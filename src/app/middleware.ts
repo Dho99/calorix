@@ -1,1 +1,0 @@
-export { auth as middleware } from "@/app/api/auth/handler/auth"
