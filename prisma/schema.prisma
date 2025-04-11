@@ -15,10 +15,12 @@ model User {
   email         String          @unique
   emailVerified DateTime?
   image         String?
+  password      String?
+  username      String?
   accounts      Account[]
   sessions      Session[]
   Authenticator Authenticator[]
-  activities     ActivitySession[]
+  activities    ActivitySession[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
