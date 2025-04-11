@@ -1,9 +1,18 @@
 import Google from "next-auth/providers/google"
 import type { NextAuthConfig } from "next-auth"
- 
+import Credentials from "next-auth/providers/credentials"
+import axios from "axios" 
+
 // Notice this is only an object, not a full Auth.js instance
 export default {
-  providers: [Google],
+  providers: [
+    Google,
+    Credentials({
+      async authorize(credentials) {
+        return credentials
+      },
+    }),
+  ],
   pages: {
     signIn: "/auth/signin",
   },
