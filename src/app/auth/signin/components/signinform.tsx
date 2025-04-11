@@ -1,23 +1,38 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { signIn } from "next-auth/react";
+import { loginSchema } from "@/app/utils/lib/validation/user";
 import { FormEvent } from "react";
-import { useRouter } from "next/navigation";
-import axios from "axios";
 
-export default function SigninForm({setMode}: {setMode: () => void}): React.ReactNode {
-  const router = useRouter();
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const user = {
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
+export default function SigninForm({
+  setMode,
+}: {
+  setMode: (is: boolean) => void;
+}): React.ReactNode {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const data = {
+      email: formData.get("email"),
+      password: formData.get("password"),
     };
 
-    axios
-      .post("/api/handler/signin", user)
-      .then((response) => console.log(response));
+    const validateInput = loginSchema.safeParse(data);
+
+    if (!validateInput.success) {
+      toast.error(validateInput.error.issues[0].message);
+    } else {
+      try {
+        signIn("credentials", data);
+      } catch (err) {
+        if (err instanceof Error) {
+          toast.error(err.message);
+        }
+      }
+    }
   };
 
   return (
@@ -30,46 +45,7 @@ export default function SigninForm({setMode}: {setMode: () => void}): React.Reac
           name="email"
           placeholder="Email"
           className="mt-3"
-        />
-      </div>
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          className="mt-3"
-        />
-      </div>
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          className="mt-3"
-        />
-      </div>
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          className="mt-3"
-        />
-      </div>
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          className="mt-3"
+          required
         />
       </div>
       <div>
@@ -80,20 +56,22 @@ export default function SigninForm({setMode}: {setMode: () => void}): React.Reac
           name="password"
           placeholder="Password"
           className="mt-3"
+          required
         />
       </div>
       <div className="flex flex-col gap-y-2">
         <button
           type="submit"
           className="w-full py-2 rounded-lg bg-blue-400 text-white"
+          value="Sign In"
         >
-          Signin
+          Sign In
         </button>
         <button
           type="button"
           className="bg-sky-200 w-full rounded-lg shadow-lg py-2"
           onClick={() => {
-            setMode()
+            setMode(false);
           }}
         >
           Register

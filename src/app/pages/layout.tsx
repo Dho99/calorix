@@ -2,6 +2,8 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/app/pages/components/sidebar";
 import AppNavbar from "./components/navbar";
 
+
+
 export default async function Layout({
   children,
 }: {
@@ -14,6 +16,7 @@ export default async function Layout({
         <AppNavbar />
         <div className="m-5">{children}</div>
       </div>
+
     </SidebarProvider>
   );
 }
