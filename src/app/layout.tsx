@@ -27,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <SessionProvider>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased w-dvw h-dvh`}
+          className={`anti-antialiased w-dvw h-dvh overflow-hidden`}
         >
           {children}
         </body>
