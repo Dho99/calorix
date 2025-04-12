@@ -8,6 +8,7 @@ import {
 
 import { HomeIcon } from "lucide-react";
 import Link from "next/link";
+import SidenavHead from "./sidenav-head";
 
 type SidebarContent = {
   title: string;
@@ -47,11 +48,19 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader />
-      <SidebarContent className="flex flex-col gap-y-3">
+      <SidebarHeader className="overflow-hidden">
+        <SidenavHead />
+      </SidebarHeader>
+      <SidebarContent className="flex flex-col gap-y-4">
         {sidebarContent.map((item, index) => {
           return (
-            <Link key={index} href={`/pages/${item.link}`} className="w-full py-2 px-4 rounded-lg shadow-lg flex flex-row items-center">{item.title}</Link>
+            <Link key={index} href={`/pages/${item.link}`} className="w-full py-3 px-3 rounded-lg shadow-lg flex flex-row items-center gap-x-3">
+              <div><item.icon/></div>
+              <div>
+
+              {item.title}
+              </div>
+              </Link>
           )
         })}
       </SidebarContent>
