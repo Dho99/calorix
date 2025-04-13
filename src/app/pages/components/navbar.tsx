@@ -48,38 +48,43 @@ export default function AppNavbar() {
             </Link>
           );
         })}
-      <ProtectedNav />
+        <ProtectedNav />
       </div>
-      {/* <div className="flex items-center space-x-4">
-        <button
-          className="px-4 py-2 bg-red-500 rounded"
-          onClick={() => {
-            signOut();
-          }}
-        >
-          Sign Out
-        </button>
-      </div> */}
     </div>
   );
 }
 
 const ProtectedNav = () => {
-
   const session = useSession();
 
   const userSession = session?.data?.user;
 
-  if(!userSession) return (
-    <Link href={'/auth/signin'} className="bg-slate-500 py-2 px-3 rounded-lg text-white">Sign In</Link>
-  );
+  if (!userSession)
+    return (
+      <Link
+        href={"/auth/signin"}
+        className="bg-slate-500 py-2 px-3 rounded-lg text-white"
+      >
+        Sign In
+      </Link>
+    );
 
   return (
-    <Link
-    href={`/profile/user/${userSession?.id}`}
-    className="flex flex-row items-center"
-  >
-    <div className="w-14 h-14 rounded-lg bg-blue-400"></div>
-  </Link> 
-  )
-}
+    <div className="flex items-center space-x-4">
+      <button
+        className="px-4 py-2 bg-red-500 rounded"
+        onClick={() => {
+          signOut({redirectTo: "/pages/home"});
+        }}
+      >
+        Sign Out
+      </button>
+    </div>
+    //   <Link
+    //   href={`/profile/user/${userSession?.id}`}
+    //   className="flex flex-row items-center"
+    // >
+    //   <div className="w-14 h-14 rounded-lg bg-blue-400"></div>
+    // </Link>
+  );
+};
