@@ -36,7 +36,7 @@ export default function Page(): React.ReactNode {
       <p className="text-md text-gray-400 my-4 text-center">or</p>
       <button
         type="button"
-        onClick={() => signIn("google")}
+        onClick={() => signIn("google", {redirectTo: "/pages/user/dashboard"})}
         className="bg-slate-400 py-2 px-4 rounded-lg shadow-lg text-white hover:cursor-pointer flex items-center justify-center gap-2 w-full"
       >
         {isLogin ? "Sign In" : "Register"} with

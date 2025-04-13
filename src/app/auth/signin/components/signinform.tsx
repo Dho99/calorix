@@ -26,7 +26,7 @@ export default function SigninForm({
       toast.error(validateInput.error.issues[0].message);
     } else {
       try {
-        signIn("credentials", data);
+        signIn("credentials", data, {redirectTo: "/pages/user/dashboard"});
       } catch (err) {
         if (err instanceof Error) {
           toast.error(err.message);
