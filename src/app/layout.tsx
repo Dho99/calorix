@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = Geist({
@@ -26,14 +25,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <SessionProvider>
         <body
           className={`anti-antialiased w-dvw h-dvh overflow-hidden`}
         >
           {children}
           <Toaster />
         </body>
-      </SessionProvider>
     </html>
   );
 }
