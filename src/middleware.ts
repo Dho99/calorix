@@ -4,6 +4,6 @@ import authConfig from "@/app/utils/lib/auth/auth.config"
 export const { auth: middleware } = NextAuth(authConfig)
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ['/pages/user/:path*']
 };
 

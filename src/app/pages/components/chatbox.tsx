@@ -31,7 +31,7 @@ export default function ChatBox() {
 
 export function ChatBoxDialog({ toggleChat }: { toggleChat: () => void }) {
   return (
-    <div className="min-h-24 h-full w-max p-10">
+    <div className="min-h-24 h-full w-[30vw] p-5  ">
       <div className="bg-white rounded-lg">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold">Calorix Assist</h2>

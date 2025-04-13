@@ -1,7 +1,8 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/app/pages/components/sidebar";
+import AppSidebar from "@/app/pages/components/sidebar";
 import AppNavbar from "./components/navbar";
 import ChatBox from "./components/chatbox";
+import { SessionProvider } from "next-auth/react";
 
 export default async function Layout({
   children,
@@ -10,12 +11,14 @@ export default async function Layout({
 }) {
   return (
     <SidebarProvider>
-      <AppSidebar />
+      {/* <AppSidebar /> */}
+      <SessionProvider>
       <div className="flex flex-col w-full h-full">
         <AppNavbar />
         <div className="m-5">{children}</div>
         <ChatBox />
       </div>
+      </SessionProvider>
 
     </SidebarProvider>
   );
