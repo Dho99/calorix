@@ -15,7 +15,7 @@ export default async function Layout({
       <SessionProvider>
       <div className="flex flex-col w-full h-full">
         <AppNavbar />
-        <div className="m-5">{children}</div>
+        <div className="">{children}</div>
         <ChatBox />
       </div>
       </SessionProvider>
