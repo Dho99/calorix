@@ -13,9 +13,9 @@ export default async function Layout({
     <SidebarProvider>
       {/* <AppSidebar /> */}
       <SessionProvider>
-      <div className="flex flex-col w-full h-full">
+      <div className="flex flex-col w-full h-full relative">
         <AppNavbar />
-        <div className="m-5">{children}</div>
+        <div className="w-full h-full relative">{children}</div>
         <ChatBox />
       </div>
       </SessionProvider>

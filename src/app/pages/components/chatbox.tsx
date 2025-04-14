@@ -13,7 +13,7 @@ export default function ChatBox() {
   };
 
   return (
-    <div className="absolute right-0 bottom-0 m-5 shadow-lg rounded-lg">
+    <div className="fixed right-0 bottom-0 m-5 shadow-lg rounded-lg">
       {isOpen ? (
         <ChatBoxDialog toggleChat={toggleChat} />
       ) : (
