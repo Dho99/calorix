@@ -34,7 +34,7 @@ export default function AppNavbar() {
     },
   ];
   return (
-    <div className="flex items-center w-full py-3 px-10 bg-[#092635] text-white justify-between">
+    <div className="flex items-center w-full py-3 px-20 bg-[#092635]/70 text-white justify-between fixed top-0 z-10 backdrop-blur-sm">
       <div className="text-2xl font-bold">Calorix</div>
       <div className="w-auto flex flex-row items-center">
         {sidebarContent.map((item, index) => {

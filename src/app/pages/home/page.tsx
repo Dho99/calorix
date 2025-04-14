@@ -1,9 +1,13 @@
 import Hero from "./components/hero"
+import FeatureOne from "./components/feature-one"
+import FAQ from "./components/faq"
 
 export default function Page(){
     return (   
-        <div className="flex flex-col w-full h-full">
+        <div className="">
             <Hero />
+            <FeatureOne />
+            <FAQ />
         </div>
     )
 }
