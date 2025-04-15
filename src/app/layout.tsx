@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
+import { SessionProvider } from "next-auth/react";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -21,12 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-        <body
-          className={`${poppins.variable} anti-antialiased w-dvw h-dvh overflow-x-hidden overflow-y-auto`}
-        >
-          {children}
-          <Toaster />
-        </body>
+      <body
+        className={`${poppins.variable} anti-antialiased w-dvw h-dvh overflow-x-hidden overflow-y-auto`}
+      >
+        <SessionProvider>{children}</SessionProvider>
+        <Toaster />
+      </body>
     </html>
   );
 }

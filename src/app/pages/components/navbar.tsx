@@ -11,11 +11,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 import Link from "next/link";
 
 export default function AppNavbar() {
   const {data} = useSession();
+  const pathname = usePathname();
+  const isLoginPage = pathname === "/auth/signin";
+
   type SidebarContent = {
     title: string;
     link: string;
@@ -45,10 +49,10 @@ export default function AppNavbar() {
   ];
 
   return (
-    <div className="flex items-center w-full py-3 px-20 bg-[#092635]/70 text-white justify-between fixed top-0 z-10 backdrop-blur-sm">
+    <div className="flex items-center w-full py-3 px-20 bg-[#092635]/70 text-white justify-between fixed top-0 z-10 backdrop-blur-sm shadow-md">
       <Link href={"/pages/home"} className="text-2xl font-bold">Calorix</Link>
       <div className="w-auto flex flex-row items-center">
-        {(sidebarContent).map((item, index) => {
+        {(!isLoginPage ? sidebarContent : []).map((item, index) => {
           return (
             <Link
               key={index}
@@ -70,11 +74,16 @@ const ProtectedNav = () => {
 
   const userSession = session?.data?.user;
 
+  const pathname = usePathname();
+  const isLoginPage = pathname === "/auth/signin";
+
+  if(isLoginPage) return null;
+
   if (!userSession)
     return (
       <Link
         href={"/auth/signin"}
-        className="border border-[#9EC8B9] text-[#9EC8B9] py-2 px-3 rounded-lg transition-all transition-duration-300 hover:bg-[#9EC8B9] hover:text-white"
+        className="border border-[#9EC8B9] text-[#9EC8B9] py-2 px-3 rounded transition-all transition-duration-300 hover:bg-[#9EC8B9] hover:text-white"
       >
         Sign In
       </Link>
@@ -93,7 +102,7 @@ const ProtectedNav = () => {
       <DropdownMenuContent className="bg-black text-white shadow-xl">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-600 font-bold" onClick={() => signOut()}>Logout</DropdownMenuItem>
+        <DropdownMenuItem className="text-red-600 font-bold" onClick={() => signOut({redirectTo: '/auth/signin'})}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

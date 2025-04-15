@@ -26,7 +26,7 @@ export default function SigninForm({
       toast.error(validateInput.error.issues[0].message);
     } else {
       try {
-        signIn("credentials", data, {redirectTo: "/pages/user/dashboard"});
+        signIn("credentials", data, { redirectTo: "/pages/user/dashboard" });
       } catch (err) {
         if (err instanceof Error) {
           toast.error(err.message);
@@ -44,7 +44,7 @@ export default function SigninForm({
           id="email"
           name="email"
           placeholder="Email"
-          className="mt-3"
+          className="mt-2 bg-[#D9D9D9] text-black"
           required
         />
       </div>
@@ -55,26 +55,26 @@ export default function SigninForm({
           id="password"
           name="password"
           placeholder="Password"
-          className="mt-3"
+          className="mt-2 bg-[#D9D9D9] text-black"
           required
         />
       </div>
       <div className="flex flex-col gap-y-2">
+        <p>
+          Belum Punya Akun ?{" "}
+          <a
+            className="hover:cursor-pointer text-blue-400 font-bold"
+            onClick={() => setMode(false)}
+          >
+            Daftar Sekarang
+          </a>
+        </p>
         <button
           type="submit"
-          className="w-full py-2 rounded-lg bg-blue-400 text-white"
+          className="w-full py-2 rounded-lg bg-[#1B4242] text-white"
           value="Sign In"
         >
           Sign In
-        </button>
-        <button
-          type="button"
-          className="bg-sky-200 w-full rounded-lg shadow-lg py-2"
-          onClick={() => {
-            setMode(false);
-          }}
-        >
-          Register
         </button>
       </div>
     </form>
