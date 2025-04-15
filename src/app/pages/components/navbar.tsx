@@ -1,11 +1,21 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { User, UserRound } from "lucide-react";
+import { UserRound } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { signOut } from "next-auth/react";
 
 import Link from "next/link";
 
 export default function AppNavbar() {
+  const {data} = useSession();
   type SidebarContent = {
     title: string;
     link: string;
@@ -17,6 +27,14 @@ export default function AppNavbar() {
       link: "dashboard",
     },
     {
+      title: "Riwayat",
+      link: "history",
+    },
+    {
+      title: "Progress",
+      link: "progress",
+    }, 
+    {
       title: "Kalkulasi",
       link: "calculate",
     },
@@ -24,24 +42,17 @@ export default function AppNavbar() {
       title: "Konsultasi",
       link: "consultation",
     },
-    {
-      title: "Riwayat",
-      link: "history",
-    },
-    {
-      title: "Progress",
-      link: "progress",
-    },
   ];
+
   return (
     <div className="flex items-center w-full py-3 px-20 bg-[#092635]/70 text-white justify-between fixed top-0 z-10 backdrop-blur-sm">
-      <div className="text-2xl font-bold">Calorix</div>
+      <Link href={"/pages/home"} className="text-2xl font-bold">Calorix</Link>
       <div className="w-auto flex flex-row items-center">
-        {sidebarContent.map((item, index) => {
+        {(sidebarContent).map((item, index) => {
           return (
             <Link
               key={index}
-              href={`/pages/${item.link}`}
+              href={data ? `/pages/user/${item.link}` :`/auth/signin`}
               className="px-4 py-2 rounded hover:bg-gray-700"
             >
               {item.title}
@@ -70,24 +81,20 @@ const ProtectedNav = () => {
     );
 
   return (
-    // <div className="flex items-center space-x-4">
-    //   <button
-    //     className="px-4 py-2 bg-red-500 rounded"
-    //     onClick={() => {
-    //       signOut({ redirectTo: "/pages/home" });
-    //     }}
-    //   >
-    //     Sign Out
-    //   </button>
-    // </div>
-    <Link
-      href={`/profile/user/${userSession?.id}`}
-      className="flex flex-row items-center gap-3"
-    >
-      <div className="border border-[#9EC8B9] text-[#9EC8B9] py-1 px-3 rounded">
-        {userSession?.name}
-      </div>
-      <UserRound className="w-10 h-10 bg-[#9EC8B9] p-2 rounded-full" />
-    </Link>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <div className="flex flex-row items-center gap-3">
+          <div className="border border-[#9EC8B9] text-[#9EC8B9] py-1 px-3 rounded">
+            {userSession?.name}
+          </div>
+          <UserRound className="w-10 h-10 bg-[#9EC8B9] p-2 rounded-full" />
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="bg-black text-white shadow-xl">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="text-red-600 font-bold" onClick={() => signOut()}>Logout</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
