@@ -6,14 +6,17 @@ import { FormEvent, useRef } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 
-export default function RegisterForm({setMode}: {setMode: (is: boolean) => void}): React.ReactNode {
- 
+export default function RegisterForm({
+  setMode,
+}: {
+  setMode: (is: boolean) => void;
+}): React.ReactNode {
   const formRef = useRef<HTMLFormElement>(null);
- 
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    
+
     const user = {
       email: formData.get("email") as string,
       password: formData.get("password") as string,
@@ -23,13 +26,14 @@ export default function RegisterForm({setMode}: {setMode: (is: boolean) => void}
     axios
       .post("/api/handler/user", user)
       .then((response) => {
-        if(response.status === 200 || response.status === 201) {
-          setMode(true)
-          toast(response.data.message)
+        if (response.status === 200 || response.status === 201) {
+          setMode(true);
+          toast(response.data.message);
           formRef.current?.reset();
         }
-      }).catch((err) => {
-        toast.error(err.response.data.message)
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
       });
   };
 
@@ -42,7 +46,7 @@ export default function RegisterForm({setMode}: {setMode: (is: boolean) => void}
           id="email"
           name="email"
           placeholder="Email"
-          className="mt-3"
+          className="mt-2 bg-[#D9D9D9] text-black"
           required
         />
       </div>
@@ -53,7 +57,7 @@ export default function RegisterForm({setMode}: {setMode: (is: boolean) => void}
           id="Name"
           name="name"
           placeholder="Name"
-          className="mt-3"
+          className="mt-2 bg-[#D9D9D9] text-black"
           required
         />
       </div>
@@ -64,25 +68,25 @@ export default function RegisterForm({setMode}: {setMode: (is: boolean) => void}
           id="password"
           name="password"
           placeholder="Password"
-          className="mt-3"
+          className="mt-2 bg-[#D9D9D9] text-black"
           required
         />
       </div>
       <div className="flex flex-col gap-y-2">
+        <p>
+          Sudah punya Akun ?{" "}
+          <a
+            className="hover:cursor-pointer text-blue-400 font-bold"
+            onClick={() => setMode(true)}
+          >
+            Login Disini
+          </a>
+        </p>
         <button
           type="submit"
-          className="w-full py-2 rounded-lg bg-blue-400 text-white"
+          className="w-full py-2 rounded-lg bg-[#1B4242] text-white"
         >
           Register
-        </button>
-        <button
-          type="button"
-          className="bg-sky-200 w-full rounded-lg shadow-lg py-2"
-          onClick={() => {
-            setMode(true)
-          }}
-        >
-          I Already have an account
         </button>
       </div>
     </form>

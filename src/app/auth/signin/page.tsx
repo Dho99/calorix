@@ -15,11 +15,11 @@ export default function Page(): React.ReactNode {
   }
 
   return (
-    <div className="w-full h-full flex-col items-center justify-center ">
+    <div className="w-full h-full flex-col items-center justify-center">
       <div className="flex flex-col items-center">
         <h1 className={"text-2xl font-bold text-center"}>Calorix</h1>
-        <h1 className="text-2xl text-black">{isLogin ? "Sign In" : "Register"}</h1>
-        <p className="text-sm text-gray-400 mb-8">Please {isLogin ? "Sign In" : "Register"} to continue</p>
+        <h1 className="text-2xl text-white">{isLogin ? "Sign In" : "Register"}</h1>
+        <p className="text-sm text-gray-400">Please {isLogin ? "Sign In" : "Register"} to continue</p>
         <div
           className={
             "flex flex-col gap-3 mt-5 flex justify-center items-center w-98"
@@ -33,11 +33,11 @@ export default function Page(): React.ReactNode {
         </div>
       </div>
 
-      <p className="text-md text-gray-400 my-4 text-center">or</p>
+      <p className="text-md text-white my-4 text-center ">Atau Masuk dengan Cara Lain</p>
       <button
         type="button"
         onClick={() => signIn("google", {redirectTo: "/pages/user/dashboard"})}
-        className="bg-slate-400 py-2 px-4 rounded-lg shadow-lg text-white hover:cursor-pointer flex items-center justify-center gap-2 w-full"
+        className="bg-[#1B4242] py-2 px-4 rounded-lg shadow-lg text-white hover:cursor-pointer flex items-center justify-center gap-2 w-full"
       >
         {isLogin ? "Sign In" : "Register"} with
         <span>
