@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} anti-antialiased w-dvw h-dvh overflow-x-hidden overflow-y-auto`}
+        className={`${poppins.variable} anti-antialiased w-dvw h-dvh overflow-x-hidden overflow-y-auto bg-[#092635]`}
       >
         <SessionProvider>{children}</SessionProvider>
         <Toaster />

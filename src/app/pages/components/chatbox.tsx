@@ -1,6 +1,6 @@
 "use client";
 
-import { PanelTopClose, CircleX } from "lucide-react";
+import { CircleX,BotMessageSquare } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -23,7 +23,7 @@ export default function ChatBox() {
         >
           <div>Calorix Assist</div>
           <div>
-            <PanelTopClose className="w-5 h-5" />
+            <BotMessageSquare className="w-5 h-5" />
           </div>
         </button>
       )}
