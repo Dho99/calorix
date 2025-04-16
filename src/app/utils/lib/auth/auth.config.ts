@@ -4,9 +4,33 @@ import Credentials from "next-auth/providers/credentials";
 import { findUser } from "../../api/user";
 import { validatePassword } from "../../hasher";
 
+declare module "next-auth" {
+  interface Session {
+   user: {
+    name?: string;
+    email?: string;
+    username?: string; // Custom field
+   };
+  }
+}
+
 export default {
   providers: [
-    Google,
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      async profile(profile) {
+        const user = {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          username: profile.name?.toLocaleLowerCase().replace(' ', '_'),
+          image: profile.picture,
+        };
+
+        return user;
+      }
+    }),
     Credentials({
       credentials: {
         email: { label: "Email" },
@@ -51,6 +75,7 @@ export default {
         token.user = {
           id: user.id,
           name: user.name,
+          username: user.name?.toLocaleLowerCase().replace(' ', '_'),
           email: user.email,
           image: user.image,
         };

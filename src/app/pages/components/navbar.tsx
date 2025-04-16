@@ -2,15 +2,6 @@
 
 import { useSession } from "next-auth/react";
 import { UserRound } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 import Link from "next/link";
@@ -89,21 +80,13 @@ const ProtectedNav = () => {
       </Link>
     );
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <div className="flex flex-row items-center gap-3">
-          <div className="border border-[#9EC8B9] text-[#9EC8B9] py-1 px-3 rounded">
-            {userSession?.name}
-          </div>
-          <UserRound className="w-10 h-10 bg-[#9EC8B9] p-2 rounded-full" />
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-black text-white shadow-xl">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-600 font-bold" onClick={() => signOut({redirectTo: '/auth/signin'})}>Logout</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
+    return (
+          <Link href={'/pages/user/manage'} className="flex flex-row items-center gap-3">
+            <div className="border border-[#9EC8B9] text-[#9EC8B9] py-1 px-3 rounded">
+              {userSession?.name}
+            </div>
+            <UserRound className="w-10 h-10 bg-[#9EC8B9] p-2 rounded-full" />
+          </Link>
+
+    );
 };
