@@ -78,7 +78,7 @@ export default function Page() {
 
   return (
     <div className="w-full h-dvh flex flex-col bg-[#092635] text-white relative px-20 py-20 items-center overflow-auto">
-      <div className="w-full flex flex-col h-full">
+      <div className="w-full flex flex-col h-full px-30">
         <div className="flex justify-center items-center w-full py-10 ">
           <Stepper
             steps={steps}
@@ -87,7 +87,7 @@ export default function Page() {
           />
         </div>
         <div className="h-full w-full flex flex-wrap py-5">
-          {JSON.stringify(stepState)}
+          {/* {JSON.stringify(stepState)} */}
           <div className="w-full h-full flex justify-center items-center">
             {(() => {
               switch (currentStep) {
@@ -131,16 +131,16 @@ export default function Page() {
           {currentStep > 1 && (
             <button
               onClick={handlePrev}
-              className="w-56 bg-[#9EC8B9] py-3 px-5 rounded-lg text-black"
+              className="text-xl w-56 bg-[#5C8374] py-3 px-5 rounded-lg text-white font-bold"
             >
-              Previous
+              Kembali
             </button>
           )}
           <button
-            className="w-56 bg-[#9EC8B9] py-3 px-5 rounded-lg ms-auto text-black"
+            className="text-xl w-56 bg-[#5C8374] py-3 px-5 rounded-lg ms-auto text-white font-bold"
             onClick={handleNext}
           >
-            Next
+            Lanjutkan
           </button>
         </div>
       </div>
