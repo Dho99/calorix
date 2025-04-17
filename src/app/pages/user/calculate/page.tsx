@@ -10,6 +10,12 @@ import Step5 from "./steps/step-5";
 import Step6 from "./steps/step-6";
 import Step7 from "./steps/step-7";
 import Step8 from "./steps/step-8";
+import Step9 from "./steps/step-9";
+import Step10 from "./steps/step-10";
+import Step12 from "./steps/step-12";
+import Step13 from "./steps/step-13";
+import Step14 from "./steps/step-14";
+import Step15 from "./steps/step-15";
 
 interface Step {
   number: number;
@@ -42,13 +48,21 @@ export default function Page() {
     { number: 6, label: "Tujuan Diet" },
     { number: 7, label: "Jenis Aktivitas Fisik" },
     { number: 8, label: "Durasi Aktivitas" },
+    { number: 9, label: "Target Berat Badan" },
+    { number: 10, label: "Kapan Tujuan Tercapai" },
+    { number: 11, label: "Pola Makan" },
+    { number: 12, label: "Pola Tidur" },
+    { number: 13, label: "Kondisi Kesehatan" },
+    { number: 14, label: "Riwayat Penyakit" },
+    { number: 15, label: "Riwayat Diet" },
+    { number: 16, label: "Selesai" },
   ];
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const handleNext = () => {
-    if (currentStep < 9) {
-      setCurrentStep((prev) => Math.min(prev + 1, 9));
+    if (currentStep < 16) {
+      setCurrentStep((prev) => Math.min(prev + 1, 16));
     }
   };
 
@@ -64,8 +78,8 @@ export default function Page() {
 
   return (
     <div className="w-full h-dvh flex flex-col bg-[#092635] text-white relative px-20 py-20 items-center overflow-auto">
-      <div className="w-full flex flex-col h-full">
-        <div className="flex justify-center items-center w-full py-10">
+      <div className="w-full flex flex-col h-full px-30">
+        <div className="flex justify-center items-center w-full py-10 ">
           <Stepper
             steps={steps}
             currentStep={currentStep}
@@ -73,7 +87,7 @@ export default function Page() {
           />
         </div>
         <div className="h-full w-full flex flex-wrap py-5">
-          {JSON.stringify(stepState)}
+          {/* {JSON.stringify(stepState)} */}
           <div className="w-full h-full flex justify-center items-center">
             {(() => {
               switch (currentStep) {
@@ -93,6 +107,20 @@ export default function Page() {
                   return <Step7 updateStepState={updateStepState} />;
                 case 8:
                   return <Step8 updateStepState={updateStepState} />;
+                case 9:
+                  return <Step9 updateStepState={updateStepState} />;
+                case 10:
+                  return <Step10 updateStepState={updateStepState} />;
+                case 11:
+                  return <Step1 updateStepState={updateStepState} />;
+                case 12:
+                  return <Step12 updateStepState={updateStepState} />;
+                case 13:
+                  return <Step13 updateStepState={updateStepState} />;
+                case 14:
+                  return <Step14 updateStepState={updateStepState} />;
+                case 15:
+                  return <Step15 updateStepState={updateStepState} />;
                 default:
                   return null
               }
@@ -103,16 +131,16 @@ export default function Page() {
           {currentStep > 1 && (
             <button
               onClick={handlePrev}
-              className="w-56 bg-[#9EC8B9] py-3 px-5 rounded-lg text-black"
+              className="text-xl w-56 bg-[#5C8374] py-3 px-5 rounded-lg text-white font-bold"
             >
-              Previous
+              Kembali
             </button>
           )}
           <button
-            className="w-56 bg-[#9EC8B9] py-3 px-5 rounded-lg ms-auto text-black"
+            className="text-xl w-56 bg-[#5C8374] py-3 px-5 rounded-lg ms-auto text-white font-bold"
             onClick={handleNext}
           >
-            Next
+            Lanjutkan
           </button>
         </div>
       </div>

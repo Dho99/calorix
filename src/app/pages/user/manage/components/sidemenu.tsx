@@ -31,7 +31,7 @@ export default function SideMenu() {
     },
     {
       name: "Signout",
-      link: "signout",
+      link: "#",
     },
   ];
 
@@ -49,9 +49,9 @@ export default function SideMenu() {
                     ? "hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold "
                     : "bg-slate-200/30 shadow-lg font-semibold "
                 } text-white text-base transition-all transition-duration-400  py-2 px-4 rounded-lg`}
-                {...(item.link === "signout" && {
+                {...(item.link === "#" && {
                   onClick: () => {
-                    signOut();
+                    signOut({redirectTo: '/auth/signin'});
                     // Add signout logic here
                   },
                 })}

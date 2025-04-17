@@ -38,57 +38,24 @@ const Stepper: React.FC<StepperProps> = ({
   React.useEffect(() => {
     scrollToCurrentStep(currentStep - 1);
   }, [currentStep]);
+
+  const progressPercentage =
+    ((currentStep - 1) / (steps.length - 1)) * 100;
+
   return (
     <>
-      <div
-        className="flex flex-wrap items-center p-4 justify-center"
-        ref={scrollAreaRef}
-      >
-        {steps.map((step, index) => (
-          <div key={step.number} className="flex flex-col items-center">
-            <div className="flex items-center">
-              <div className="flex flex-col items-center justify-center">
-                <div
-                  onClick={() => onStepClick(step.number)}
-                  className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold",
-                    step.number === currentStep
-                      ? "bg-white text-black"
-                      : step.number < currentStep
-                      ? "bg-white text-black"
-                      : "bg-black text-white"
-                  )}
-                >
-                  {step.number < currentStep ? (
-                    <Check className="w-6 h-6" />
-                  ) : (
-                    step.number
-                  )}
-                </div>
-                <div
-                  className={cn(
-                    "mt-2 text-xs text-center w-36 text-base",
-                    step.number === currentStep
-                      ? "text-white font-bold"
-                      : step.number < currentStep
-                      ? "text-white"
-                      : "text-white"
-                  )}
-                >
-                  {step.label}
-                </div>
-              </div>
-              {index < steps.length - 1 && (
-                <div
-                  className={cn(
-                    "w-16 h-[2px] mb-5 -mx-8",
-                    step.number <= currentStep ? "bg-white" : "bg-black"
-                  )}
-                />
-              )}
-            </div>
+      <div className="relative w-full">
+
+        <div className="absolute top-1/2 left-0 w-full h-2 bg-gray-300 transform -translate-y-1/2 rounded-full flex flex-row items-center bg-slate-600">
+          <div
+            className="h-2 bg-white rounded-full transition-all duration-300"
+            style={{ width: `${progressPercentage}%`, maxWidth: "100%" }}
+          />
+          <div className="bg-white p-1 w-16 h-10 text-black rounded-full items-center flex justify-center -ms-2">
+            <p className="">{currentStep} / {steps.length}</p>
           </div>
-        ))}
+        </div>
+
       </div>
     </>
   );
