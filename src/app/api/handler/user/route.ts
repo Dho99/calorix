@@ -90,10 +90,11 @@ export async function PUT(req: NextRequest){
 
   
   if(!result.success) {
+    console.log(result.error.issues);
     return NextResponse.json(
       {
         success: false,
-        message: result.error.issues[1].message,
+        message: result.error.issues[0].message,
       },
       {
         status: 200,
@@ -142,33 +143,4 @@ export async function PUT(req: NextRequest){
       status: 404,  
     }
   )
-}
-
-export async function GET(req: NextRequest){
-  const { searchParams } = new URL(req.url);
-  console.log(searchParams)
-  // const body = await req.json();
-  // const { email } = body;
-  // const user = await findUser(email);
-  // if (user.success) {
-  //   return NextResponse.json(
-  //     {
-  //       success: true,
-  //       message: "User found",
-  //       user: user.data,
-  //     },
-  //     {
-  //       status: 200,
-  //     }
-  //   );
-  // }
-  // return NextResponse.json(
-  //   {
-  //     success: false,
-  //     message: "User not found",
-  //   },
-  //   {
-  //     status: 404,  
-  //   }
-  // )
 }

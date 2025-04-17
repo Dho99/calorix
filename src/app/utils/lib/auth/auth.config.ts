@@ -7,6 +7,7 @@ import { validatePassword } from "../../hasher";
 declare module "next-auth" {
   interface Session {
    user: {
+    id?: string;
     name?: string;
     email?: string;
     username?: string; // Custom field

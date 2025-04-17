@@ -24,16 +24,16 @@ export async function GET() {
 
   const { user } = session;
 
-  try{
+  try {
     const loadChats = await prisma.chatbot.findMany({
       where: {
-        userId: user?.id,
+         userId: user?.id,
       },
       include: {
         user: true,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: "asc",
       },
     });
 
@@ -46,35 +46,31 @@ export async function GET() {
         status: 200,
       }
     );
-
-
-
-  }catch(err){
-    console.log(err)
-    if(err instanceof Error){
+  } catch (err) {
+    console.log(err);
+    if (err instanceof Error) {
       return NextResponse.json(
         {
           success: false,
-          message: err.message
+          message: err.message,
         },
         {
-          status: 500
+          status: 500,
         }
-      )
+      );
     }
   }
-
 }
 
-export async function POST(request: NextRequest){
+export async function POST(request: NextRequest) {
   const body = await request.json();
-  const {userQuery} = body;
+  const { userQuery } = body;
   const session = await auth();
 
-  try{
+  try {
     const aires = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
-        contents: `Anda adalah seorang ahli gizi yang sangat berpengalaman. Anda akan menjawab pertanyaan dari pengguna tentang kesehatan dan gizi. Pertanyaan: ${userQuery}`,
+      model: "gemini-2.0-flash",
+      contents: `Anda adalah seorang ahli gizi yang sangat berpengalaman. Anda akan menjawab pertanyaan dari pengguna tentang kesehatan dan gizi. Pertanyaan: ${userQuery}`,
     });
 
     await prisma.chatbot.createMany({
@@ -82,36 +78,36 @@ export async function POST(request: NextRequest){
         {
           userId: session?.user?.id as string,
           sender: "USER",
-          payload: userQuery
+          payload: userQuery,
         },
         {
           userId: session?.user?.id as string,
           sender: "BOT",
-          payload: aires.text
-        }
-      ]
+          payload: aires.text,
+        },
+      ],
     });
 
     return NextResponse.json(
+      {
+        success: true,
+        message: aires.text,
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (err) {
+    if (err instanceof Error) {
+      return NextResponse.json(
         {
-            success: true,
-            message: aires.text
+          success: false,
+          message: err.message,
         },
         {
-            status: 200
+          status: 500,
         }
-    )
-  }catch(err){
-    if(err instanceof Error){
-        return NextResponse.json(
-            {
-                success: false,
-                message: err.message
-            },
-            {
-                status: 500
-            }
-        )
+      );
     }
   }
 }

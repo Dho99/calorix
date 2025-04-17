@@ -16,18 +16,25 @@ import {
 } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import axios from "axios";
-import type {Register as User} from "@/app/utils/lib/types/user";
+import type { Register as User } from "@/app/utils/lib/types/user";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function Page() {
   const session = useSession();
 
   const [data, setUserData] = useState<User | null>(null);
+  const [openAlert, setOpenAlert] = useState<{success: boolean, message: string} | null>(null);
+
+  function handleAlertClose() {
+    setOpenAlert(null);
+  }
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`/api/handler/user/email=${session?.data?.user?.email}`, {
-        });
+        const res = await axios.get(
+          `/api/handler/user/${session?.data?.user?.email}`,
+        );
         if (res.status === 200) {
           setUserData(res.data.user);
         }
@@ -39,7 +46,7 @@ export default function Page() {
     };
 
     fetchUser();
-  },[session])
+  }, [session]);
 
   const [isEdit, setEdit] = useState<boolean>(false);
 
@@ -50,11 +57,13 @@ export default function Page() {
       username: formData.get("username"),
       name: formData.get("name"),
       password: formData.get("password"),
-      validatePass: formData.get("validatePass"),
+      email: session?.data?.user?.email,
     };
 
-    if(payload.password !== payload.validatePass) {
-      alert("Password tidak sama");
+    const validatePass = formData.get("validatePass");
+
+    if (payload.password !== validatePass) {
+      setOpenAlert({success: false, message: "Password tidak sama"});
       return;
     }
 
@@ -62,15 +71,17 @@ export default function Page() {
       .put("/api/handler/user", payload)
       .then((res) => {
         if (res.status === 200) {
-          alert(res.data.message);
           if (res.data.success) {
+            setOpenAlert({success: true, message: res.data.message});
             setEdit(false);
+          }else{
+            setOpenAlert({success: false, message: res.data.message});
           }
         }
       })
       .catch((err) => {
         if (err instanceof Error) {
-          alert(err.message);
+          setOpenAlert({success: false, message: err.message});
         }
       });
   }
@@ -131,10 +142,20 @@ export default function Page() {
             )}
           </div>
         </div>
+        {
+          openAlert && (
+            <Alert className={`max-w-3/4 ${openAlert?.success ? 'bg-green-500' : 'bg-red-500/50'} text-white border-0 shadow-lg`} onClick={handleAlertClose}>
+              <AlertTitle>{openAlert?.success ? 'Success' : 'Error'} Alert</AlertTitle>
+              <AlertDescription className="text-white text-lg font-bold">
+               {openAlert.message}
+              </AlertDescription>
+            </Alert>
+          )
+        }
         <form
           onSubmit={submitFormInput}
           className="flex flex-col gap-y-5 w-full text-white"
-        >
+          >
           <div className="grid w-full max-w-3/4 items-center gap-3">
             <Label htmlFor="email">Email</Label>
             <Input
