@@ -33,7 +33,7 @@ export default function Step8({
     ]
 
   return (
-    <div className="w-full h-full flex flex-col gap-5 p-20 bg-white/50 rounded-xl justify-center items-center">
+    <>
       <Label htmlFor="email" className="text-lg text-white">
        Berapa Lama Anda Biasa Melakukan Aktivitas Olahraga Fisik?
       </Label>
@@ -54,6 +54,6 @@ export default function Step8({
           </SelectGroup>
         </SelectContent>
       </Select>
-    </div>
+    </>
   );
 }

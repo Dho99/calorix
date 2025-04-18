@@ -47,7 +47,7 @@ export default function Step7({
     ]
 
   return (
-    <div className="w-full h-full flex flex-col gap-5 p-20 bg-white/50 rounded-xl justify-center items-center">
+    <>
       <Label htmlFor="email" className="text-lg text-white">
         Apa Jenis Aktivitas Olahraga Fisik yang biasa Anda Lakukan ?
       </Label>
@@ -68,6 +68,6 @@ export default function Step7({
           </SelectGroup>
         </SelectContent>
       </Select>
-    </div>
+    </>
   );
 }

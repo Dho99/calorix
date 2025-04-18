@@ -22,7 +22,7 @@ export default function Step1({updateStepState}: {updateStepState: (stepType: st
     }
   
     return (
-      <div className="w-full h-full flex flex-row gap-x-10 p-3 justify-center items-center">
+      <>
         {step1Option?.map((gender, index) => {
           return (
             <button
@@ -38,7 +38,7 @@ export default function Step1({updateStepState}: {updateStepState: (stepType: st
             </button>
           );
         })}
-      </div>
+      </>
     );
   }
   

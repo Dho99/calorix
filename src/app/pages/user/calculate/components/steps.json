@@ -1,0 +1,145 @@
+
+
+{
+  "steps": [
+    {
+      "number": 1,
+      "question": "Apa Jenis Kelamin Anda ?",
+      "placeholder": null,
+      "stateKey": "gender",
+      "type": "radio",
+      "opts": [
+        { "value": "L", "label": "Laki-laki" },
+        { "value": "P", "label": "Perempuan" }
+      ]
+    },
+    {
+      "number": 2,
+      "question": "Berapa Tinggi Anda ?",
+      "placeholder": "Tinggi badan (cm)",
+      "stateKey": "height",
+      "type": "number"
+    },
+    {
+      "number": 3,
+      "question": "Berapa Usia Anda ?",
+      "placeholder": "Usia (tahun)",
+      "stateKey": "age",
+      "type": "number"
+    },
+    {
+      "number": 4,
+      "question": "Berapa Berat Badan Anda Saat ini ? (Kg)",
+      "placeholder": "Berat badan (kg)",
+      "stateKey": "currentWeight",
+      "type": "number"
+    },
+    {
+      "number": 5,
+      "question": "Berapa target berat badan yang anda inginkan ?",
+      "placeholder": "Target berat badan (kg)",
+      "stateKey": "targetWeight",
+      "type": "number"
+    },
+    {
+      "number": 6,
+      "question": "Bagaimana intensitas aktivitas fisik anda ?",
+      "placeholder": "Deskripsikan aktivitas fisik",
+      "stateKey": "physicalActivity",
+      "type": "select",
+      "opts": [
+        { "value": "1", "label": "Tidak aktif" },
+        { "value": "2", "label": "Aktif ringan" },
+        { "value": "3", "label": "Aktif sedang" },
+        { "value": "4", "label": "Aktif berat" }
+      ]
+    },
+    {
+      "number": 7,
+      "question": "Berapa banyak anda makan dalam 1 hari ?",
+      "placeholder": "Jumlah makanan (porsi)",
+      "stateKey": "dailyMeals",
+      "type": "number"
+    },
+    {
+      "number": 8,
+      "question": "Apa makanan yang anda konsumsi setiap hari dan kira kira berapa gram anda mengkonsumsinya ?",
+      "placeholder": "Kalori makanan (kalori)",
+      "stateKey": "dailyFoodIntake",
+      "type": "number"
+    },
+    {
+      "number": 9,
+      "question": "Pilih semua yang cenderung Anda lakukan ",
+      "placeholder": "Pilih kebiasaan Anda",
+      "stateKey": "habits",
+      "type": "checkbox",
+      "opts": [
+        { "value": "1", "label": "Saya makan larut malam" },
+        { "value": "2", "label": "Saya tidak bisa berhenti makan makanan manis" },
+        { "value": "3", "label": "Saya suka minuman bersoda" },
+        { "value": "4", "label": "Saya sesekali meminum minuman keras" },
+        { "value": "5", "label": "Saya suka makanan berlemak atau asin" },
+        { "value": "6", "label": "Tidak satu pun di atas" }
+      ]
+    },
+    {
+      "number": 10,
+      "question": "Berapa kali anda berolahraga dalam seminggu ?",
+      "placeholder": "Jumlah olahraga (kali/minggu)",
+      "stateKey": "weeklyExerciseFrequency",
+      "type": "number"
+    },
+    {
+      "number": 11,
+      "question": "Berapa lama durasi anda berolahraga dalam sehari ?",
+      "placeholder": "Durasi olahraga (jam)",
+      "stateKey": "dailyExerciseDuration",
+      "type": "number"
+    },
+    {
+      "number": 12,
+      "question": "Bagaimana skala intensitas anda dalam berolahraga ?",
+      "placeholder": "Skala intensitas (1-10)",
+      "stateKey": "exerciseIntensity",
+      "type": "select",
+      "opts": [
+        { "value": "1", "label": "Sangat ringan" },
+        { "value": "2", "label": "Ringan" },
+        { "value": "3", "label": "Sedang" },
+        { "value": "4", "label": "Berat" },
+        { "value": "5", "label": "Sangat berat" }
+      ]
+    },
+    {
+      "number": 13,
+      "question": "Berapa lama anda tidur sehari ? (Dalam Jam)",
+      "placeholder": "Durasi tidur (jam)",
+      "stateKey": "sleepDuration",
+      "type": "number"
+    },
+    {
+      "number": 14,
+      "question": "Berapa banyak anda minum sehari ?",
+      "placeholder": "Jumlah minum",
+      "stateKey": "dailyWaterIntake",
+      "type": "select",
+      "opts": [
+        { "value": "1", "label": "Hanya kopi atau teh" },
+        { "value": "2", "label": "Kurang dari 0,5 L" },
+        { "value": "3", "label": "Kurang dari 2 gelas" },
+        { "value": "4", "label": "0.5 - 1.5 L" },
+        { "value": "5", "label": "2-6 gelas" },
+        { "value": "6", "label": "1.5 - 2.5 L" },
+        { "value": "7", "label": "7-10 gelas" }
+      ]
+    },
+    {
+      "number": 15,
+      "question": "Kapan target pencapaian anda ingin tercapai ?",
+      "placeholder": "Tanggal target (YYYY-MM-DD)",
+      "stateKey": "targetDate",
+      "type": "date"
+    }
+  ]
+}

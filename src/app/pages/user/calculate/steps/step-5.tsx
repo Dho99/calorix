@@ -32,7 +32,7 @@ export default function Step5({
     ];
 
   return (
-    <div className="w-full h-full flex flex-col gap-5 p-20 bg-white/50 rounded-xl justify-center items-center">
+    <>
       <Label htmlFor="email" className="text-lg text-white">
         Pilih Skala Aktivitas Harian Anda
       </Label>
@@ -53,6 +53,6 @@ export default function Step5({
           </SelectGroup>
         </SelectContent>
       </Select>
-    </div>
+    </>
   );
 }
