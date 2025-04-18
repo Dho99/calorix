@@ -4,7 +4,6 @@ import { Check } from "lucide-react";
 
 interface Step {
   number: number;
-  label: string;
 }
 
 interface StepperProps {
