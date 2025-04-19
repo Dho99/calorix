@@ -1,26 +1,60 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { UserRound } from "lucide-react";
+import { CogIcon, UserRound } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { MenuIcon, XIcon } from "lucide-react";
+import { MenuIcon, XIcon, WrenchIcon, CircleHelpIcon, NotebookTabsIcon, InfoIcon, HomeIcon, BotIcon } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import Link from "next/link";
+
+export const navigContent = [
+  {
+    title: "Tentang",
+    link: "#about",
+    icon: InfoIcon
+  },
+  {
+    title: "Fitur",
+    link: "#features",
+    icon: WrenchIcon
+  },
+  {
+    title: "Konsultasi",
+    link: "/pages/user/consultation",
+    icon: BotIcon
+  },
+  {
+    title: "How It Works",
+    link: "/how-it-works",
+    icon: NotebookTabsIcon
+  },
+  {
+    title: "FAQ",
+    link: "#faq",
+    icon: CircleHelpIcon
+  },
+];
+
+
+export const dropdownLinks = [
+  {
+    title: "Dashboard",
+    link: "/pages/user/dashboard",
+    icon: HomeIcon,
+  },
+  {
+    title: "Preferensi",
+    link: "/pages/user/manage",
+    icon: CogIcon,
+  },
+]
+
 
 export default function AppNavbar() {
   const { data } = useSession();
@@ -30,26 +64,9 @@ export default function AppNavbar() {
   type SidebarContent = {
     title: string;
     link: string;
+    icon: typeof MenuIcon;
   };
 
-  const sidebarContent: SidebarContent[] = [
-    {
-      title: "Tentang",
-      link: "#about",
-    },
-    {
-      title: "Fitur",
-      link: "#features",
-    },
-    {
-      title: "How It Works",
-      link: "/how-it-works",
-    },
-    {
-      title: "FAQ",
-      link: "#faq",
-    },
-  ];
 
   return (
     <div className="flex items-center w-full py-3 lg:px-20 px-10 bg-[#092635]/70 text-white justify-between fixed top-0 z-2 backdrop-blur-xs shadow-md">
@@ -57,7 +74,7 @@ export default function AppNavbar() {
         Calorix
       </Link>
       <div className="w-auto lg:flex flex-row hidden items-center">
-        {sidebarContent.map((item, index) => {
+        {navigContent.map((item, index) => {
           return (
             <Link
               key={index}
@@ -73,6 +90,7 @@ export default function AppNavbar() {
     </div>
   );
 }
+
 
 const ProtectedNav = () => {
   const { open, toggleSidebar } = useSidebar();
@@ -95,16 +113,6 @@ const ProtectedNav = () => {
       </Link>
     );
 
-  const dropdownLinks = [
-    {
-      title: "Manage",
-      link: "/pages/user/manage",
-    },
-    {
-      title: "Settings",
-      link: "/pages/user/settings",
-    },
-  ];
 
   return (
     <>
@@ -117,27 +125,20 @@ const ProtectedNav = () => {
             <UserRound className="w-10 h-10 bg-[#9EC8B9] p-2 rounded-full" />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56 bg-black/20 backdrop-blur-xs text-white">
-          <DropdownMenuGroup>
-            {dropdownLinks.map((item, index) => {
-              return (
-                
-                  <DropdownMenuItem key={index}>
-                    <Link
-                      href={item.link}
-                      className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded"
-                    >
-                      {item.title}
-                    </Link>
-                  </DropdownMenuItem>
-                
-              );
-            })}
-          </DropdownMenuGroup>
+        <DropdownMenuContent className="w-40 bg-black/20 backdrop-blur-xs text-white">
+          {/* <DropdownMenuGroup> */}
+          {dropdownLinks.map((item, index) => {
+            return (
+              <Link
+                href={item.link}
+                key={index}
+                className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded"
+              >
+                {item.title}
+              </Link>
+            );
+          })}
         </DropdownMenuContent>
-
-        {/* <Link href={'/pages/user/manage'} >
-          </Link> */}
       </DropdownMenu>
       <button
         className="bg-black/20 lg:hidden  py-2 px-4 rounded-lg shadow-lg"
