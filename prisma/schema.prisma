@@ -19,8 +19,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   Authenticator Authenticator[]
-  activities    ActivitySession[]
   Chatbot      Chatbot[]
+  UserCharacteristic UserCharacteristics[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -82,35 +82,43 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
-model ActivitySession {
-  id             String         @id @default(cuid())
-  user           User           @relation(fields: [userId], references: [id])
-  userId         String
-  type           String         // contoh: "lari", "bersepeda", dll
-  startedAt      DateTime
-  endedAt        DateTime
-  heartRateLogs  HeartRateLog[]
-  calorieEstimation CalorieEstimation?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+model UserCharacteristics {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gender               String
+  age                  Int
+  height_cm            Int
+  current_weight_kg    Int
+  target_weight_kg     Int
+  target_date          DateTime
+  activity_level       String
+  meal_portion         String
+  daily_diet           Json
+  eating_behavior      Json
+  exercise_frequency_per_week Int
+  exercise_duration_hour      Float
+  exercise_intensity   String
+  activity_function    String
+  sleep_hours          Int
+  water_intake         String
+  stress_score         Int
+  sleep_quality        String
+  medical_history      Json
+  medication_use       Json
+  diet_experience      String
+  diet_preferences     Json
+  waist_cm             Int
+  hip_cm               Int
+  goal_priority        String
+  motivation_level     Int
+  confidence_level     Int
+
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-model HeartRateLog {
-  id              String    @id @default(cuid())
-  activity        ActivitySession @relation(fields: [activityId], references: [id])
-  activityId      String
-  timestamp       DateTime  // waktu pengambilan detak jantung
-  heartRate       Int       // dalam bpm
-}
-
-model CalorieEstimation {
-  id              String    @id @default(cuid())
-  activity        ActivitySession @relation(fields: [activityId], references: [id])
-  activityId      String    @unique
-  estimatedCalories Float    // hasil estimasi kalori terbakar
-  method          String    // misal: "integral", "average", dll
-  calculatedAt    DateTime  @default(now())
-}
 
 model Chatbot {
   id          String   @id @default(cuid())

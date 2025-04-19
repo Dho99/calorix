@@ -3,7 +3,7 @@ import SidenavContent from "./sidenav-content";
 
 export default function AppSidebar() {
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar className="lg:hidden block z-10">
       <SidenavContent />
       <SidebarFooter />
     </Sidebar>
