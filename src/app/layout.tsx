@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "next-auth/react";
 
+
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
@@ -24,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${poppins.variable} anti-antialiased w-dvw h-dvh overflow-x-hidden overflow-y-auto bg-[#092635]`}
-      >
+        >
         <SessionProvider>{children}</SessionProvider>
         <Toaster />
       </body>
