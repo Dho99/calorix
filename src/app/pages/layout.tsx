@@ -1,5 +1,4 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import AppSidebar from "@/app/pages/components/sidebar";
 import AppNavbar from "./components/navbar";
 // import ChatBox from "./components/chatbox";
 import { SessionProvider } from "next-auth/react";

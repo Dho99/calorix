@@ -43,9 +43,9 @@ export default function SidenavHead() {
   return (
     <>
       <SidebarHeader className="overflow-hidden">
-        <div className="flex flex-row items-center gap-x-3">
-          <img src="/logo.svg" className="w-10 h-10" alt="Logo" />
-          <div className="text-2xl font-bold">{JSON.stringify(open)}</div>
+        <div className="flex flex-row items-center gap-x-3 p-4">
+          {/* <img src="/logo.svg" className="w-10 h-10" alt="Logo" /> */}
+          <p className="text-3xl font-bold">Calorix</p>
         </div>
       </SidebarHeader>
       <SidebarContent className={`flex flex-col gap-y-2 ${open && "px-2"}`}>
@@ -54,7 +54,7 @@ export default function SidenavHead() {
             <Link
               key={index}
               href={`/pages/${item.link}`}
-              className="w-full py-3 px-3 rounded-lg shadow-lg flex flex-row items-center gap-x-3"
+              className="w-full py-3 px-3 rounded-lg shadow-lg flex flex-row items-center gap-x-3 hover:bg-[#9EC8B9] hover:font-bold transition-all duration-200 ease-in-out"
             >
               <div>
                 <item.icon />

@@ -3,6 +3,9 @@
 import { useSession } from "next-auth/react";
 import { UserRound } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { MenuIcon, XIcon } from "lucide-react";
+import { useSidebar } from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import Link from "next/link";
 
@@ -18,36 +21,33 @@ export default function AppNavbar() {
 
   const sidebarContent: SidebarContent[] = [
     {
-      title: "Dashboard",
-      link: "dashboard",
+      title: "Tentang",
+      link: "#about",
     },
     {
-      title: "Riwayat",
-      link: "history",
+      title: "Fitur",
+      link: "#features",
     },
     {
-      title: "Progress",
-      link: "progress",
-    }, 
-    {
-      title: "Kalkulasi",
-      link: "calculate",
+      title: "How It Works",
+      link: "/how-it-works",
     },
     {
-      title: "Konsultasi",
-      link: "consultation",
+      title: "FAQ",
+      link: "#faq",
     },
   ];
 
+  
   return (
-    <div className="flex items-center w-full py-3 px-20 bg-[#092635]/70 text-white justify-between fixed top-0 z-10 backdrop-blur-sm shadow-md">
+    <div className="flex items-center w-full py-3 lg:px-20 px-10 bg-[#092635]/70 text-white justify-between fixed top-0 z-10 backdrop-blur-xs shadow-md">
       <Link href={"/pages/home"} className="text-2xl font-bold">Calorix</Link>
-      <div className="w-auto flex flex-row items-center">
-        {(!isLoginPage ? sidebarContent : []).map((item, index) => {
+      <div className="w-auto lg:flex flex-row hidden items-center">
+        {sidebarContent.map((item, index) => {
           return (
             <Link
               key={index}
-              href={data ? `/pages/user/${item.link}` :`/auth/signin`}
+              href={`/pages/home${item.link}`}
               className="px-4 py-2 rounded hover:bg-gray-700"
             >
               {item.title}
@@ -61,6 +61,8 @@ export default function AppNavbar() {
 }
 
 const ProtectedNav = () => {
+
+  const {open, toggleSidebar} = useSidebar();
   const session = useSession();
 
   const userSession = session?.data?.user;
@@ -76,17 +78,24 @@ const ProtectedNav = () => {
         href={"/auth/signin"}
         className="border border-[#9EC8B9] text-[#9EC8B9] py-2 px-3 rounded transition-all transition-duration-300 hover:bg-[#9EC8B9] hover:text-white"
       >
-        Sign In
+        Sign In 
       </Link>
     );
 
     return (
-          <Link href={'/pages/user/manage'} className="flex flex-row items-center gap-3">
+      <>
+          <Link href={'/pages/user/manage'} className="flex-row items-center gap-1 lg:flex hidden">
             <div className="border border-[#9EC8B9] text-[#9EC8B9] py-1 px-3 rounded">
               {userSession?.name}
             </div>
             <UserRound className="w-10 h-10 bg-[#9EC8B9] p-2 rounded-full" />
           </Link>
+          <button className="bg-black/20 lg:hidden  py-2 px-4 rounded-lg shadow-lg" onClick={toggleSidebar}>
+          {
+            open ? <XIcon className="w-10 h-10 text-white" /> : <MenuIcon className="w-10 h-10 text-white" />
+          }
+          </button>
+      </>
 
     );
 };
