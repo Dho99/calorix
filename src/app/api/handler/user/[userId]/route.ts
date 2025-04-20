@@ -1,7 +1,10 @@
 import { prisma } from "@/app/utils/lib/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: { params: { email: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { email: string } }
+) {
   const { email } = params;
 
   const user = await prisma.user.findFirst({
@@ -17,7 +20,7 @@ export async function GET(request: NextRequest, { params }: { params: { email: s
         message: "User not found",
       },
       {
-        status: 404,    
+        status: 404,
       }
     );
   }
@@ -32,5 +35,5 @@ export async function GET(request: NextRequest, { params }: { params: { email: s
       status: 200,
     }
   );
-
 }
+
