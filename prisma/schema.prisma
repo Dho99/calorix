@@ -7,25 +7,24 @@ generator client {
   provider = "prisma-client-js"
 }
 
- 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  username      String?
-  accounts      Account[]
-  sessions      Session[]
-  Authenticator Authenticator[]
-  Chatbot      Chatbot[]
+  id                 String                @id @default(cuid())
+  name               String?
+  email              String                @unique
+  emailVerified      DateTime?
+  image              String?
+  password           String?
+  username           String?
+  accounts           Account[]
+  sessions           Session[]
+  Authenticator      Authenticator[]
+  Chatbot            Chatbot[]
   UserCharacteristic UserCharacteristics[]
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -39,33 +38,32 @@ model Account {
   id_token          String?
   session_state     String?
 
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
@@ -76,58 +74,45 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([userId, credentialID])
 }
 
 model UserCharacteristics {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  gender               String
-  age                  Int
-  height_cm            Int
-  current_weight_kg    Int
-  target_weight_kg     Int
-  target_date          DateTime
-  activity_level       String
-  meal_portion         String
-  daily_diet           Json
-  eating_behavior      Json
-  exercise_frequency_per_week Int
-  exercise_duration_hour      Float
-  exercise_intensity   String
-  activity_function    String
-  sleep_hours          Int
-  water_intake         String
-  stress_score         Int
-  sleep_quality        String
-  medical_history      Json
-  medication_use       Json
-  diet_experience      String
-  diet_preferences     Json
-  waist_cm             Int
-  hip_cm               Int
-  goal_priority        String
-  motivation_level     Int
-  confidence_level     Int
+  id                     String   @id @default(cuid())
+  userId                 String
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gender                 String
+  age                    Int
+  height                 Int
+  currentWeight          Int
+  targetWeight           Int
+  targetTime             Int
+  physicalActivities     String[] // Array of strings
+  goal                   String
+  activityFactor         Float
+  mealsPerDay            Int
+  waterIntake            Float
+  sleepHours             Int
+  workoutsPerWeek        Int
+  workoutDuration        Int
+  manualCalorieAdjustment Int
 
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 
 model Chatbot {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  payload     String?
-  sender      SENDER
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payload   String?
+  sender    SENDER
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum SENDER {
