@@ -19,7 +19,7 @@ model User {
   sessions           Session[]
   Authenticator      Authenticator[]
   Chatbot            Chatbot[]
-  UserCharacteristic UserCharacteristics[]
+  UserCharacteristic UserCharacteristics?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -82,7 +82,7 @@ model Authenticator {
 
 model UserCharacteristics {
   id                     String   @id @default(cuid())
-  userId                 String   
+  userId                 String   @unique
   user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   gender                 String
   age                    String

@@ -43,11 +43,20 @@ export async function PUT(
     request: NextRequest,
     { params }: { params: Promise<{ userId: string }> }
   ) {
-    const { data } = await request.json();
+    const body = await request.json();
     const session = await auth();
+    const { userId } = await params;
+    
+    if(session?.user?.id !== userId) {
+      return NextResponse.json({
+        status: 400,
+        success: false,
+        message: "You cannot access this data",
+      });
+    }
   
     try {
-      const { success, error } = characteristicsSchema.safeParse(data);
+      const { success, error } = characteristicsSchema.safeParse(body);
 
       if (!success && error) {
           return NextResponse.json(
@@ -59,13 +68,11 @@ export async function PUT(
           );
       }
   
-      await prisma.userCharacteristics.update({
+      await prisma.userCharacteristics.updateMany({
         where: {
-          userId: session?.user?.id!,
+          userId: session?.user?.id as string,
         },
-        data: {
-          ...data,
-        }
+        data: body
       });
   
       return NextResponse.json(

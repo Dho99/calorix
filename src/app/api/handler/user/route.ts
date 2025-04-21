@@ -90,7 +90,6 @@ export async function PUT(req: NextRequest){
 
   
   if(!result.success) {
-    console.log(result.error.issues);
     return NextResponse.json(
       {
         success: false,
@@ -103,8 +102,6 @@ export async function PUT(req: NextRequest){
   }
 
   data.password = await hashPassword(data.password);
-
-  console.log("data", data);
 
   try {
     const user = await prisma.user.update({
