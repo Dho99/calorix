@@ -19,7 +19,7 @@ model User {
   sessions           Session[]
   Authenticator      Authenticator[]
   Chatbot            Chatbot[]
-  UserCharacteristic UserCharacteristics[]
+  UserCharacteristic UserCharacteristics?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -82,23 +82,23 @@ model Authenticator {
 
 model UserCharacteristics {
   id                     String   @id @default(cuid())
-  userId                 String
+  userId                 String   @unique
   user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   gender                 String
-  age                    Int
-  height                 Int
-  currentWeight          Int
-  targetWeight           Int
-  targetTime             Int
-  physicalActivities     String[] // Array of strings
+  age                    String
+  height                 String
+  currentWeight          String
+  targetWeight           String
+  targetTime             String
+  physicalActivities     String // Array of strings
   goal                   String
-  activityFactor         Float
-  mealsPerDay            Int
-  waterIntake            Float
-  sleepHours             Int
-  workoutsPerWeek        Int
-  workoutDuration        Int
-  manualCalorieAdjustment Int
+  activityFactor         String
+  mealsPerDay            String
+  waterIntake            String
+  sleepHours             String
+  workoutsPerWeek        String
+  workoutDuration        String
+  manualCalorieAdjustment String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

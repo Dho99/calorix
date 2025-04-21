@@ -3,7 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "next-auth/react";
-import { SidebarProvider } from "@/components/ui/sidebar";
+
 
 
 const poppins = Poppins({
@@ -29,9 +29,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} anti-antialiased w-dvw h-dvh overflow-x-hidden overflow-y-auto bg-[#092635]`}
         >
-          <SidebarProvider>
         <SessionProvider>{children}</SessionProvider>
-        </SidebarProvider>
         <Toaster />
       </body>
     </html>

@@ -17,6 +17,7 @@
       "placeholder": "Contoh: 25",
       "stateKey": "age",
       "type": "number",
+      "indicator": "Tahun",
       "tips": {
         "title": "Kami menanyakan usia anda untuk membuat program pribadi anda",
         "description": "Orang yang lebih tua cenderung memiliki lebih banyak lemak tubuh daripada orang yang lebih muda dengan IMT yang sama"
@@ -28,6 +29,7 @@
       "placeholder": "Contoh: 170",
       "stateKey": "height",
       "type": "number",
+      "indicator": "cm",
       "tips": {
         "title": "Menghitung Index Massa Tubuh Anda",
         "description": "IMT Umumnya digunakan sebagai indikator resiko untuk perkembangan atau prevealensi beberapa masalah kesehatan"
@@ -38,20 +40,23 @@
       "question": "Masukkan Berat Badan Saat Ini (dalam kg)",
       "placeholder": "Contoh: 70",
       "stateKey": "currentWeight",
-      "type": "number"
+      "type": "number",
+      "indicator": "kg"
     },
     {
       "number": 5,
       "question": "Masukkan Berat Badan Target (dalam kg)",
       "placeholder": "Contoh: 65",
       "stateKey": "targetWeight",
-      "type": "number"
+      "type": "number",
+      "indicator": "kg"
     },
     {
       "number": 6,
       "question": "Masukkan Target Waktu (dalam bulan)",
       "placeholder": "Contoh: 6",
       "stateKey": "targetTime",
+      "indicator": "Bulan",
       "type": "number",
       "tips": {
         "title": "MUDAH MENANG: Hasilkan 17% dari berat badan Anda",
@@ -63,7 +68,7 @@
       "question": "Pilih Aktivitas Fisik Dinamis anda sehari - hari",
       "placeholder": "Pilih aktivitas fisik yang dilakukan",
       "stateKey": "physicalActivities",
-      "type": "checkbox",
+      "type": "radio",
       "opts": [
         {
           "value": "1",
@@ -105,61 +110,86 @@
       ]
     },
     {
-      "number": 7,
+      "number": 9,
       "question": "Pilih Tingkat Aktivitas Harian Anda",
       "placeholder": "Pilih tingkat aktivitas harian",
       "stateKey": "activityFactor",
       "type": "radio",
       "opts": [
-        { "value": "1.2", "label": "Sangat Sedikit (Sedentari) — 1.2" },
-        { "value": "1.375", "label": "Ringan (1–3x/minggu) — 1.375" },
-        { "value": "1.55", "label": "Sedang (3–5x/minggu) — 1.55" },
-        { "value": "1.725", "label": "Berat (6–7x/minggu) — 1.725" },
-        { "value": "1.9", "label": "Sangat Berat (2x/hari) — 1.9" }
+        { "value": "1.2", "label": "Sangat Sedikit (Sedentari)" },
+        { "value": "1.375", "label": "Ringan (1–3x/minggu)" },
+        { "value": "1.55", "label": "Sedang (3–5x/minggu)" },
+        { "value": "1.725", "label": "Berat (6–7x/minggu)" },
+        { "value": "1.9", "label": "Sangat Berat (2x/hari)" }
       ]
     },
     {
-      "number": 9,
-      "question": "Masukkan Jumlah Makan dalam Sehari",
-      "placeholder": "Contoh: 3",
-      "stateKey": "mealsPerDay",
-      "type": "number"
-    },
-    {
       "number": 10,
-      "question": "Masukkan Jumlah Air yang Diminum Sehari (liter)",
-      "placeholder": "Contoh: 2.5",
-      "stateKey": "waterIntake",
-      "type": "number"
+      "question": "Seberapa Intens Anda berolahraga ?",
+      "placeholder": "Pilih tingkat Intens olahraga anda",
+      "stateKey": "sportIntensity",
+      "type": "radio",
+      "opts": [
+        {"value": "1", "label": "Ringan (Jalan / Yoga)"},
+        {"value": "2", "label": "Sedang (Lari / Sepeda)"},
+        {"value": "3", "label": "Berat (Angkat Beban / HIIT), Atlet"}
+      ]
     },
     {
       "number": 11,
-      "question": "Masukkan Jumlah Tidur Sehari (jam)",
-      "placeholder": "Contoh: 8",
-      "stateKey": "sleepHours",
+      "question": "Masukkan Jumlah Makan dalam Sehari",
+      "placeholder": "Contoh: 3",
+      "stateKey": "mealsPerDay",
+      "indicator": "Porsi",
       "type": "number"
     },
     {
       "number": 12,
-      "question": "Masukkan Jumlah Olahraga per Minggu",
-      "placeholder": "Contoh: 4",
-      "stateKey": "workoutsPerWeek",
+      "question": "Masukkan Jumlah Air yang Diminum Sehari (liter)",
+      "placeholder": "Contoh: 2.5",
+      "stateKey": "waterIntake",
+      "indicator": "Liter",
       "type": "number"
     },
     {
       "number": 13,
+      "question": "Masukkan Jumlah Tidur Sehari (jam)",
+      "placeholder": "Contoh: 8",
+      "stateKey": "sleepHours",
+      "type": "number",
+      "indicator": "Jam"
+    },
+    {
+      "number": 14,
+      "question": "Masukkan Jumlah Olahraga per Minggu",
+      "placeholder": "Contoh: 4",
+      "stateKey": "workoutsPerWeek",
+      "type": "number",
+      "indicator": "Minggu"
+    },
+    {
+      "number": 15,
       "question": "Masukkan Durasi Olahraga Sekali Latihan (dalam menit)",
       "placeholder": "Contoh: 45",
       "stateKey": "workoutDuration",
-      "type": "number"
+      "type": "number",
+      "indicator": "Menit"
     },
-
     {
-      "number": 15,
+      "number": 16,
+      "question": "Masukkan Kalori Harian yang Dihasilkan",
+      "placeholder": "Contoh: 2000",
+      "stateKey": "caloriesPerDay",
+      "type": "date",
+      "indicator": "Kalori"
+    },
+    {
+      "number": 17,
       "question": "Masukkan Kalori Harian Tambahan atau Defisit Manual",
       "placeholder": "Contoh: -500 atau 300",
       "stateKey": "manualCalorieAdjustment",
-      "type": "number"
+      "type": "number",
+      "indicator": "Kalori"
     }
   ]
 }

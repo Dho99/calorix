@@ -3,7 +3,16 @@
 import { useSession } from "next-auth/react";
 import { CogIcon, UserRound } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { MenuIcon, XIcon, WrenchIcon, CircleHelpIcon, NotebookTabsIcon, InfoIcon, HomeIcon, BotIcon } from "lucide-react";
+import {
+  MenuIcon,
+  XIcon,
+  WrenchIcon,
+  CircleHelpIcon,
+  NotebookTabsIcon,
+  InfoIcon,
+  HomeIcon,
+  BotIcon,
+} from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -17,30 +26,29 @@ export const navigContent = [
   {
     title: "Tentang",
     link: "#about",
-    icon: InfoIcon
+    icon: InfoIcon,
   },
   {
     title: "Fitur",
     link: "#features",
-    icon: WrenchIcon
+    icon: WrenchIcon,
   },
   {
     title: "Konsultasi",
     link: "/pages/user/consultation",
-    icon: BotIcon
+    icon: BotIcon,
   },
   {
     title: "How It Works",
     link: "/how-it-works",
-    icon: NotebookTabsIcon
+    icon: NotebookTabsIcon,
   },
   {
     title: "FAQ",
     link: "#faq",
-    icon: CircleHelpIcon
+    icon: CircleHelpIcon,
   },
 ];
-
 
 export const dropdownLinks = [
   {
@@ -53,8 +61,7 @@ export const dropdownLinks = [
     link: "/pages/user/manage",
     icon: CogIcon,
   },
-]
-
+];
 
 export default function AppNavbar() {
   const { data } = useSession();
@@ -67,30 +74,30 @@ export default function AppNavbar() {
     icon: typeof MenuIcon;
   };
 
-
   return (
     <div className="flex items-center w-full py-3 lg:px-20 px-10 bg-[#092635]/70 text-white justify-between fixed top-0 z-2 backdrop-blur-xs shadow-md">
       <Link href={"/pages/home"} className="text-2xl font-bold">
         Calorix
       </Link>
       <div className="w-auto lg:flex flex-row hidden items-center">
-        {navigContent.map((item, index) => {
-          return (
-            <Link
-              key={index}
-              href={`/pages/home${item.link}`}
-              className="px-4 py-2 rounded hover:bg-gray-700"
-            >
-              {item.title}
-            </Link>
-          );
-        })}
+        {isLoginPage
+          ? null
+          : navigContent.map((item, index) => {
+              return (
+                <Link
+                  key={index}
+                  href={`/pages/home${item.link}`}
+                  className="px-4 py-2 rounded hover:bg-gray-700"
+                >
+                  {item.title}
+                </Link>
+              );
+            })}
       </div>
       <ProtectedNav />
     </div>
   );
 }
-
 
 const ProtectedNav = () => {
   const { open, toggleSidebar } = useSidebar();
@@ -112,7 +119,6 @@ const ProtectedNav = () => {
         Sign In
       </Link>
     );
-
 
   return (
     <>

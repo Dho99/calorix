@@ -7,7 +7,7 @@ export const characteristicsSchema = z.object({
     currentWeight: z.string({ message: "Current weight is required." }),
     targetWeight: z.string({ message: "Target weight is required." }),
     targetTime: z.string({ message: "Target time is required." }),
-    physicalActivities: z.string({ message: "Physical activities are required." }).array(),
+    physicalActivities: z.string({ message: "Physical activities are required." }),
     goal: z.string({ message: "Goal is required." }),
     activityFactor: z.string({ message: "Activity factor is required." }),
     mealsPerDay: z.string({ message: "Meals per day are required." }),

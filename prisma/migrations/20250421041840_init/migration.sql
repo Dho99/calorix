@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "SENDER" AS ENUM ('USER', 'BOT');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -5,6 +8,8 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "emailVerified" TIMESTAMP(3),
     "image" TEXT,
+    "password" TEXT,
+    "username" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -63,37 +68,40 @@ CREATE TABLE "Authenticator" (
 );
 
 -- CreateTable
-CREATE TABLE "ActivitySession" (
+CREATE TABLE "UserCharacteristics" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
-    "startedAt" TIMESTAMP(3) NOT NULL,
-    "endedAt" TIMESTAMP(3) NOT NULL,
+    "gender" TEXT NOT NULL,
+    "age" TEXT NOT NULL,
+    "height" TEXT NOT NULL,
+    "currentWeight" TEXT NOT NULL,
+    "targetWeight" TEXT NOT NULL,
+    "targetTime" TEXT NOT NULL,
+    "physicalActivities" TEXT NOT NULL,
+    "goal" TEXT NOT NULL,
+    "activityFactor" TEXT NOT NULL,
+    "mealsPerDay" TEXT NOT NULL,
+    "waterIntake" TEXT NOT NULL,
+    "sleepHours" TEXT NOT NULL,
+    "workoutsPerWeek" TEXT NOT NULL,
+    "workoutDuration" TEXT NOT NULL,
+    "manualCalorieAdjustment" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "ActivitySession_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "UserCharacteristics_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "HeartRateLog" (
+CREATE TABLE "Chatbot" (
     "id" TEXT NOT NULL,
-    "activityId" TEXT NOT NULL,
-    "timestamp" TIMESTAMP(3) NOT NULL,
-    "heartRate" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
+    "payload" TEXT,
+    "sender" "SENDER" NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "HeartRateLog_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "CalorieEstimation" (
-    "id" TEXT NOT NULL,
-    "activityId" TEXT NOT NULL,
-    "estimatedCalories" DOUBLE PRECISION NOT NULL,
-    "method" TEXT NOT NULL,
-    "calculatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "CalorieEstimation_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Chatbot_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -106,7 +114,7 @@ CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
 CREATE UNIQUE INDEX "Authenticator_credentialID_key" ON "Authenticator"("credentialID");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "CalorieEstimation_activityId_key" ON "CalorieEstimation"("activityId");
+CREATE UNIQUE INDEX "UserCharacteristics_userId_key" ON "UserCharacteristics"("userId");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -118,10 +126,7 @@ ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "Authenticator" ADD CONSTRAINT "Authenticator_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ActivitySession" ADD CONSTRAINT "ActivitySession_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserCharacteristics" ADD CONSTRAINT "UserCharacteristics_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "HeartRateLog" ADD CONSTRAINT "HeartRateLog_activityId_fkey" FOREIGN KEY ("activityId") REFERENCES "ActivitySession"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "CalorieEstimation" ADD CONSTRAINT "CalorieEstimation_activityId_fkey" FOREIGN KEY ("activityId") REFERENCES "ActivitySession"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Chatbot" ADD CONSTRAINT "Chatbot_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
