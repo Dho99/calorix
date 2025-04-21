@@ -56,6 +56,7 @@ export default function Page() {
 
   const router = useRouter();
   const [stepState, setStepState] = useState<StepValues | null>(null);
+  const [isUpdatePage, setIsUpdatePage] = useState<boolean>(false);
   const [alert, setAlert] = useState<{
     type: string;
     success: boolean;
@@ -69,17 +70,25 @@ export default function Page() {
       const res = await axios.get(
         `/api/handler/characteristics/${data?.user?.id!}`
       );
-      if (res.data && res.status === 200) {
+      if (res.data.data && res.data.status === 200) {
         setAlert({
           success: true,
           type: "dialog",
           message:
             "Anda telah memiliki data kalkulasi sebelumnya, apakah anda ingin memperbarui data tersebut?",
         });
+      } else if (res.data.status === 400) {
+        setAlert({
+          success: false,
+          type: "alert",
+          message: res.data.message,
+        })
       }
     };
-    getUserData();
-  }, []);
+
+    if(data?.user?.id) getUserData();
+
+  }, [data?.user?.id]);
 
   function updateStepState(stepType: string, value: string | number | boolean) {
     setStepState((prevState) => ({
@@ -113,12 +122,12 @@ export default function Page() {
         setCurrentStep((prev) => Math.min(prev + 1, 16));
       } else {
         const payload = stepState;
-        axios
-          .post(`/api/handler/characteristics/${data?.user?.id!}`, {
+        axios.post(`/api/handler/characteristics/${isUpdatePage && data?.user?.id ? data.user.id : ''}`, 
+          {
+            // method: isUpdatePage ? 'PUT' : 'POST',
             data: payload,
           })
           .then((res) => {
-            console.log(res.data);
             if (res.data.status === 400) {
               setAlert({
                 success: false,
@@ -128,13 +137,13 @@ export default function Page() {
             } else {
               setAlert({
                 success: true,
-                type: "alert",
-                message: res.data.message,
+                type: "dialog",
+                message: "Data berhasil disimpan",
               });
 
-              // setStepState(null);
+              setStepState(null);
             }
-            setCurrentStep(1);
+            // setCurrentStep(1);
           })
           .catch((err) => {
             console.log(err);
@@ -193,6 +202,7 @@ export default function Page() {
             type="button"
             className="border border-[#5C8374] rounded-lg py-2 px-4 text-white"
             onClick={() => {
+              setIsUpdatePage(true);
               setAlert(null);
             }}
           >
@@ -214,6 +224,7 @@ export default function Page() {
         className="w-full h-dvh flex flex-col bg-[#092635] text-white relative py-20 items-center overflow-auto"
         ref={pageRef}
       >
+        {/* {JSON.stringify(isUpdatePage)} */}
         <div className="w-full flex flex-col h-full lg:px-30 px-5">
           <div className="flex justify-center items-center w-full py-10 ">
             <Stepper
@@ -242,7 +253,7 @@ export default function Page() {
 
           <div className="h-max w-full flex flex-wrap py-5">
             <div className="w-full h-full flex justify-center items-center flex-col">
-              {JSON.stringify(stepState)}
+              {/* {JSON.stringify(stepState)} */}
               <div className="w-full h-max flex flex-col gap-10 p-10 ring ring-black/30 shadow-xl/20 rounded-xl justify-center items-center">
                 <div className="w-full flex justify-center items-center">
                   <h1 className="text-4xl font-bold text-center">
@@ -255,7 +266,7 @@ export default function Page() {
                     className={`grid 
                       
                       ${
-                        steps[currentStep - 1].opts!.length < 3 ? "lg:grid-cols-2" : "lg:grid-cols-1"
+                        steps[currentStep - 1].opts!.length < 3 ? "lg:grid-cols-2" : "lg:grid-cols-3"
                       }
 
                       grid-cols-1 lg:gap-10 gap-3 lg:w-fit w-1/2`}
@@ -277,23 +288,17 @@ export default function Page() {
                           );
                         }}
                       >
-                        {steps[currentStep - 1].stateKey === "gender" ? (
-                          opt.value === "L" ? (
-                            <MarsIcon className="m-auto w-14 h-14" />
-                          ) : (
-                            <VenusIcon className="m-auto w-14 h-14" />
-                          )
-                        ) : (
+                        {
                           opt.icon && (
                             <Image
                               src={`/assets/static/svg/${opt.icon}`}
                               alt={opt.label}
-                              width={400}
-                              height={400}
+                              width={300}
+                              height={300}
                               quality={100}
                               className="m-auto"
                             />
-                          )
+                          
                         )}
                         <div>{opt.label}</div>
                       </button>
@@ -362,9 +367,9 @@ export default function Page() {
                 )}
                 {steps[currentStep - 1].tips && (
                   <div className="w-full flex justify-center items-center bg-[#EBF5FF] rounded-lg">
-                    <div className="w-full h-max flex flex-col gap-3 p-10 ring ring-black/30 shadow-xl/20 rounded-xl">
+                    <div className="w-full h-max flex flex-col gap-3 p-5 ring ring-black/30 shadow-xl/20 rounded-xl">
                       <h1 className="text-2xl font-bold text-start text-slate-600">
-                        {steps[currentStep - 1].tips?.title as string}
+                        Tips : {steps[currentStep - 1].tips?.title as string}
                       </h1>
                       <p className="text-lg text-start text-slate-600">
                         {steps[currentStep - 1].tips?.description as string}

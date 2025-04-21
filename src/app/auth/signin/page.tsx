@@ -15,14 +15,14 @@ export default function Page(): React.ReactNode {
   }
 
   return (
-    <div className="w-full h-full flex-col items-center justify-center">
-      <div className="flex flex-col items-center">
+    <div className={`w-full h-full flex-col items-center justify-center ${!isLogin ? 'lg:py-20 py-0' : ''}`}>
+      <div className="flex flex-col items-center m-auto w-full">
         <h1 className={"text-2xl font-bold text-center"}>Calorix</h1>
         <h1 className="text-2xl text-white">{isLogin ? "Sign In" : "Register"}</h1>
         <p className="text-sm text-gray-400">Please {isLogin ? "Sign In" : "Register"} to continue</p>
         <div
           className={
-            "flex flex-col gap-3 mt-5 flex justify-center items-center w-98"
+            "flex flex-col gap-3 mt-5 flex justify-center items-center lg:w-98 md:w-98 w-auto"
           }
         >
           {isLogin ? (
