@@ -108,7 +108,7 @@ export default function Page() {
   const handleNext = async() => {
     scrollToTop();
 
-    if (!stepState?.hasOwnProperty(steps[currentStep - 1].stateKey!) && currentStep < steps.length) {
+    if (!stepState?.hasOwnProperty(steps[currentStep - 2].stateKey!) && currentStep < steps.length) {
       setAlert({
         success: false,
         type: "alert",
@@ -125,15 +125,24 @@ export default function Page() {
         input.value = stepState?.[steps[currentStep]?.stateKey!] as string;
       }
 
-      if (currentStep < steps.length) {
+      if (currentStep < steps.length - 1) {
         setCurrentStep((prev) => Math.min(prev + 1, steps.length));
-      } else {
-        const payload = stepState;
         
-        // console.log("hit");
-        calculateUserData(payload!);
+      } 
+      
+      if(currentStep < steps.length - 2) {
+        const calculate = await calculateUserData(stepState!);
 
-        // axios({
+        const payload = {
+          ...stepState,
+          ...calculate
+        };
+
+      }
+
+      if(currentStep >= steps.length - 2 && currentStep < steps.length) {
+        console.log(payload)
+              // axios({
         //   method: isUpdatePage ? "PUT" : "POST",
         //   url: `/api/handler/characteristics/${data?.user?.id}`,
         //   data: payload,
@@ -160,6 +169,8 @@ export default function Page() {
         //     console.log(err);
         //   });
       }
+
+
     }
   };
 
@@ -232,7 +243,8 @@ export default function Page() {
             </Alert>
           )}
           {JSON.stringify(steps.length)}
-          {currentStep < steps.length ? (
+
+          {currentStep < steps.length - 2? (
             <>
               <DialogContent className="sm:max-w-[425px] bg-[#092635] text-white border-none">
                 <DialogHeader>

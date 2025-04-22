@@ -1,7 +1,7 @@
 "use server"
 
-import type { StepValues } from "@/app/pages/user/calculate/page"
-import axios from "axios";
+import type { StepValues } from "@/app/pages/user/calculate/page";
+
 
 export const calculateUserData = async (data: StepValues) => {
    const { currentWeight, height, gender, age, activityFactor, manualCalorieAdjustment } = data;
@@ -10,9 +10,12 @@ export const calculateUserData = async (data: StepValues) => {
   const BMR = await calculateBMR(parseFloat(String(currentWeight)), parseFloat(String(height)), String(gender), parseInt(String(age)));
   const TDEE = await calculateTDEE(BMR, parseFloat(String(activityFactor)), parseFloat(String(manualCalorieAdjustment)));
 
-  console.log("BMI: ", BMI);
-  console.log("BMR: ", BMR);
-  console.log("TDEE: ", TDEE);
+
+  return {
+    BMI: BMI.toString(),
+    BMR: BMR.toString(),
+    TDEE: TDEE.toString(),
+  }
 
 
 }
