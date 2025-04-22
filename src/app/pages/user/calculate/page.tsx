@@ -23,10 +23,10 @@ import { calculateUserData } from "@/app/utils/api/calculate";
 
 export type Step = {
   number: number;
-  question: string;
-  placeholder: string | null;
-  stateKey: string;
-  type: string;
+  question?: string;
+  placeholder?: string;
+  stateKey?: string;
+  type?: string;
   indicator?: string;
   tips?: {
     title: string;
@@ -105,10 +105,10 @@ export default function Page() {
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
-  const handleNext = () => {
+  const handleNext = async() => {
     scrollToTop();
 
-    if (!stepState?.hasOwnProperty(steps[currentStep - 1].stateKey)) {
+    if (!stepState?.hasOwnProperty(steps[currentStep - 1].stateKey!) && currentStep < steps.length) {
       setAlert({
         success: false,
         type: "alert",
@@ -122,15 +122,16 @@ export default function Page() {
       );
 
       if (input instanceof HTMLInputElement) {
-        input.value = stepState?.[steps[currentStep]?.stateKey] as string;
+        input.value = stepState?.[steps[currentStep]?.stateKey!] as string;
       }
 
-      if (currentStep < 16) {
-        setCurrentStep((prev) => Math.min(prev + 1, 16));
-      } else if (currentStep >= 16) {
+      if (currentStep < steps.length) {
+        setCurrentStep((prev) => Math.min(prev + 1, steps.length));
+      } else {
         const payload = stepState;
-
-        calculateUserData(payload);
+        
+        // console.log("hit");
+        calculateUserData(payload!);
 
         // axios({
         //   method: isUpdatePage ? "PUT" : "POST",
@@ -170,7 +171,7 @@ export default function Page() {
         `input#${steps[currentStep - 1].stateKey}`
       );
       if (input instanceof HTMLInputElement) {
-        input.value = stepState?.[steps[currentStep - 2].stateKey] as string;
+        input.value = stepState?.[steps[currentStep - 2].stateKey!] as string;
       }
     }
   };
@@ -230,7 +231,8 @@ export default function Page() {
               </AlertDescription>
             </Alert>
           )}
-          {currentStep < 16 ? (
+          {JSON.stringify(steps.length)}
+          {currentStep < steps.length ? (
             <>
               <DialogContent className="sm:max-w-[425px] bg-[#092635] text-white border-none">
                 <DialogHeader>
@@ -264,7 +266,6 @@ export default function Page() {
 
               <div className="h-full w-full flex flex-wrap py-5">
                 <div className="w-full h-full flex justify-center items-center flex-col">
-                  {/* {JSON.stringify(stepState)} */}
                   <div className="w-full h-max flex flex-col gap-10 p-10 ring ring-black/30 shadow-xl/20 rounded-xl justify-center items-center">
                     <div className="w-full flex justify-center items-center">
                       <h1 className="text-4xl font-bold text-center">
@@ -290,13 +291,13 @@ export default function Page() {
                             type="button"
                             className={`hover:-mt-5 transition-all transition-duration-30 hover:cursor-pointer h-full p-5 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 focus:bg-[#5C8374] focus:text-white ${
                               opt.value ===
-                              stepState?.[steps[currentStep - 1].stateKey]
+                              stepState?.[steps[currentStep - 1].stateKey!]
                                 ? "bg-[#5C8374] text-white"
                                 : "bg-white"
                             }`}
                             onClick={() => {
                               updateStepState(
-                                steps[currentStep - 1].stateKey,
+                                steps[currentStep - 1].stateKey!,
                                 opt.value
                               );
                             }}
@@ -333,7 +334,7 @@ export default function Page() {
                                 className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                 onClick={() => {
                                   handleOptionInput(
-                                    steps[currentStep - 1].stateKey,
+                                    steps[currentStep - 1].stateKey!,
                                     opt.value
                                   );
                                 }}
@@ -366,7 +367,7 @@ export default function Page() {
                           className="w-full h-full bg-white px-10 py-5 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 "
                           defaultValue={
                             stepState?.[
-                              steps[currentStep - 1].stateKey
+                              steps[currentStep - 1].stateKey!
                             ]! as string
                           }
                           required
