@@ -110,7 +110,7 @@
       ]
     },
     {
-      "number": 7,
+      "number": 9,
       "question": "Pilih Tingkat Aktivitas Harian Anda",
       "placeholder": "Pilih tingkat aktivitas harian",
       "stateKey": "activityFactor",
@@ -124,7 +124,7 @@
       ]
     },
     {
-      "number": 7,
+      "number": 10,
       "question": "Seberapa Intens Anda berolahraga ?",
       "placeholder": "Pilih tingkat Intens olahraga anda",
       "stateKey": "sportIntensity",
@@ -136,7 +136,7 @@
       ]
     },
     {
-      "number": 9,
+      "number": 11,
       "question": "Masukkan Jumlah Makan dalam Sehari",
       "placeholder": "Contoh: 3",
       "stateKey": "mealsPerDay",
@@ -144,7 +144,7 @@
       "type": "number"
     },
     {
-      "number": 10,
+      "number": 12,
       "question": "Masukkan Jumlah Air yang Diminum Sehari (liter)",
       "placeholder": "Contoh: 2.5",
       "stateKey": "waterIntake",
@@ -152,7 +152,7 @@
       "type": "number"
     },
     {
-      "number": 11,
+      "number": 13,
       "question": "Masukkan Jumlah Tidur Sehari (jam)",
       "placeholder": "Contoh: 8",
       "stateKey": "sleepHours",
@@ -160,7 +160,7 @@
       "indicator": "Jam"
     },
     {
-      "number": 12,
+      "number": 14,
       "question": "Masukkan Jumlah Olahraga per Minggu",
       "placeholder": "Contoh: 4",
       "stateKey": "workoutsPerWeek",
@@ -168,7 +168,7 @@
       "indicator": "Minggu"
     },
     {
-      "number": 13,
+      "number": 15,
       "question": "Masukkan Durasi Olahraga Sekali Latihan (dalam menit)",
       "placeholder": "Contoh: 45",
       "stateKey": "workoutDuration",
@@ -176,7 +176,7 @@
       "indicator": "Menit"
     },
     {
-      "number": 14,
+      "number": 16,
       "question": "Masukkan Jumlah Kalori Harian yang Masuk ke tubuh",
       "placeholder": "Contoh: 2000",
       "stateKey": "caloriesPerDay",
@@ -184,7 +184,7 @@
       "indicator": "Kalori"
     },
     {
-      "number": 15,
+      "number": 17,
       "question": "Masukkan Kalori Harian Tambahan atau Defisit Manual",
       "placeholder": "Contoh: -500 atau 300",
       "stateKey": "manualCalorieAdjustment",
@@ -192,11 +192,10 @@
       "indicator": "Kalori"
     },
     {
-      "number": 16
+      "number": 18
     },
     {
-      "number": 17
+      "number": 19
     }
-
   ]
 }

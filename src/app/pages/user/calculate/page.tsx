@@ -6,7 +6,7 @@ import { steps as stepsJson } from "./components/steps.json";
 import { Checkbox } from "@/components/ui/checkbox";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Save } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -20,6 +20,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { calculateUserData } from "@/app/utils/api/calculate";
+import SaveCalculate from "./components/save-calculate";
 
 export type Step = {
   number: number;
@@ -105,10 +106,13 @@ export default function Page() {
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
-  const handleNext = async() => {
+  const handleNext = async () => {
     scrollToTop();
 
-    if (!stepState?.hasOwnProperty(steps[currentStep - 2].stateKey!) && currentStep < steps.length) {
+    if (
+      !stepState?.hasOwnProperty(steps[currentStep - 1].stateKey!) &&
+      currentStep < steps.length - 2
+    ) {
       setAlert({
         success: false,
         type: "alert",
@@ -125,52 +129,47 @@ export default function Page() {
         input.value = stepState?.[steps[currentStep]?.stateKey!] as string;
       }
 
-      if (currentStep < steps.length - 1) {
+      if (currentStep < steps.length) {
         setCurrentStep((prev) => Math.min(prev + 1, steps.length));
-        
-      } 
-      
-      if(currentStep < steps.length - 2) {
+      }
+
+      if (currentStep < steps.length - 1) {
         const calculate = await calculateUserData(stepState!);
 
-        const payload = {
-          ...stepState,
-          ...calculate
-        };
-
+        setStepState((prevState) => ({
+          ...prevState,
+          ...calculate,
+        }));
       }
 
-      if(currentStep >= steps.length - 2 && currentStep < steps.length) {
-        console.log(payload)
-              // axios({
-        //   method: isUpdatePage ? "PUT" : "POST",
-        //   url: `/api/handler/characteristics/${data?.user?.id}`,
-        //   data: payload,
-        // })
-        //   .then((res) => {
-        //     if (res.data.status === 400) {
-        //       setAlert({
-        //         success: false,
-        //         type: "alert",
-        //         message: res.data.message,
-        //       });
-        //     } else {
-        //       setAlert({
-        //         success: true,
-        //         type: "dialog",
-        //         message: "Data berhasil disimpan",
-        //       });
+      if (currentStep === steps.length) {
+        axios({
+          method: isUpdatePage ? "PUT" : "POST",
+          url: `/api/handler/characteristics${isUpdatePage ? '/'+data?.user?.id : ''}`,
+          data: stepState!,
+        })
+          .then((res) => {
+            if (res.data.status === 400) {
+              setAlert({
+                success: false,
+                type: "alert",
+                message: res.data.message,
+              });
+            } else {
+              setAlert({
+                success: true,
+                type: "dialog",
+                message: "Data berhasil disimpan",
+              });
 
-        //       setStepState(null);
-        //     }
-        //     // setCurrentStep(1);
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   });
+              setStepState(null);
+            }
+            // setCurrentStep(1);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
-
-
     }
   };
 
@@ -242,9 +241,8 @@ export default function Page() {
               </AlertDescription>
             </Alert>
           )}
-          {JSON.stringify(steps.length)}
 
-          {currentStep < steps.length - 2? (
+          {currentStep < steps.length - 1 ? (
             <>
               <DialogContent className="sm:max-w-[425px] bg-[#092635] text-white border-none">
                 <DialogHeader>
@@ -370,7 +368,7 @@ export default function Page() {
                     ) : (
                       <div className={`flex flex-row gap-10`}>
                         <input
-                        autoFocus
+                          autoFocus
                           id={steps[currentStep - 1].stateKey}
                           type={steps[currentStep - 1].type}
                           placeholder={
@@ -409,8 +407,10 @@ export default function Page() {
                 </div>
               </div>
             </>
+          ) : currentStep === steps.length ? (
+            <SaveCalculate props={stepState!} />
           ) : (
-            <SummaryCalculate props={stepState} />
+            <SummaryCalculate props={stepState!} />
           )}
           <div className="w-full pt-10 pb-20 flex flex-row justify-between">
             {currentStep > 1 && (

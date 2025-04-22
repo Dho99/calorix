@@ -8,26 +8,24 @@ export async function POST(
   ) {
     const { data } = await request.json();
     const session = await auth();
-
+    
+    console.log(data);
     const payload = {
       ...data,
       userId: session?.user?.id as string,
     }
-
-    console.log(data);
   
     try {
-  
       const { success, error } = characteristicsSchema.safeParse(data);
       if (!success && error) {
         console.log("error", error);
-          return NextResponse.json(
-            {
-              status: 400,
-              success: false,
-              message: error.issues.map((issue) => issue.message).join(", "),
-            },
-          );
+          // return NextResponse.json(
+          //   {
+          //     status: 400,
+          //     success: false,
+          //     message: error.issues.map((issue) => issue.message).join(", "),
+          //   },
+          // );
       }
 
 
@@ -35,26 +33,28 @@ export async function POST(
       await prisma.userCharacteristics.create({
           data: payload
       });
+
+      console.log("created");
   
-      return NextResponse.json(
-        {
-          status: 200,
-          success: true,
-          message: "Data tersimpan dengan sukses",
-        }
-      );
+      // return NextResponse.json(
+      //   {
+      //     status: 200,
+      //     success: true,
+      //     message: "Data tersimpan dengan sukses",
+      //   }
+      // );
     } catch (err) {
       console.log(err);
-      if (err instanceof Error) {
-        return NextResponse.json(
-          {
-            message: err.message,
-          },
-          {
-            status: 500,
-          }
-        );
-      }
+      // if (err instanceof Error) {
+      //   return NextResponse.json(
+      //     {
+      //       message: err.message,
+      //     },
+      //     {
+      //       status: 500,
+      //     }
+      //   );
+      // }
     }
   }
   
