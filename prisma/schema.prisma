@@ -85,23 +85,25 @@ model UserCharacteristics {
   userId                 String   @unique
   user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   gender                 String
-  age                    Float
-  height                 Float
-  currentWeight          Float
-  targetWeight           Float
-  targetTime             Float
-  physicalActivities     Float // Array of Floats
-  goal                   Float
-  activityFactor         Float
-  mealsPerDay            Float
-  waterIntake            Float
-  sleepHours             Float
-  workoutsPerWeek        Float
-  workoutDuration        Float
-  manualCalorieAdjustment Float
-  BMR                Float  
-  TDEE                Float
-  BMI                Float
+  age                    String
+  height                 String
+  currentWeight          String
+  targetWeight           String
+  targetTime             String
+  physicalActivities     String // Array of Strings
+  goal                   String
+  activityFactor         String
+  mealsPerDay            String
+  waterIntake            String
+  sleepHours             String
+  workoutsPerWeek        String
+  workoutDuration        String
+  caloriesPerDay         String
+  sportIntensity         String
+  manualCalorieAdjustment String
+  bmi                   String
+  tdee                  String
+  bmr                   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -63,9 +63,11 @@ export default function Page() {
   const [isUpdatePage, setIsUpdatePage] = useState<boolean>(false);
 
   const [alert, setAlert] = useState<{
+    title?: string;
     type: string;
     success: boolean;
     message: string;
+    markdownComponent?: React.ReactNode
   } | null>(null);
 
   const { data } = useSession();
@@ -108,7 +110,6 @@ export default function Page() {
 
   const handleNext = async () => {
     scrollToTop();
-
     if (
       !stepState?.hasOwnProperty(steps[currentStep - 1].stateKey!) &&
       currentStep < steps.length - 2
@@ -160,11 +161,10 @@ export default function Page() {
                 success: true,
                 type: "dialog",
                 message: "Data berhasil disimpan",
+                markdownComponent: (handleAfterSubmitSuccess()),
               });
-
-              setStepState(null);
             }
-            // setCurrentStep(1);
+            setCurrentStep(1);
           })
           .catch((err) => {
             console.log(err);
@@ -172,6 +172,22 @@ export default function Page() {
       }
     }
   };
+
+  const handleAfterSubmitSuccess = () => {
+    return (
+      <div className="w-full flex flex-row justify-between gap-5">
+        <button
+          type="button"
+          className="bg-[#5C8374] text-white rounded-lg py-2 px-4 ms-auto"
+          onClick={() => {
+            router.push("/pages/user/dashboard");
+          }}
+        >
+          Kembali ke Dashboard
+        </button>
+      </div>
+    )
+  }
 
   const handlePrev = () => {
     scrollToTop();
@@ -211,7 +227,7 @@ export default function Page() {
   };
 
   return (
-    <Dialog>
+    <Dialog open={alert?.type === "dialog"}>
       <div
         className="w-full max-h-dvh h-full flex flex-col bg-[#092635] text-white relative py-20 items-center overflow-auto"
         ref={pageRef}
@@ -242,16 +258,20 @@ export default function Page() {
             </Alert>
           )}
 
-          {currentStep < steps.length - 1 ? (
-            <>
+          {
+            alert?.type === "dialog" && (
               <DialogContent className="sm:max-w-[425px] bg-[#092635] text-white border-none">
-                <DialogHeader>
-                  <DialogTitle>Calculation Alert</DialogTitle>
-                  <DialogDescription className="text-slate-400 text-base my-5">
-                    {alert?.message}
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter className="flex justify-between w-full">
+              <DialogHeader>
+                <DialogTitle>{alert?.title ? alert?.title : "Calculate Alert"}</DialogTitle>
+                <DialogDescription className="text-slate-400 text-base my-5">
+                  {alert?.message}
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="flex justify-between w-full">
+                {alert?.markdownComponent ? (
+                  alert?.markdownComponent
+                ) : (
+                  <>
                   <button
                     type="button"
                     className="border border-[#5C8374] rounded-lg py-2 px-4 text-white"
@@ -271,9 +291,16 @@ export default function Page() {
                   >
                     Kembali ke Dashboard
                   </button>
-                </DialogFooter>
-              </DialogContent>
+                  </>
+                )}
+             
+              </DialogFooter>
+            </DialogContent>
+            )
+          }
 
+          {currentStep < steps.length - 1 ? (
+            <>
               <div className="h-full w-full flex flex-wrap py-5">
                 <div className="w-full h-full flex justify-center items-center flex-col">
                   <div className="w-full h-max flex flex-col gap-10 p-10 ring ring-black/30 shadow-xl/20 rounded-xl justify-center items-center">

@@ -12,9 +12,9 @@ export const calculateUserData = async (data: StepValues) => {
 
 
   return {
-    BMI: BMI.toString(),
-    BMR: BMR.toString(),
-    TDEE: TDEE.toString(),
+    bmi: BMI.toString(),
+    bmr: BMR.toString(),
+    tdee: TDEE.toString(),
   }
 
 
