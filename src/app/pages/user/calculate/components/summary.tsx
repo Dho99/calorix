@@ -1,16 +1,14 @@
 "use client";
 import type { StepValues, Step } from "../page";
-import { useState } from "react";
 import { steps as stepsJson } from "./steps.json";
 import Image from "next/image";
-import { Checkbox } from "@/components/ui/checkbox";
 
 export default function SummaryCalculate({
   props,
 }: {
   props: StepValues | null;
 }) {
-  const [steps, setStep] = useState<StepValues | null>(props);
+  const steps = props;
   const stepsTemplate: Step[] = stepsJson;
 
   return (
@@ -25,7 +23,6 @@ export default function SummaryCalculate({
       </div>
       <div className="mt-4 grid lg:grid-cols-2 grid-cols-1 gap-5">
         {stepsTemplate.map((step, index) => {
-          const stepValue = steps?.[step.stateKey as keyof StepValues];
           return (
             <div key={index} className="w-full flex flex-col gap-y-1">
               <h3 className="text-xl font-bold">
@@ -39,7 +36,7 @@ export default function SummaryCalculate({
                     placeholder={stepsTemplate[index].placeholder as string}
                     className="w-full h-full px-10 py-5 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 "
                     defaultValue={
-                      steps?.[stepsTemplate[index].stateKey!] as string
+                      steps?.[stepsTemplate[index].stateKey as keyof StepValues] as string
                     }
                     readOnly
                   />

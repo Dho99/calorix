@@ -5,12 +5,10 @@ import HeroImage from "../../../../../public/assets/static/hero-image.png";
 import { useRef, useEffect } from "react";
 import { animate, stagger, hover } from "motion";
 import { splitText } from "motion-plus";
-import { useTime } from "motion/react";
 import * as motion from "motion/react-client";
 
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
-  const time = useTime();
   useEffect(() => {
     document.fonts.ready.then(() => {
       if (!ref.current) return;

@@ -6,7 +6,7 @@ import { steps as stepsJson } from "./components/steps.json";
 import { Checkbox } from "@/components/ui/checkbox";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { AlertCircle, Save } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -75,7 +75,7 @@ export default function Page() {
   useEffect(() => {
     const getUserData = async () => {
       const res = await axios.get(
-        `/api/handler/characteristics/${data?.user?.id!}`
+        `/api/handler/characteristics/${data?.user?.id as string}`
       );
 
       if (res.data.data && res.data.status === 200) {
@@ -127,7 +127,7 @@ export default function Page() {
       );
 
       if (input instanceof HTMLInputElement) {
-        input.value = stepState?.[steps[currentStep]?.stateKey!] as string;
+        input.value = stepState?.[steps[currentStep]?.stateKey as string] as string
       }
 
       if (currentStep < steps.length) {
@@ -404,8 +404,8 @@ export default function Page() {
                           className="w-full h-full bg-white px-10 py-5 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 "
                           defaultValue={
                             stepState?.[
-                              steps[currentStep - 1].stateKey!
-                            ]! as string
+                              steps[currentStep - 1].stateKey as string
+                            ] as string
                           }
                           required
                           onChange={(e) =>
