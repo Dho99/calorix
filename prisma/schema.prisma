@@ -8,9 +8,9 @@ generator client {
 }
 
 model User {
-  id                 String                @id @default(cuid())
+  id                 String               @id @default(cuid())
   name               String?
-  email              String                @unique
+  email              String               @unique
   emailVerified      DateTime?
   image              String?
   password           String?
@@ -20,6 +20,9 @@ model User {
   Authenticator      Authenticator[]
   Chatbot            Chatbot[]
   UserCharacteristic UserCharacteristics?
+  PhysicalActivityLog      PhysicalActivityLog[]
+  UserActivites    UserActivites[]
+  FoodLog            FoodLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -81,34 +84,72 @@ model Authenticator {
 }
 
 model UserCharacteristics {
-  id                     String   @id @default(cuid())
-  userId                 String   @unique
-  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  gender                 String
-  age                    String
-  height                 String
-  currentWeight          String
-  targetWeight           String
-  targetTime             String
-  physicalActivities     String // Array of Strings
-  goal                   String
-  activityFactor         String
-  mealsPerDay            String
-  waterIntake            String
-  sleepHours             String
-  workoutsPerWeek        String
-  workoutDuration        String
-  caloriesPerDay         String
-  sportIntensity         String
-  manualCalorieAdjustment String
-  bmi                   String
-  tdee                  String
-  bmr                   String
+  id                      String   @id @default(cuid())
+  userId                  String   @unique
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  gender                  String
+  age                     String
+  height                  String
+  currentWeight           String
+  targetWeight            String
+  targetTime              String?    
+  physicalActivities      String 
+  goal                    String   
+  activityFactor          String   
+  mealsPerDay             String
+  waterIntake             String   
+  sleepHours              String
+  workoutsPerWeek         String
+  workoutDuration         String      
+  caloriesPerDay          String   
+  sportIntensity          String?  
+  manualCalorieAdjustment String?   
+  bmi                     String?
+  tdee                    String?
+  bmr                     String?
+  bodyFatPercentage      String?
+  isDeleted               Boolean  @default(false)
+
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+model PhysicalActivityLog {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activityName   String
+  metValue       Float
+  duration       Int      // dalam menit
+  caloriesBurned Float
+  createdAt      DateTime @default(now())
+}
+
+model FoodLog {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  foodName       String
+  calories       Float
+  mealType       String   // ex: "breakfast", "lunch"
+  date           DateTime
+}
+
+
+
+model UserActivites {
+  id        String @id @default(cuid())
+  userId    String @unique
+  calories  String
+  heartRate String
+  steps     String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
 model Chatbot {
   id        String   @id @default(cuid())
