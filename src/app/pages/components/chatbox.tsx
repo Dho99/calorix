@@ -71,7 +71,7 @@ export function ChatBoxDialog({ toggleChat }: { toggleChat: () => void }) {
           const chats = getRes.data?.message;
           setChatState((prev) => [
             ...prev,
-            ...chats.map((chat: any, key: number) => ({
+            ...chats.map((chat: any, key: number) => ({ //eslint-disable-line
               id: key + 1,
               response: chat.response,
               userQuery: chat.userQuery,

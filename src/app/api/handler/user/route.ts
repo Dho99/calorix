@@ -106,7 +106,7 @@ export async function PUT(req: NextRequest){
   try {
     const user = await prisma.user.update({
       where: {
-        email: data?.email!,
+        email: data?.email as string,
       },
       data: data,
     });

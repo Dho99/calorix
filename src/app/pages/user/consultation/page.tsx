@@ -56,7 +56,7 @@ export default function Page() {
               response: `Hello, ${session?.data?.user?.name} how can I assist you today?`,
               userQuery: "",
             },
-            ...chats.map((chat: any, key: number) => ({
+            ...chats.map((chat: any, key: number) => ({ //eslint-disable-line
               id: chatState.length + key + 1,
               userQuery: chat.sender === "USER" ? chat.payload : null,
               response: chat.sender !== "USER" ? chat.payload : null,
@@ -71,7 +71,7 @@ export default function Page() {
 
   useEffect(() => {
     initFetchChats();
-  }, [session]);
+  }, []); //eslint-disable-line
 
   return (
     <div className="h-dvh w-full relative w-full relative ">

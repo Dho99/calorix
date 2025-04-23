@@ -64,15 +64,14 @@ export const dropdownLinks = [
 ];
 
 export default function AppNavbar() {
-  const { data } = useSession();
   const pathname = usePathname();
   const isLoginPage = pathname === "/auth/signin";
 
-  type SidebarContent = {
-    title: string;
-    link: string;
-    icon: typeof MenuIcon;
-  };
+  // type SidebarContent = {
+  //   title: string;
+  //   link: string;
+  //   icon: typeof MenuIcon;
+  // };
 
   return (
     <div className="flex items-center w-full py-3 lg:px-20 px-10 bg-[#092635]/70 text-white justify-between fixed top-0 z-2 backdrop-blur-xs shadow-md">

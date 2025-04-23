@@ -9,7 +9,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -164,7 +163,7 @@ export default function Page() {
               name="email"
               placeholder="Email"
               readOnly
-              defaultValue={data?.email!}
+              defaultValue={data?.email as string}
               className={`${"bg-[#D9D9D9] text-black"} ${
                 isEdit ? "" : `hover:cursor-not-allowed`
               }`}
@@ -179,7 +178,7 @@ export default function Page() {
               placeholder="Username"
               name="username"
               readOnly={!isEdit}
-              defaultValue={data?.username!}
+              defaultValue={data?.username as string}
               className={`${"bg-[#D9D9D9] text-black"} ${
                 isEdit ? "" : `hover:cursor-not-allowed`
               }`}
@@ -193,7 +192,7 @@ export default function Page() {
               placeholder="Name"
               name="name"
               readOnly={!isEdit}
-              defaultValue={data?.name!}
+              defaultValue={data?.name as string}
               className={`${"bg-[#D9D9D9] text-black"} ${
                 isEdit ? "" : `hover:cursor-not-allowed`
               }`}

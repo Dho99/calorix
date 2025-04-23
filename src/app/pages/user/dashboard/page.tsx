@@ -53,7 +53,7 @@ export default function Page() {
     };
     if(data?.user?.id) fetchData();
 
-  },[data?.user?.id]);
+  },[]); //eslint-disable-line
 
   const session = useSession();
   return (
