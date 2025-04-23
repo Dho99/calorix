@@ -108,6 +108,7 @@ model UserCharacteristics {
   bmi                     String?
   tdee                    String?
   bmr                     String?
+  bodyFatPercentage      String?
   isDeleted               Boolean  @default(false)
 
   createdAt               DateTime @default(now())

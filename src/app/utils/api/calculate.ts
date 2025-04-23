@@ -11,12 +11,14 @@ export const calculateUserData = async (data: StepValues) => {
   const TDEE = await calculateTDEE(BMR, parseFloat(String(activityFactor)), parseFloat(String(manualCalorieAdjustment)));
 
   const healthTarget = targetWeight < currentWeight ? "deficit" : targetWeight > currentWeight ? "surplus" : "maintenance";
+  const bodyFat = (1.2 * BMI) + (0.23 * parseInt(String(age))) - (gender === "male" ? 16.2 : 5.4) ;
 
   return {
     bmi: BMI.toString(),
     bmr: BMR.toString(),
     tdee: TDEE.toString(),
     goal: healthTarget,
+    bodyFatPercentage: bodyFat.toString(),
   }
 
 

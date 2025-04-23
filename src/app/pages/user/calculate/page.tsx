@@ -144,6 +144,7 @@ export default function Page() {
       }
 
       if (currentStep === steps.length) {
+        console.log(stepState)
         axios({
           method: isUpdatePage ? "PUT" : "POST",
           url: `/api/handler/characteristics${isUpdatePage ? '/'+data?.user?.id : ''}`,
