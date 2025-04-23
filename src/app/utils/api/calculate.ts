@@ -4,17 +4,19 @@ import type { StepValues } from "@/app/pages/user/calculate/page";
 
 
 export const calculateUserData = async (data: StepValues) => {
-   const { currentWeight, height, gender, age, activityFactor, manualCalorieAdjustment } = data;
+   const { currentWeight, height, gender, age, activityFactor, manualCalorieAdjustment, targetWeight } = data;
    
   const BMI = await calculateBMI(parseFloat(String(currentWeight)), parseFloat(String(height)));
   const BMR = await calculateBMR(parseFloat(String(currentWeight)), parseFloat(String(height)), String(gender), parseInt(String(age)));
   const TDEE = await calculateTDEE(BMR, parseFloat(String(activityFactor)), parseFloat(String(manualCalorieAdjustment)));
 
+  const healthTarget = targetWeight < currentWeight ? "deficit" : targetWeight > currentWeight ? "surplus" : "maintenance";
 
   return {
     bmi: BMI.toString(),
     bmr: BMR.toString(),
     tdee: TDEE.toString(),
+    goal: healthTarget,
   }
 
 
