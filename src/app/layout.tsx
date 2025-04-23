@@ -4,8 +4,6 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "next-auth/react";
 
-
-
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],

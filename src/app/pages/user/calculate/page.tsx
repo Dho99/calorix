@@ -6,7 +6,7 @@ import { steps as stepsJson } from "./components/steps.json";
 import { Checkbox } from "@/components/ui/checkbox";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Save } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -20,13 +20,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { calculateUserData } from "@/app/utils/api/calculate";
+import SaveCalculate from "./components/save-calculate";
 
 export type Step = {
   number: number;
-  question: string;
-  placeholder: string | null;
-  stateKey: string;
-  type: string;
+  question?: string;
+  placeholder?: string;
+  stateKey?: string;
+  type?: string;
   indicator?: string;
   tips?: {
     title: string;
@@ -62,9 +63,11 @@ export default function Page() {
   const [isUpdatePage, setIsUpdatePage] = useState<boolean>(false);
 
   const [alert, setAlert] = useState<{
+    title?: string;
     type: string;
     success: boolean;
     message: string;
+    markdownComponent?: React.ReactNode
   } | null>(null);
 
   const { data } = useSession();
@@ -105,10 +108,12 @@ export default function Page() {
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     scrollToTop();
-
-    if (!stepState?.hasOwnProperty(steps[currentStep - 1].stateKey)) {
+    if (
+      !stepState?.hasOwnProperty(steps[currentStep - 1].stateKey!) &&
+      currentStep < steps.length - 2
+    ) {
       setAlert({
         success: false,
         type: "alert",
@@ -122,45 +127,67 @@ export default function Page() {
       );
 
       if (input instanceof HTMLInputElement) {
-        input.value = stepState?.[steps[currentStep]?.stateKey] as string;
+        input.value = stepState?.[steps[currentStep]?.stateKey!] as string;
       }
 
-      if (currentStep < 16) {
-        setCurrentStep((prev) => Math.min(prev + 1, 16));
-      } else if (currentStep >= 16) {
-        const payload = stepState;
+      if (currentStep < steps.length) {
+        setCurrentStep((prev) => Math.min(prev + 1, steps.length));
+      }
 
-        calculateUserData(payload);
+      if (currentStep < steps.length - 1) {
+        const calculate = await calculateUserData(stepState!);
 
-        // axios({
-        //   method: isUpdatePage ? "PUT" : "POST",
-        //   url: `/api/handler/characteristics/${data?.user?.id}`,
-        //   data: payload,
-        // })
-        //   .then((res) => {
-        //     if (res.data.status === 400) {
-        //       setAlert({
-        //         success: false,
-        //         type: "alert",
-        //         message: res.data.message,
-        //       });
-        //     } else {
-        //       setAlert({
-        //         success: true,
-        //         type: "dialog",
-        //         message: "Data berhasil disimpan",
-        //       });
+        setStepState((prevState) => ({
+          ...prevState,
+          ...calculate,
+        }));
+      }
 
-        //       setStepState(null);
-        //     }
-        //     // setCurrentStep(1);
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   });
+      if (currentStep === steps.length) {
+        axios({
+          method: isUpdatePage ? "PUT" : "POST",
+          url: `/api/handler/characteristics${isUpdatePage ? '/'+data?.user?.id : ''}`,
+          data: stepState!,
+        })
+          .then((res) => {
+            if (res.data.status === 400) {
+              setAlert({
+                success: false,
+                type: "alert",
+                message: res.data.message,
+              });
+            } else {
+              setAlert({
+                success: true,
+                type: "dialog",
+                message: "Data berhasil disimpan",
+                markdownComponent: (handleAfterSubmitSuccess()),
+              });
+            }
+            setCurrentStep(1);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     }
   };
+
+  const handleAfterSubmitSuccess = () => {
+    return (
+      <div className="w-full flex flex-row justify-between gap-5">
+        <button
+          type="button"
+          className="bg-[#5C8374] text-white rounded-lg py-2 px-4 ms-auto"
+          onClick={() => {
+            router.push("/pages/user/dashboard");
+          }}
+        >
+          Kembali ke Dashboard
+        </button>
+      </div>
+    )
+  }
 
   const handlePrev = () => {
     scrollToTop();
@@ -170,7 +197,7 @@ export default function Page() {
         `input#${steps[currentStep - 1].stateKey}`
       );
       if (input instanceof HTMLInputElement) {
-        input.value = stepState?.[steps[currentStep - 2].stateKey] as string;
+        input.value = stepState?.[steps[currentStep - 2].stateKey!] as string;
       }
     }
   };
@@ -200,7 +227,7 @@ export default function Page() {
   };
 
   return (
-    <Dialog>
+    <Dialog open={alert?.type === "dialog"}>
       <div
         className="w-full max-h-dvh h-full flex flex-col bg-[#092635] text-white relative py-20 items-center overflow-auto"
         ref={pageRef}
@@ -230,16 +257,21 @@ export default function Page() {
               </AlertDescription>
             </Alert>
           )}
-          {currentStep < 16 ? (
-            <>
+
+          {
+            alert?.type === "dialog" && (
               <DialogContent className="sm:max-w-[425px] bg-[#092635] text-white border-none">
-                <DialogHeader>
-                  <DialogTitle>Calculation Alert</DialogTitle>
-                  <DialogDescription className="text-slate-400 text-base my-5">
-                    {alert?.message}
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter className="flex justify-between w-full">
+              <DialogHeader>
+                <DialogTitle>{alert?.title ? alert?.title : "Calculate Alert"}</DialogTitle>
+                <DialogDescription className="text-slate-400 text-base my-5">
+                  {alert?.message}
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="flex justify-between w-full">
+                {alert?.markdownComponent ? (
+                  alert?.markdownComponent
+                ) : (
+                  <>
                   <button
                     type="button"
                     className="border border-[#5C8374] rounded-lg py-2 px-4 text-white"
@@ -259,12 +291,18 @@ export default function Page() {
                   >
                     Kembali ke Dashboard
                   </button>
-                </DialogFooter>
-              </DialogContent>
+                  </>
+                )}
+             
+              </DialogFooter>
+            </DialogContent>
+            )
+          }
 
+          {currentStep < steps.length - 1 ? (
+            <>
               <div className="h-full w-full flex flex-wrap py-5">
                 <div className="w-full h-full flex justify-center items-center flex-col">
-                  {/* {JSON.stringify(stepState)} */}
                   <div className="w-full h-max flex flex-col gap-10 p-10 ring ring-black/30 shadow-xl/20 rounded-xl justify-center items-center">
                     <div className="w-full flex justify-center items-center">
                       <h1 className="text-4xl font-bold text-center">
@@ -290,13 +328,13 @@ export default function Page() {
                             type="button"
                             className={`hover:-mt-5 transition-all transition-duration-30 hover:cursor-pointer h-full p-5 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 focus:bg-[#5C8374] focus:text-white ${
                               opt.value ===
-                              stepState?.[steps[currentStep - 1].stateKey]
+                              stepState?.[steps[currentStep - 1].stateKey!]
                                 ? "bg-[#5C8374] text-white"
                                 : "bg-white"
                             }`}
                             onClick={() => {
                               updateStepState(
-                                steps[currentStep - 1].stateKey,
+                                steps[currentStep - 1].stateKey!,
                                 opt.value
                               );
                             }}
@@ -333,7 +371,7 @@ export default function Page() {
                                 className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                 onClick={() => {
                                   handleOptionInput(
-                                    steps[currentStep - 1].stateKey,
+                                    steps[currentStep - 1].stateKey!,
                                     opt.value
                                   );
                                 }}
@@ -357,7 +395,7 @@ export default function Page() {
                     ) : (
                       <div className={`flex flex-row gap-10`}>
                         <input
-                        autoFocus
+                          autoFocus
                           id={steps[currentStep - 1].stateKey}
                           type={steps[currentStep - 1].type}
                           placeholder={
@@ -366,7 +404,7 @@ export default function Page() {
                           className="w-full h-full bg-white px-10 py-5 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 "
                           defaultValue={
                             stepState?.[
-                              steps[currentStep - 1].stateKey
+                              steps[currentStep - 1].stateKey!
                             ]! as string
                           }
                           required
@@ -396,8 +434,10 @@ export default function Page() {
                 </div>
               </div>
             </>
+          ) : currentStep === steps.length ? (
+            <SaveCalculate props={stepState!} />
           ) : (
-            <SummaryCalculate props={stepState} />
+            <SummaryCalculate props={stepState!} />
           )}
           <div className="w-full pt-10 pb-20 flex flex-row justify-between">
             {currentStep > 1 && (

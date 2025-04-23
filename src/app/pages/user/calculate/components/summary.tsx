@@ -39,7 +39,7 @@ export default function SummaryCalculate({
                     placeholder={stepsTemplate[index].placeholder as string}
                     className="w-full h-full px-10 py-5 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 "
                     defaultValue={
-                      steps?.[stepsTemplate[index].stateKey]! as string
+                      steps?.[stepsTemplate[index].stateKey!] as string
                     }
                     readOnly
                   />
@@ -56,7 +56,7 @@ export default function SummaryCalculate({
                     {stepsTemplate[index].opts
                       ?.filter(
                         (opt) =>
-                          opt.value === steps?.[stepsTemplate[index].stateKey]
+                          opt.value === steps?.[stepsTemplate[index].stateKey!]
                       )
                       .map((opt, index) => (
                         <button

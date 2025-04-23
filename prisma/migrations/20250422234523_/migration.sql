@@ -85,7 +85,12 @@ CREATE TABLE "UserCharacteristics" (
     "sleepHours" TEXT NOT NULL,
     "workoutsPerWeek" TEXT NOT NULL,
     "workoutDuration" TEXT NOT NULL,
+    "caloriesPerDay" TEXT NOT NULL,
+    "sportIntensity" TEXT NOT NULL,
     "manualCalorieAdjustment" TEXT NOT NULL,
+    "bmi" TEXT NOT NULL,
+    "tdee" TEXT NOT NULL,
+    "bmr" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

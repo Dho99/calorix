@@ -90,7 +90,7 @@ model UserCharacteristics {
   currentWeight          String
   targetWeight           String
   targetTime             String
-  physicalActivities     String // Array of strings
+  physicalActivities     String // Array of Strings
   goal                   String
   activityFactor         String
   mealsPerDay            String
@@ -98,7 +98,12 @@ model UserCharacteristics {
   sleepHours             String
   workoutsPerWeek        String
   workoutDuration        String
+  caloriesPerDay         String
+  sportIntensity         String
   manualCalorieAdjustment String
+  bmi                   String
+  tdee                  String
+  bmr                   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

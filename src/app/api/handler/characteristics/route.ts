@@ -6,18 +6,18 @@ import { auth } from "../auth";
 export async function POST(
     request: NextRequest
   ) {
-    const { data } = await request.json();
+    const data = await request.json();
     const session = await auth();
+    
 
     const payload = {
       ...data,
       userId: session?.user?.id as string,
     }
 
-    console.log(data);
+    console.log(payload);
   
     try {
-  
       const { success, error } = characteristicsSchema.safeParse(data);
       if (!success && error) {
         console.log("error", error);
@@ -35,6 +35,8 @@ export async function POST(
       await prisma.userCharacteristics.create({
           data: payload
       });
+
+      console.log("created");
   
       return NextResponse.json(
         {
