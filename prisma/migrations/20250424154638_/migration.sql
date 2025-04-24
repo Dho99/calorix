@@ -76,7 +76,7 @@ CREATE TABLE "UserCharacteristics" (
     "height" TEXT NOT NULL,
     "currentWeight" TEXT NOT NULL,
     "targetWeight" TEXT NOT NULL,
-    "targetTime" TEXT NOT NULL,
+    "targetTime" TEXT,
     "physicalActivities" TEXT NOT NULL,
     "goal" TEXT NOT NULL,
     "activityFactor" TEXT NOT NULL,
@@ -86,15 +86,67 @@ CREATE TABLE "UserCharacteristics" (
     "workoutsPerWeek" TEXT NOT NULL,
     "workoutDuration" TEXT NOT NULL,
     "caloriesPerDay" TEXT NOT NULL,
-    "sportIntensity" TEXT NOT NULL,
-    "manualCalorieAdjustment" TEXT NOT NULL,
-    "bmi" TEXT NOT NULL,
-    "tdee" TEXT NOT NULL,
-    "bmr" TEXT NOT NULL,
+    "sportIntensity" TEXT,
+    "manualCalorieAdjustment" TEXT,
+    "bmi" TEXT,
+    "tdee" TEXT,
+    "bmr" TEXT,
+    "bodyFatPercentage" TEXT,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "UserCharacteristics_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PhysicalActivityLog" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "activityName" TEXT NOT NULL,
+    "metValue" DOUBLE PRECISION NOT NULL,
+    "duration" INTEGER NOT NULL,
+    "caloriesBurned" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "PhysicalActivityLog_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "FoodLog" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "foodName" TEXT NOT NULL,
+    "calories" DOUBLE PRECISION NOT NULL,
+    "mealType" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "FoodLog_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "UserHydration" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "waterIntake" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "UserHydration_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "UserActivites" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "calories" TEXT NOT NULL,
+    "heartRate" TEXT NOT NULL,
+    "steps" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "UserActivites_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -121,6 +173,12 @@ CREATE UNIQUE INDEX "Authenticator_credentialID_key" ON "Authenticator"("credent
 -- CreateIndex
 CREATE UNIQUE INDEX "UserCharacteristics_userId_key" ON "UserCharacteristics"("userId");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "UserHydration_userId_key" ON "UserHydration"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserActivites_userId_key" ON "UserActivites"("userId");
+
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -132,6 +190,18 @@ ALTER TABLE "Authenticator" ADD CONSTRAINT "Authenticator_userId_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "UserCharacteristics" ADD CONSTRAINT "UserCharacteristics_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PhysicalActivityLog" ADD CONSTRAINT "PhysicalActivityLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "FoodLog" ADD CONSTRAINT "FoodLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserHydration" ADD CONSTRAINT "UserHydration_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserActivites" ADD CONSTRAINT "UserActivites_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Chatbot" ADD CONSTRAINT "Chatbot_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

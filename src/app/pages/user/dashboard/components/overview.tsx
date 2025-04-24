@@ -1,8 +1,11 @@
 "use client";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { UserCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { DashboardComponentPageProps } from "../page";
 
 type OverviewProps = {
   currentWeight: string;
@@ -11,7 +14,9 @@ type OverviewProps = {
   bodyFatPercentage: string;
 }
 
-export default function Overview() {
+
+export default function Overview(setDialog: DashboardComponentPageProps) {
+  const router = useRouter();
   const { data } = useSession();
   const [characteristics, setCharacteristics] = useState<OverviewProps | null>(null);
 
@@ -19,10 +24,29 @@ export default function Overview() {
     const fetchData = () => {
      axios.get(`/api/handler/characteristics/${data?.user.id}`)
       .then((response) => {
+        if(response.data.status === 404) {
+          setDialog.setDialog({
+            open: true,
+            title: "Perhitungan",
+            message: "Silahkan lakukan perhitungan terlebih dahulu",
+            buttons: (
+              <>
+                <Button
+                  variant="outline"
+                  className="bg-[#092635] text-white hover:bg-[#092635] border-none"
+                  onClick={() => {
+                    router.push("/pages/user/calculate");
+                  }}
+                >
+                  Hitung
+                </Button>
+              </>
+            ),
+          });
+        }
+
         if (response.data.status === 200) {
           setCharacteristics(response.data.data);
-        } else {
-          console.error("Error fetching characteristics:", response.data.message);
         }
       }
       )
