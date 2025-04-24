@@ -26,13 +26,23 @@ export async function GET(
         userId: userId as string,
       },
     });
+    
+    if (!characteristics) {
+      return NextResponse.json({
+        status: 404,
+        success: false,
+        message: "User characteristics not found",
+      });
+    }
+
+
     return NextResponse.json({
       status: 200,
       success: true,
       data: characteristics,
     });
+
   } catch (error) {
-    console.error("Error fetching characteristics:", error);
     return NextResponse.json(
       { error: "Failed to fetch characteristics" },
       { status: 500 }
