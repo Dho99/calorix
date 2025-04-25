@@ -23,7 +23,9 @@ model User {
   PhysicalActivityLog PhysicalActivityLog[]
   UserActivites       UserActivites[]
   FoodLog             FoodLog[]
-  UserHydration       UserHydration?
+  UserHydration       UserHydration[]
+  SleepTracker        SleepTracker[]
+  UserGoal            UserGoal?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -94,15 +96,12 @@ model UserCharacteristics {
   height                  String
   currentWeight           String
   targetWeight            String
-  targetTime              String?
   physicalActivities      String
-  goal                    String
   activityFactor          String
   mealsPerDay             String
   waterIntake             String
   sleepHours              String
   workoutsPerWeek         String
-  workoutDuration         String
   caloriesPerDay          String
   sportIntensity          String?
   manualCalorieAdjustment String?
@@ -114,6 +113,20 @@ model UserCharacteristics {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model UserGoal {
+  id              String  @id @default(cuid())
+  userId          String  @unique
+  goal            String
+  caloriesGoal    String
+  workoutTime     String
+  stepsGoal       String
+  workoutDuration String
+  targetTime      String?
+  hydrationNeeds  String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PhysicalActivityLog {
@@ -128,9 +141,9 @@ model PhysicalActivityLog {
 }
 
 model FoodLog {
-  id       String   @id @default(cuid())
+  id       String @id @default(cuid())
   userId   String
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   foodName String
   calories Float
   mealType String // ex: "breakfast", "lunch"
@@ -145,6 +158,19 @@ model UserHydration {
   waterIntake String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SleepTracker {
+  id        String @id @default(cuid())
+  userId    String @unique
+  sleepTime String
+  wakeTime  String
+  duration  Float // dalam menit
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -6,7 +6,8 @@ import { findUser } from "@/app/utils/api/user";
 import { hashPassword } from "@/app/utils/hasher";
 import { registerSchema } from "@/app/utils/lib/validation/user";
 import type { Register } from "@/app/utils/lib/types/user";
-// import { auth } from "../auth";
+import { auth } from "../auth";
+
 
 export async function POST(request: NextRequest) {
   const body = await request.json();

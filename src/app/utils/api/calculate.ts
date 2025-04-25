@@ -12,6 +12,7 @@ export const calculateUserData = async (data: StepValues) => {
 
   const healthTarget = targetWeight < currentWeight ? "deficit" : targetWeight > currentWeight ? "surplus" : "maintenance";
   const bodyFat = (1.2 * BMI) + (0.23 * parseInt(String(age))) - (gender === "male" ? 16.2 : 5.4) ;
+  const waterNeeds = parseFloat(String(currentWeight)) * 0.035
 
   return {
     bmi: BMI.toString(),
@@ -19,10 +20,10 @@ export const calculateUserData = async (data: StepValues) => {
     tdee: TDEE.toString(),
     goal: healthTarget,
     bodyFatPercentage: bodyFat.toString(),
+    waterNeeds: waterNeeds.toString(),
   }
 
-
-}
+} 
 
 const calculateBMI = async (weight: number, height: number) => {
   const heightInMeters = height / 100; // Convert height from cm to meters
@@ -44,6 +45,6 @@ const calculateBMR = async (weight: number, height: number, gender: string, age:
 }
 
 const calculateTDEE = async (bmr: number, activityLevel: number, manualCalorieAdjustment: number) => {
-  return bmr * activityLevel + manualCalorieAdjustment;
+  return (bmr * activityLevel) + manualCalorieAdjustment;
 
 }
