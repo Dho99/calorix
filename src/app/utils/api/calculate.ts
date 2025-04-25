@@ -4,7 +4,7 @@ import type { StepValues } from "@/app/pages/user/calculate/page";
 
 
 export const calculateUserData = async (data: StepValues) => {
-   const { currentWeight, height, gender, age, activityFactor, manualCalorieAdjustment, targetWeight } = data;
+   const { currentWeight, height, gender, age, activityFactor, manualCalorieAdjustment, targetWeight, targetTime } = data;
    
   const BMI = await calculateBMI(parseFloat(String(currentWeight)), parseFloat(String(height)));
   const BMR = await calculateBMR(parseFloat(String(currentWeight)), parseFloat(String(height)), String(gender), parseInt(String(age)));
@@ -12,7 +12,9 @@ export const calculateUserData = async (data: StepValues) => {
 
   const healthTarget = targetWeight < currentWeight ? "deficit" : targetWeight > currentWeight ? "surplus" : "maintenance";
   const bodyFat = (1.2 * BMI) + (0.23 * parseInt(String(age))) - (gender === "male" ? 16.2 : 5.4) ;
-  const waterNeeds = parseFloat(String(currentWeight)) * 0.035
+  const waterNeeds = parseFloat(String(currentWeight)) * 0.035;
+  const defisitCalories = calculateDeficitCalories(TDEE, parseInt(String(currentWeight)), parseInt(String(targetWeight)), parseInt(String(targetTime)));
+
 
   return {
     bmi: BMI.toString(),
@@ -21,6 +23,7 @@ export const calculateUserData = async (data: StepValues) => {
     goal: healthTarget,
     bodyFatPercentage: bodyFat.toString(),
     waterNeeds: waterNeeds.toString(),
+    defisitCalories: defisitCalories.toString(),
   }
 
 } 
@@ -47,4 +50,17 @@ const calculateBMR = async (weight: number, height: number, gender: string, age:
 const calculateTDEE = async (bmr: number, activityLevel: number, manualCalorieAdjustment: number) => {
   return (bmr * activityLevel) + manualCalorieAdjustment;
 
+}
+
+const calculateDeficitCalories = async (tdee: number, currentWeight: number, targetWeight: number, targetTime: number) => {
+  const weightDifference = Math.abs(currentWeight - targetWeight);
+  const currentDate = new Date();
+  const targetDate = new Date();
+  targetDate.setMonth(currentDate.getMonth() + targetTime);
+
+  const timeDifference = targetDate.getTime() - currentDate.getTime();
+  const daysDifference = timeDifference / (1000 * 60 * 60 * 24); // Convert milliseconds to days
+
+  const deficitCalories = (weightDifference * 7700) / daysDifference; // 7700 calories per kg of body weight
+  return deficitCalories;
 }

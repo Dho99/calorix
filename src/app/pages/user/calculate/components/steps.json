@@ -132,14 +132,6 @@
       "type": "number"
     },
     {
-      "number": 11,
-      "question": "Masukkan Jumlah Air yang Diminum Sehari (liter)",
-      "placeholder": "Contoh: 2.5",
-      "stateKey": "waterIntake",
-      "indicator": "Liter",
-      "type": "number"
-    },
-    {
       "number": 12,
       "question": "Masukkan Jumlah Tidur Sehari (jam)",
       "placeholder": "Contoh: 8",

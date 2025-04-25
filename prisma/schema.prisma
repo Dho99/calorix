@@ -99,10 +99,8 @@ model UserCharacteristics {
   physicalActivities      String
   activityFactor          String
   mealsPerDay             String
-  waterIntake             String
   sleepHours              String
   workoutsPerWeek         String
-  caloriesPerDay          String
   sportIntensity          String?
   manualCalorieAdjustment String?
   bmi                     String?
@@ -146,7 +144,7 @@ model FoodLog {
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   foodName String
   calories Float
-  mealType String // ex: "breakfast", "lunch"
+  mealType String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
