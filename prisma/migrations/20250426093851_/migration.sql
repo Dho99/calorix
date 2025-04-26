@@ -75,17 +75,10 @@ CREATE TABLE "UserCharacteristics" (
     "age" TEXT NOT NULL,
     "height" TEXT NOT NULL,
     "currentWeight" TEXT NOT NULL,
-    "targetWeight" TEXT NOT NULL,
-    "targetTime" TEXT,
     "physicalActivities" TEXT NOT NULL,
-    "goal" TEXT NOT NULL,
     "activityFactor" TEXT NOT NULL,
     "mealsPerDay" TEXT NOT NULL,
-    "waterIntake" TEXT NOT NULL,
     "sleepHours" TEXT NOT NULL,
-    "workoutsPerWeek" TEXT NOT NULL,
-    "workoutDuration" TEXT NOT NULL,
-    "caloriesPerDay" TEXT NOT NULL,
     "sportIntensity" TEXT,
     "manualCalorieAdjustment" TEXT,
     "bmi" TEXT,
@@ -97,6 +90,20 @@ CREATE TABLE "UserCharacteristics" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "UserCharacteristics_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "UserGoal" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "goal" TEXT NOT NULL,
+    "deficitPerDay" TEXT NOT NULL,
+    "stepsGoal" TEXT NOT NULL,
+    "targetTime" TEXT,
+    "hydrationNeeds" TEXT NOT NULL,
+    "targetWeight" TEXT NOT NULL,
+
+    CONSTRAINT "UserGoal_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -137,6 +144,19 @@ CREATE TABLE "UserHydration" (
 );
 
 -- CreateTable
+CREATE TABLE "SleepTracker" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "sleepTime" TEXT NOT NULL,
+    "wakeTime" TEXT NOT NULL,
+    "duration" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "SleepTracker_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "UserActivites" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
@@ -174,7 +194,13 @@ CREATE UNIQUE INDEX "Authenticator_credentialID_key" ON "Authenticator"("credent
 CREATE UNIQUE INDEX "UserCharacteristics_userId_key" ON "UserCharacteristics"("userId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "UserGoal_userId_key" ON "UserGoal"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "UserHydration_userId_key" ON "UserHydration"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SleepTracker_userId_key" ON "SleepTracker"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserActivites_userId_key" ON "UserActivites"("userId");
@@ -192,6 +218,9 @@ ALTER TABLE "Authenticator" ADD CONSTRAINT "Authenticator_userId_fkey" FOREIGN K
 ALTER TABLE "UserCharacteristics" ADD CONSTRAINT "UserCharacteristics_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "UserGoal" ADD CONSTRAINT "UserGoal_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "PhysicalActivityLog" ADD CONSTRAINT "PhysicalActivityLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -199,6 +228,9 @@ ALTER TABLE "FoodLog" ADD CONSTRAINT "FoodLog_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "UserHydration" ADD CONSTRAINT "UserHydration_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SleepTracker" ADD CONSTRAINT "SleepTracker_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserActivites" ADD CONSTRAINT "UserActivites_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

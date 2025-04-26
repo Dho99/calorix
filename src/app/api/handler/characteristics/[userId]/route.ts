@@ -8,7 +8,6 @@ export async function GET(
   { params }: { params: Promise<{ userId: string }> }
 ) {
   const { userId } = await params;
-
   const session = await auth();
 
 

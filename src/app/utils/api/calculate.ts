@@ -2,6 +2,11 @@
 
 import type { StepValues } from "@/app/pages/user/calculate/page";
 
+/**
+ * 
+ * @param activityFactor as METVALUE as string, should convert to number
+ * @returns 
+ */
 
 export const calculateUserData = async (data: StepValues) => {
    const { currentWeight, height, gender, age, activityFactor, manualCalorieAdjustment, targetWeight, targetTime } = data;
@@ -10,22 +15,21 @@ export const calculateUserData = async (data: StepValues) => {
   const BMR = await calculateBMR(parseFloat(String(currentWeight)), parseFloat(String(height)), String(gender), parseInt(String(age)));
   const TDEE = await calculateTDEE(BMR, parseFloat(String(activityFactor)), parseFloat(String(manualCalorieAdjustment)));
 
-  const healthTarget = targetWeight < currentWeight ? "deficit" : targetWeight > currentWeight ? "surplus" : "maintenance";
   const bodyFat = (1.2 * BMI) + (0.23 * parseInt(String(age))) - (gender === "male" ? 16.2 : 5.4) ;
   const waterNeeds = parseFloat(String(currentWeight)) * 0.035;
-  const defisitCalories = calculateDeficitCalories(TDEE, parseInt(String(currentWeight)), parseInt(String(targetWeight)), parseInt(String(targetTime)));
+  const deficitPerDay = await calculateDeficitCalories(TDEE, parseInt(String(currentWeight)), parseInt(String(targetWeight)), parseInt(String(targetTime)));
 
+  const stepNeeds = await calculateStepNeeds(currentWeight as string, activityFactor as string, deficitPerDay.deficitPerDay as string);
 
   return {
     bmi: BMI.toString(),
     bmr: BMR.toString(),
     tdee: TDEE.toString(),
-    goal: healthTarget,
     bodyFatPercentage: bodyFat.toString(),
-    waterNeeds: waterNeeds.toString(),
-    defisitCalories: defisitCalories.toString(),
+    hydrationNeeds: waterNeeds.toString(),
+    ...deficitPerDay,
+    stepsGoal: stepNeeds, //estimated daily steps needed to reach the goal
   }
-
 } 
 
 const calculateBMI = async (weight: number, height: number) => {
@@ -44,23 +48,46 @@ const calculateBMR = async (weight: number, height: number, gender: string, age:
   }
 
   return bmr;
-  
 }
 
 const calculateTDEE = async (bmr: number, activityLevel: number, manualCalorieAdjustment: number) => {
-  return (bmr * activityLevel) + manualCalorieAdjustment;
-
+  return (bmr * activityLevel) + (manualCalorieAdjustment || 0);
 }
 
 const calculateDeficitCalories = async (tdee: number, currentWeight: number, targetWeight: number, targetTime: number) => {
-  const weightDifference = Math.abs(currentWeight - targetWeight);
+  let weightDifference = Math.abs(currentWeight - targetWeight);
+  
+  type Target = {
+    goal: string;
+    deficitPerDay: string | null;
+    daysLeft: string | null;
+  }
+
+  let target: Target = {
+    goal: currentWeight > targetWeight ? "deficit" : "surplus",
+    deficitPerDay: null,
+    daysLeft: null
+  };
+  
   const currentDate = new Date();
   const targetDate = new Date();
   targetDate.setMonth(currentDate.getMonth() + targetTime);
 
   const timeDifference = targetDate.getTime() - currentDate.getTime();
   const daysDifference = timeDifference / (1000 * 60 * 60 * 24); // Convert milliseconds to days
+  target.daysLeft = Math.ceil(daysDifference).toString();
+  if(target.goal === "deficit") {
+   target.deficitPerDay = ((weightDifference * 7700) / daysDifference).toString(); // 7700 calories per kg of body weight
+  } else if(target.goal === "surplus") {
+    target.deficitPerDay = ((weightDifference * 7700) / daysDifference).toString(); // 7700 calories per kg of body weight
+  } else {
+    target.deficitPerDay = tdee.toString();
+  }
 
-  const deficitCalories = (weightDifference * 7700) / daysDifference; // 7700 calories per kg of body weight
-  return deficitCalories;
+  return target
+}
+
+const calculateStepNeeds = async (currentWeight: string, activityFactor: string, deficitPerDay: string) => {
+  const caloriesPerStep = (parseFloat(activityFactor) * parseFloat(currentWeight) * 3.5) / (200 * 60); // MET value for walking
+  return (Math.abs(parseFloat(deficitPerDay)) / caloriesPerStep).toString();
 }

@@ -11,9 +11,6 @@ export const characteristicsSchema = z.object({
     goal: z.string({ message: "Goal is required." }),
     activityFactor: z.string({ message: "Activity factor is required." }),
     mealsPerDay: z.string({ message: "Meals per day are required." }),
-    waterIntake: z.string({ message: "Water intake is required." }),
     sleepHours: z.string({ message: "Sleep hours are required." }),
-    workoutsPerWeek: z.string({ message: "Workouts per week are required." }),
     workoutDuration: z.string({ message: "Workout duration is required." }),
-    manualCalorieAdjustment: z.string({ message: "Manual calorie adjustment is required." })
 });

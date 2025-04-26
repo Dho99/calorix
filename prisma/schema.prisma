@@ -95,12 +95,10 @@ model UserCharacteristics {
   age                     String
   height                  String
   currentWeight           String
-  targetWeight            String
   physicalActivities      String
   activityFactor          String
   mealsPerDay             String
   sleepHours              String
-  workoutsPerWeek         String
   sportIntensity          String?
   manualCalorieAdjustment String?
   bmi                     String?
@@ -117,12 +115,11 @@ model UserGoal {
   id              String  @id @default(cuid())
   userId          String  @unique
   goal            String
-  caloriesGoal    String
-  workoutTime     String
+  deficitPerDay    String
   stepsGoal       String
-  workoutDuration String
   targetTime      String?
   hydrationNeeds  String
+  targetWeight            String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

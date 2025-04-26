@@ -41,7 +41,7 @@ export type Step = {
 };
 
 export type StepValues = {
-  [stepType: string]: string | string[] | number | boolean;
+  [stepType: string]: string | string[] | number | boolean | null;
 };
 
 export default function Page() {
@@ -397,6 +397,7 @@ export default function Page() {
                       <div className={`flex flex-row gap-10`}>
                         <input
                           autoFocus
+                          required
                           id={steps[currentStep - 1].stateKey}
                           type={steps[currentStep - 1].type}
                           placeholder={
@@ -408,7 +409,6 @@ export default function Page() {
                               steps[currentStep - 1].stateKey as string
                             ] as string
                           }
-                          required
                           onChange={(e) =>
                             updateStepState(
                               `${steps[currentStep - 1].stateKey}`,

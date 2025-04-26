@@ -25,7 +25,7 @@ export default function SidenavHead() {
           return (
             <Link
               key={index}
-              href={`/pages/${item.link}`}
+              href={`/${item.link}`}
               className="w-full py-3 px-3 rounded-lg shadow-lg flex flex-row items-center gap-x-3 hover:bg-[#9EC8B9] hover:font-bold transition-all duration-200 ease-in-out"
             >
               <div>
