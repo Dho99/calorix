@@ -18,9 +18,6 @@ export type DashboardComponentPageProps = {
 
 
 export default function Page() {
-  const { data } = useSession();
-
-  const router = useRouter();
 
   const [dialog, setDialog] = useState<DashboardComponentPageProps | null>(null);
 
@@ -33,7 +30,7 @@ export default function Page() {
           buttons={dialog.buttons}
         />
       )}
-      <div className="w-full h-dvh flex flex-row gap-2 my-20 px-20">
+      <div className="w-full h-dvh lg:flex lg:flex-row grid grid-cols-1 gap-2 gap-y-10 py-15">
         <div className="w-full h-full flex flex-col gap-2">
           <h1 className="text-4xl font-bold text-white mb-3">Overview</h1>
           <Overview setDialog={setDialog}/>

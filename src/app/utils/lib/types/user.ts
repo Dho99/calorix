@@ -6,26 +6,33 @@ export type Register = {
 };
 
 export type User = {
-    name?: string;
-    email: string;
-    emailVerified?: Date;
-    image?: string;
-    password?: string;
-    username?: string;
-    Chatbot: Chatbot[];
-    UserCharacteristic?: UserCharacteristics;
-    PhysicalActivityLog: PhysicalActivityLog[];
-    UserActivites: UserActivites[];
-    FoodLog: FoodLog[];
-    UserHydration?: UserHydration;
+  name?: string;
+  email: string;
+  emailVerified?: Date;
+  image?: string;
+  password?: string;
+  username?: string;
+  Chatbot: Chatbot[];
+  UserCharacteristic?: UserCharacteristics;
+  PhysicalActivityLog: PhysicalActivityLog[];
+  UserActivites: UserActivites[];
+  FoodLog: FoodLog[];
+  UserHydration?: UserHydration;
 };
 
-export type UserActivites = {
+export type UserActivites = BaseModel & {
   id: string;
   userId: string;
-  activityName: string;
-  caloriesBurned: number;
   createdAt: Date;
+  sleepTrackerId?: String;
+  userHydrationId?: String;
+  foodLogId?: String;
+  physicalActivityLogId?: String;
+
+  sleepTracker?: SleepTracker | null;
+  userHydration?: UserHydration | null;
+  foodLog?: FoodLog | null;
+  physicalActivityLog?: PhysicalActivityLog | null;
 };
 
 export type FoodLog = {
@@ -55,44 +62,54 @@ export type Chatbot = {
   createdAt: Date;
 };
 
-export type UserCharacteristics = {
-  id: string;
+export type UserCharacteristics = BaseModel & {
   userId: string;
+  user: User;
+
+  // Personal Data
   gender: string;
   age: string;
   height: string;
   currentWeight: string;
-  targetWeight: string;
-  targetTime?: string;
+
+  // Activity Data
   physicalActivities: string;
-  goal: string;
   activityFactor: string;
+  sportIntensity?: string | null;
+
+  // Lifestyle Data
   mealsPerDay: string;
-  waterIntake: string;
   sleepHours: string;
-  workoutsPerWeek: string;
-  workoutDuration: string;
-  caloriesPerDay: string;
-  sportIntensity?: string;
-  manualCalorieAdjustment?: string;
-  bmi?: string;
-  tdee?: string;
-  bmr?: string;
-  bodyFatPercentage?: string;
-  isDeleted: boolean;
+
+  // Calculated Fields
+  manualCalorieAdjustment?: string | null;
+  bmi?: string | null;
+  tdee?: string | null;
+  bmr?: string | null;
+  bodyFatPercentage?: string | null;
+};
+
+export type PhysicalActivityLog = BaseModel & {
+  id: string;
+  userId: string;
+  user: User;
+  activityName: string;
+  metValue: number;
+  duration: number; // dalam menit
+  caloriesBurned: number;
+};
+
+export type SleepTracker = BaseModel & {
+  sleepTime: string;
+  wakeTime: string;
+  duration: number;
+  userActivityId?: string | null;
+  user: User;
+};
+
+export type BaseModel = {
+  id: string;
+  userId: string;
   createdAt: Date;
   updatedAt: Date;
 };
-
-export type PhysicalActivityLog = {
-    id: string;
-    userId: string;
-    user: User;
-    activityName: string;
-    metValue: number;
-    duration: number; // dalam menit
-    caloriesBurned: number;
-    createdAt: Date;
-};
-
-

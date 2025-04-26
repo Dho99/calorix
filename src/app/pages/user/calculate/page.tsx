@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { calculateUserData } from "@/app/utils/api/calculate";
 import SaveCalculate from "./components/save-calculate";
+import { scrollToTop } from "@/app/pages/layout";
 
 export type Step = {
   number: number;
@@ -44,17 +45,12 @@ export type StepValues = {
   [stepType: string]: string | string[] | number | boolean | null;
 };
 
+
+
+
 export default function Page() {
   const pageRef = useRef<HTMLDivElement>(null);
 
-  const scrollToTop = () => {
-    if (pageRef.current) {
-      pageRef.current.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
-  };
 
   const router = useRouter();
 
@@ -109,7 +105,7 @@ export default function Page() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const handleNext = async () => {
-    scrollToTop();
+    scrollToTop(pageRef);
     if (
       !stepState?.hasOwnProperty(steps[currentStep - 1].stateKey!) &&
       currentStep < steps.length - 2
@@ -191,7 +187,7 @@ export default function Page() {
   }
 
   const handlePrev = () => {
-    scrollToTop();
+    scrollToTop(pageRef);
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
       const input = document.querySelector(
