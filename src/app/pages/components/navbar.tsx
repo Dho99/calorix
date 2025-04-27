@@ -135,7 +135,7 @@ const ProtectedNav = () => {
           {dropdownLinks.map((item, index) => {
             return (
               <Link
-                href={`/${item.link}`}
+                href={`${item.link}`}
                 key={index}
                 className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded"
               >

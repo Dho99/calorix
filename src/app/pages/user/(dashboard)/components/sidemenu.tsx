@@ -3,11 +3,29 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { AppWindowIcon, UserRoundPenIcon, LogOutIcon, ActivityIcon } from "lucide-react";
+import {
+  AppWindowIcon,
+  UserRoundPenIcon,
+  LogOutIcon,
+  ActivityIcon,
+  MinusIcon,
+} from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-type Preference = {
+export type Preference = {
   title: string;
-  link: string;
+  collapsible?: boolean;
+  link:
+    | string
+    | {
+        title: string;
+        childLink: string;
+      }[];
   icon: typeof AppWindowIcon;
 };
 
@@ -19,7 +37,17 @@ export const dashboardMenu: Preference[] = [
   },
   {
     title: "Aktivitas",
-    link: "/pages/user/activity",
+    collapsible: true,
+    link: [
+      {
+        title: "Tambah Aktivitas",
+        childLink: "/pages/user/activity/add",
+      },
+      {
+        title: "Riwayat Aktivitas",
+        childLink: "/pages/user/activity",
+      },
+    ],
     icon: ActivityIcon,
   },
   {
@@ -27,20 +55,47 @@ export const dashboardMenu: Preference[] = [
     link: "/pages/user/manage",
     icon: UserRoundPenIcon,
   },
-
 ];
-
 
 export default function SideMenu() {
   const pathname = usePathname();
-
 
   return (
     <div className="h-dvh border-e-3 border-[#5D5D5D] flex flex-col gap-5 px-3 w-full py-4">
       <div className="flex flex-col gap-5 w-full h-full">
         <div className="flex flex-col gap-3">
           {dashboardMenu.map((item, index) => {
-            return (
+            return item.collapsible ? (
+              <Accordion key={index} type="single" collapsible className="text-white">
+                <AccordionItem value={item.title}>
+                  <AccordionTrigger className="text-white text-base transition-all transition-duration-400  py-2 px-4 rounded-lg hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold flex flex-row gap-2 items-center hover:no-underline">
+                    <item.icon className="text-white" />
+                    <p className="me-auto">{item.title}</p>
+                  </AccordionTrigger>
+                  <AccordionContent className="py-2">
+                    <div className="flex flex-col gap-y-2 px-2">
+                      {Array.isArray(item.link) &&
+                        item.link.map((child, index) => {
+                          return (
+                            <Link
+                              key={index}
+                              href={`${child.childLink}`}
+                              className={`${
+                                pathname !== child.childLink
+                                  ? "hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold "
+                                  : "bg-slate-200/30 shadow-lg font-semibold "
+                              } text-white text-sm transition-all transition-duration-400  py-2 px-4 rounded-lg flex flex-row gap-2 items-center`}
+                            >
+                              <MinusIcon className="text-white" />
+                              {child.title}
+                            </Link>
+                          );
+                        })}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            ) : (
               <Link
                 key={index}
                 href={`${item.link}`}
@@ -55,7 +110,14 @@ export default function SideMenu() {
               </Link>
             );
           })}
-          <button className="text-white text-base text-start transition-all transition-duration-400  py-2 px-4 rounded-lg hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold flex flex-row gap-2 items-center" onClick={() => {signOut({redirectTo: '/auth/signin'})}}><LogOutIcon className="text-white"/> Signout </button>
+          <button
+            className="text-white text-base text-start transition-all transition-duration-400  py-2 px-4 rounded-lg hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold flex flex-row gap-2 items-center"
+            onClick={() => {
+              signOut({ redirectTo: "/auth/signin" });
+            }}
+          >
+            <LogOutIcon className="text-white" /> Signout{" "}
+          </button>
         </div>
       </div>
     </div>

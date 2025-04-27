@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react"
 import type { UserActivites } from "@/app/utils/lib/types/user"
 import axios from "axios"
+import Table from "./components/table"
+
 
 export default function Page(){
     const [activities, setActivities] = useState<UserActivites|null>(null)
@@ -34,6 +36,7 @@ export default function Page(){
                 <h1 className="text-white text-2xl font-semibold">Aktivitas</h1>
                 <p className="text-white text-base">Berikut adalah aktivitas yang telah anda lakukan</p>
             </div>
+            <Table activities={activities}/>
         </div>
     )
 }
