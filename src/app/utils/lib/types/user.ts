@@ -46,6 +46,7 @@ export type FoodLog = {
   fat: number;
   createdAt: Date;
   updatedAt: Date;
+  mealType: string;
 };
 
 export type UserHydration = {

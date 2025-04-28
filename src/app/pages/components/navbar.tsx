@@ -12,6 +12,8 @@ import {
   InfoIcon,
   HomeIcon,
   BotIcon,
+  MoonIcon,
+  SunIcon,
 } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 import {
@@ -19,6 +21,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTheme } from "next-themes";
 
 import Link from "next/link";
 
@@ -95,6 +98,7 @@ export default function AppNavbar() {
 const ProtectedNav = () => {
   const { open, toggleSidebar } = useSidebar();
   const session = useSession();
+  const { theme, setTheme } = useTheme();
 
   const userSession = session?.data?.user;
 
@@ -137,6 +141,9 @@ const ProtectedNav = () => {
               </Link>
             );
           })}
+          <button className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded justify-between" onClick={() => {setTheme(theme === "dark" ? "light" : "dark")}}>
+            {theme === "dark" ? (<MoonIcon /> ) : (<SunIcon />)} {theme === "dark" ? "Dark" : "Light"} Mode
+          </button>
         </DropdownMenuContent>
       </DropdownMenu>
       <button

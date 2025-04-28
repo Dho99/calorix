@@ -9,9 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import type { UserActivites } from "@/app/utils/lib/types/user";
 
-export default function FoodForm() {
+export default function FoodForm({data}: {data: UserActivites|undefined}) {
   return (
     <div className="flex flex-col gap-6 ">
       <div className="flex flex-col gap-3">
@@ -21,8 +21,10 @@ export default function FoodForm() {
         <Input
           name="calories"
           type="number"
+          readOnly={!!data}
           placeholder="Insert Amount"
           className="backdrop-blur text-white"
+          defaultValue={data?.foodLog?.calories}
         ></Input>
       </div>
       <div className="flex flex-col gap-3 ">
@@ -32,15 +34,17 @@ export default function FoodForm() {
         <Input
           name="foodName"
           type="text"
+          readOnly={!!data}
           placeholder="Insert Food Name"
           className="backdrop-blur text-white"
+          defaultValue={data?.foodLog?.foodName}
         ></Input>
       </div>
       <div className="flex flex-col gap-3 ">
         <Label htmlFor="activity-name" className="text-white text-base">
             Meal Type
         </Label>
-        <Select name="mealType">
+        <Select name="mealType" defaultValue={data?.foodLog?.mealType} disabled={!!data}>
           <SelectTrigger className="w-full backdrop-blur text-white">
             <SelectValue placeholder="Select your Meal Type" />
           </SelectTrigger>

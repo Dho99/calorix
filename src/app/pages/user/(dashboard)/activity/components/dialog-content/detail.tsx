@@ -15,16 +15,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import ActivityForm from "./form/activity";
+import FoodForm from "./form/food";
+import HydrationForm from "./form/hydration";
+import SleepForm from "./form/sleep";
+import axios from "axios";
+
 
 export default function DetailActivity({
   activity,
   setDialogProps,
+  setActivities
 }: {
   activity: UserActivites;
   setDialogProps: React.Dispatch<
     React.SetStateAction<{ content?: React.ReactNode } | null>
+  >;
+  setActivities: React.Dispatch<
+    React.SetStateAction<UserActivites[] | null>
   >;
 }) {
   const [pageState, setPageState] = useState<{
@@ -35,10 +44,27 @@ export default function DetailActivity({
     pageData: null,
   });
 
+  function deleteActivity(id: string) {
+    const urlParams = new URLSearchParams({
+      type: "delete",
+      id: id,
+    });
+
+    axios.delete(`/api/handler/activities/user?${urlParams.toString()}`).then((res) => {
+      if (res.data.success) {
+        setActivities(prev => prev!.filter((activity) => activity.id !== id));
+      }
+    }
+    ).catch((err) => {
+      console.error(err);
+    }
+    );
+  }
+
   return (
     <form className="inline-flex flex-col gap-5">
       <DialogHeader>
-        <DialogTitle>Tambah Aktivitas</DialogTitle>
+        <DialogTitle>Detail dan Catatan Aktivitas Anda</DialogTitle>
         <DialogDescription>
           Silahkan isi data aktivitas yang ingin anda tambahkan
         </DialogDescription>
@@ -49,7 +75,8 @@ export default function DetailActivity({
             <label htmlFor="activity-name" className="text-white">
               Pilih Kategori Aktivitas
             </label>
-            <Select name="category" defaultValue={activity.category}>
+            <Select name="category" defaultValue={activity?.category} disabled={!!activity}>
+              
               <SelectTrigger className="w-full">
                 <SelectValue
                   placeholder="Choose Categories"
@@ -64,19 +91,23 @@ export default function DetailActivity({
               </SelectContent>
             </Select>
           </div>
-          <div className="flex flex-col gap-3 ">
-            <label htmlFor="activity-name" className="text-white">
-              Masukkan Durasi
-            </label>
-            <Input
-              name="duration"
-              type="number"
-              placeholder="Insert Duration"
-            ></Input>
-          </div>
+          {activity?.category === "SLEEP_TRACKER" ? (
+                    <SleepForm data={activity}/>
+                  ) : activity?.category === "FOOD_LOG" ? (
+                    <FoodForm data={activity}/>
+                  ) : activity?.category === "USER_HYDRATION" ? (
+                    <HydrationForm />
+                  ) : activity?.category === "PHYSICAL_ACTIVITY" ? (
+                    <ActivityForm />
+                  ) : (
+                    <></>
+                  )}
         </div>
       </div>
-      <DialogFooter>
+      <DialogFooter className="flex flex-row gap-2 justify-between">
+        <Button variant="default" type="button" className="me-auto bg-transparent text-red-600 border border-red-600 hover:bg-red-600 hover:text-white" onClick={() => {deleteActivity(activity.id)}}>
+          Batal
+        </Button>
         <Button variant="outline" type="button" className="bg-transparent" onClick={() => {setDialogProps(null)}}>
           Batal
         </Button>

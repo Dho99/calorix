@@ -5,9 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   SearchIcon,
-  NotepadTextIcon,
+  BedIcon,
   FunnelIcon,
   UtensilsCrossedIcon,
+  BeerIcon,
+  BicepsFlexedIcon
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -25,12 +27,16 @@ import { DialogTrigger } from "@/components/ui/dialog";
 export default function ActivityTable({
   activitiesProps,
   setDialogProps,
+  setActivities
 }: {
-  activitiesProps: UserActivites | null;
+  activitiesProps: UserActivites[] | null;
   setDialogProps: React.Dispatch<
     React.SetStateAction<{
       content?: React.ReactNode;
     } | null>
+  >;
+  setActivities: React.Dispatch<
+    React.SetStateAction<UserActivites[] | null>
   >;
 }) {
   const dropdownMenuItems = [
@@ -65,7 +71,7 @@ export default function ActivityTable({
   ];
 
   return (
-    <div className="bg-white/2 border rounded-lg shadow-lg p-5 w-full h-auto flex flex-col gap-5">
+    <div className="bg-white/2 border border-white rounded-lg shadow-lg p-5 w-full h-auto flex flex-col gap-5">
       <div className="flex flex-row w-full justify-between items-center">
         <div className="flex w-full items-center max-w-md">
           <Input type="email" placeholder="Email" className="rounded-e-none " />
@@ -109,14 +115,56 @@ export default function ActivityTable({
       <div className="flex flex-col gap-3">
         {Array.isArray(activitiesProps) &&
           activitiesProps.map((activity, key) => (
+            <DialogTrigger asChild key={key}>
             <div
-              className="w-full flex flex-col gap-2 border bg-white/2 rounded-lg py-2 px-4 text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out"
-              key={key}
+              className="w-full flex flex-row gap-2 border  border-white bg-white/2 rounded-lg py-2 px-4 text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center"
+              onClick={() =>
+                setDialogProps({
+                  content: (
+                    <DetailActivity
+                      activity={activity}
+                      setDialogProps={setDialogProps}
+                      setActivities={setActivities}
+                    />
+                  ),
+                })
+              }
             >
               <div>
-              {activity.category === "FOOD_LOG" ? (<UtensilsCrossedIcon className="text-white w-10 h-10" />) : activity.category === "USER_HYDRATION" ? (<SearchIcon className="text-white w-10 h-10" />) : activity.category === "SLEEP_TRACKER" ? (<SearchIcon className="text-white w-10 h-10" />) : (<SearchIcon className="text-white w-10 h-10" />)}
+                {activity.category === "FOOD_LOG" ? (
+                  <UtensilsCrossedIcon className="text-white w-10 h-10" />
+                ) : activity.category === "USER_HYDRATION" ? (
+                  <BeerIcon className="text-white w-10 h-10" />
+                ) : activity.category === "SLEEP_TRACKER" ? (
+                  <BedIcon className="text-white w-10 h-10" />
+                ) : (
+                  <BicepsFlexedIcon className="text-white w-10 h-10" />
+                )}
+              </div>
+              <div>
+                <h1 className="text-white text-2xl font-semibold">
+                  {activity.category === "FOOD_LOG"
+                    ? "Makan"
+                    : activity.category === "USER_HYDRATION"
+                    ? "Minum"
+                    : activity.category === "SLEEP_TRACKER"
+                    ? "Tidur"
+                    : "Aktivitas Fisik"}
+                </h1>
+                <p className="text-white/50 text-sm">
+                  {formatDate(activity.createdAt)}
+                </p>
+              </div>
+              <div>
+                {activity.category === "FOOD_LOG" ? `${activity?.foodLog?.calories} Kalori `: activity.category === "USER_HYDRATION"
+                  ? `${activity?.userHydration?.waterIntake} ml`
+                  : activity.category === "SLEEP_TRACKER"
+                  ? `${(activity?.sleepTracker?.duration)} Menit`
+                  : `${activity?.physicalActivityLog?.duration} Jam`}
+                
               </div>
             </div>
+            </DialogTrigger>
           ))}
       </div>
       {/* <Table className="text-white">

@@ -15,7 +15,7 @@ export type DialogProps = {
 };
 
 export default function Page() {
-  const [activities, setActivities] = useState<UserActivites | null>(null);
+  const [activities, setActivities] = useState<UserActivites[] | null>(null);
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -67,7 +67,7 @@ export default function Page() {
               className="bg-[#9EC8B9]/10 hover:bg-[#9EC8B9]/50 transition-all transition-duration-400 py-2 px-4 border rounded-lg text-white shadow-lg ms-auto flex flex-row gap-4"
               onClick={() => {
                 setDialogProps({
-                  content: <AddActivityContent setDialogProps={setDialogProps}/>,
+                  content: <AddActivityContent setDialogProps={setDialogProps} setActivities={setActivities}/>,
                 });
               }}
             >
@@ -76,7 +76,7 @@ export default function Page() {
             </button>
           </DialogTrigger>
         </div>
-        <ActivityTable activitiesProps={activities} setDialogProps={setDialogProps} />
+        <ActivityTable activitiesProps={activities} setDialogProps={setDialogProps} setActivities={setActivities}/>
       </div>
     </Dialog>
   );

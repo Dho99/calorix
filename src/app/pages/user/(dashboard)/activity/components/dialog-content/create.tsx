@@ -18,14 +18,19 @@ import SleepForm from "./form/sleep";
 import FoodForm from "./form/food";
 import HydrationForm from "./form/hydration";
 import ActivityForm from "./form/activity";
+import type { UserActivites } from "@/app/utils/lib/types/user";
 
 export default function AddActivityContent({
   setDialogProps,
+  setActivities
 }: {
   setDialogProps: React.Dispatch<
     React.SetStateAction<{
       content?: React.ReactNode;
     } | null>
+  >;
+  setActivities: React.Dispatch<
+    React.SetStateAction<UserActivites[] | null>
   >;
 }): React.ReactNode {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -61,6 +66,12 @@ export default function AddActivityContent({
       .then((res) => {
         if (res.data.success) {
           setDialogProps(null);
+          setActivities((prev) => {
+            if (prev) {
+              return [...prev, res.data.data];
+            }
+            return [res.data.data];
+          });
         } else {
           console.log("failed");
         }

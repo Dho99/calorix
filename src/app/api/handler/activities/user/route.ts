@@ -91,3 +91,27 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({ success: false }, { status: 400 });
 }
+
+export async function DELETE(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const reqType = searchParams.get("type");
+  const session = await auth();
+
+  if (reqType === "delete") {
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ success: false }, { status: 400 });
+    }
+
+    const res = await prisma.userActivites.delete({
+      where: {
+        id,
+      },
+    });
+
+    return NextResponse.json({ success: true, data: res }, { status: 200 });
+  }
+
+  return NextResponse.json({ success: false }, { status: 400 });
+}
