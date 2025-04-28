@@ -37,21 +37,22 @@ export const dashboardMenu: Preference[] = [
   },
   {
     title: "Aktivitas",
-    collapsible: true,
-    link: [
-      {
-        title: "Tambah Aktivitas",
-        childLink: "/pages/user/activity/add",
-      },
-      {
-        title: "Riwayat Aktivitas",
-        childLink: "/pages/user/activity",
-      },
-    ],
+    collapsible: false,
+    link: "/pages/user/activity",
+    // link: [
+    //   {
+    //     title: "Tambah Aktivitas",
+    //     childLink: "/pages/user/activity/add",
+    //   },
+    //   {
+    //     title: "Riwayat Aktivitas",
+    //     childLink: "/pages/user/activity",
+    //   },
+    // ],
     icon: ActivityIcon,
   },
   {
-    title: "Manajemen Akun",
+    title: "Akun",
     link: "/pages/user/manage",
     icon: UserRoundPenIcon,
   },
@@ -63,7 +64,7 @@ export default function SideMenu() {
   return (
     <div className="h-dvh border-e-3 border-[#5D5D5D] flex flex-col gap-5 px-3 w-full py-4">
       <div className="flex flex-col gap-5 w-full h-full">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           {dashboardMenu.map((item, index) => {
             return item.collapsible ? (
               <Accordion key={index} type="single" collapsible className="text-white">
@@ -73,7 +74,7 @@ export default function SideMenu() {
                     <p className="me-auto">{item.title}</p>
                   </AccordionTrigger>
                   <AccordionContent className="py-2">
-                    <div className="flex flex-col gap-y-2 px-2">
+                    <div className="flex flex-col gap-y-2">
                       {Array.isArray(item.link) &&
                         item.link.map((child, index) => {
                           return (

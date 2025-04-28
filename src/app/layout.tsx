@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Geist } from 'next/font/google'
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "next-auth/react";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "700"], // Add desired font weights
-});
+const geist = Geist({ subsets: ['latin'] })
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} anti-antialiased w-dvw h-dvh overflow-x-hidden overflow-y-auto bg-[#092635]`}
+        className={`${geist.className} anti-antialiased w-dvw h-dvh overflow-x-hidden overflow-y-auto bg-[#092635]`}
         >
         <SessionProvider>{children}</SessionProvider>
         <Toaster />
