@@ -1,19 +1,14 @@
 "use client";
 
 import type { UserActivites } from "@/app/utils/lib/types/user";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SearchIcon } from "lucide-react";
-import { useState } from "react";
+import {
+  SearchIcon,
+  NotepadTextIcon,
+  FunnelIcon,
+  UtensilsCrossedIcon,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,16 +18,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { formatDate } from "@/app/utils/api/date";
+import DetailActivity from "./dialog-content/detail";
+import { DialogTrigger } from "@/components/ui/dialog";
 
 export default function ActivityTable({
   activitiesProps,
+  setDialogProps,
 }: {
   activitiesProps: UserActivites | null;
+  setDialogProps: React.Dispatch<
+    React.SetStateAction<{
+      content?: React.ReactNode;
+    } | null>
+  >;
 }) {
-  const [activities, setActivities] = useState<UserActivites | null>(
-    activitiesProps
-  );
-
   const dropdownMenuItems = [
     {
       title: "Food Log",
@@ -79,7 +79,11 @@ export default function ActivityTable({
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="bg-white/3 text-white">
+            <Button
+              variant="outline"
+              className="bg-white/3 text-white space-x-2"
+            >
+              <FunnelIcon />
               Filter
             </Button>
           </DropdownMenuTrigger>
@@ -102,7 +106,20 @@ export default function ActivityTable({
         </DropdownMenu>
         {/* <button className="bg-white/5 text-white rounded-lg px-4 border py-1">Filter</button> */}
       </div>
-      <Table className="text-white">
+      <div className="flex flex-col gap-3">
+        {Array.isArray(activitiesProps) &&
+          activitiesProps.map((activity, key) => (
+            <div
+              className="w-full flex flex-col gap-2 border bg-white/2 rounded-lg py-2 px-4 text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out"
+              key={key}
+            >
+              <div>
+              {activity.category === "FOOD_LOG" ? (<UtensilsCrossedIcon className="text-white w-10 h-10" />) : activity.category === "USER_HYDRATION" ? (<SearchIcon className="text-white w-10 h-10" />) : activity.category === "SLEEP_TRACKER" ? (<SearchIcon className="text-white w-10 h-10" />) : (<SearchIcon className="text-white w-10 h-10" />)}
+              </div>
+            </div>
+          ))}
+      </div>
+      {/* <Table className="text-white">
         <TableCaption>A list of your activities.</TableCaption>
         <TableHeader>
           <TableRow className="">
@@ -112,21 +129,44 @@ export default function ActivityTable({
               Perubahan pada Tubuh
             </TableHead>
             <TableHead className="text-white text-center">Log Date</TableHead>
-            <TableHead className="text-white text-center">Detail</TableHead>
+            <TableHead className="text-white text-center">Details</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {activities ? (
-            Array.isArray(activities) &&
-            activities.map((activity, key) => (
-              <TableRow key={key}>
+          {activitiesProps ? (
+            Array.isArray(activitiesProps) &&
+            activitiesProps.map((activity, key) => (
+              <TableRow key={key} className="text-center">
                 <TableCell className="font-medium">
-                  {activity.invoice}
+                  {activity.foodLogId
+                    ? "Makan"
+                    : activity.waterIntakeId
+                    ? "Minum"
+                    : activity.physicalActivityId
+                    ? "Aktivitas Fisik"
+                    : "Tidur"}
                 </TableCell>
-                <TableCell>{activity.paymentStatus}</TableCell>
-                <TableCell>{activity.paymentMethod}</TableCell>
-                <TableCell className="text-right">
-                  {activity.totalAmount}
+                <TableCell>
+                  {(activity.sleepTrackerId
+                    ? activity.sleepTracker.duration / 60
+                    : activity.physicalActivityId &&
+                      activity.physicalActivity.duration / 60
+                  )}{" "}
+                  Jam
+                </TableCell>
+                <TableCell>{formatDate(activity.createdAt)}</TableCell>
+                <TableCell>{formatDate(activity.createdAt)}</TableCell>
+                <TableCell className="flex justify-center">
+                  <DialogTrigger asChild>
+                  <Button
+                    className="flex flex-row space-x-2 bg-black/20 hover:text-black hover:bg-[#9EC8B9]"
+                    variant={"outline"}
+                    onClick={() => setDialogProps({ content: <DetailActivity activity={activity} setDialogProps={setDialogProps} /> })}
+                  >
+                    <NotepadTextIcon className="text-center" />
+                    Info
+                  </Button>
+                  </DialogTrigger>
                 </TableCell>
               </TableRow>
             ))
@@ -141,18 +181,8 @@ export default function ActivityTable({
               </TableCell>
             </TableRow>
           )}
-          {/* {activities?.map((activity, key) => (
-            <TableRow key={key}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell className="text-right">
-                {invoice.totalAmount}
-              </TableCell>
-            </TableRow>
-          ))} */}
         </TableBody>
-      </Table>
+      </Table> */}
     </div>
   );
 }

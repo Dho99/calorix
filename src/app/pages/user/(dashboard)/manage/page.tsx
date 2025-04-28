@@ -169,7 +169,7 @@ export default function Page() {
               placeholder="Email"
               readOnly
               defaultValue={data?.email as string}
-              className={`${"bg-[#D9D9D9] text-black"} ${
+              className={`${"bg-[#D9D9D9] text-white"} ${
                 isEdit ? "" : `hover:cursor-not-allowed`
               }`}
             />{" "}
@@ -184,7 +184,7 @@ export default function Page() {
               name="username"
               readOnly={!isEdit}
               defaultValue={data?.username as string}
-              className={`${"bg-[#D9D9D9] text-black"} ${
+              className={`${"bg-[#D9D9D9] text-white"} ${
                 isEdit ? "" : `hover:cursor-not-allowed`
               }`}
             />
@@ -198,7 +198,7 @@ export default function Page() {
               name="name"
               readOnly={!isEdit}
               defaultValue={data?.name as string}
-              className={`${"bg-[#D9D9D9] text-black"} ${
+              className={`${"bg-[#D9D9D9] text-white"} ${
                 isEdit ? "" : `hover:cursor-not-allowed`
               }`}
             />
@@ -212,7 +212,7 @@ export default function Page() {
                   id="password"
                   name="password"
                   placeholder="New Password"
-                  className="bg-[#D9D9D9] text-black"
+                  className="bg-[#D9D9D9] text-white"
                   required
                 />
               </div>
@@ -223,7 +223,7 @@ export default function Page() {
                   id="validatePass"
                   name="validatePass"
                   placeholder="Validate New Password"
-                  className="bg-[#D9D9D9] text-black"
+                  className="bg-[#D9D9D9] text-white"
                   required
                 />
               </div>

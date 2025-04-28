@@ -4,11 +4,10 @@ import React, { useEffect, useState } from "react";
 import type { UserActivites } from "@/app/utils/lib/types/user";
 import axios from "axios";
 import ActivityTable from "./components/table";
-import { CopyPlusIcon, Scroll } from "lucide-react";
+import { CopyPlusIcon } from "lucide-react";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import ActivityDialog from "./components/dialog";
 import AddActivityContent from "./components/dialog-content/create";
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 
 export type DialogProps = {
@@ -47,7 +46,7 @@ export default function Page() {
   const [dialogProps, setDialogProps] = useState<DialogProps | null>(null);
 
   return (
-    <Dialog>
+    <Dialog open={dialogProps !== null}>
       {dialogProps && (
         <DialogContent className="bg-black/50 border backdrop-blur-sm max-h-[90vh] text-white overflow-auto">
           <ActivityDialog dialogProps={dialogProps!} />
@@ -68,7 +67,7 @@ export default function Page() {
               className="bg-[#9EC8B9]/10 hover:bg-[#9EC8B9]/50 transition-all transition-duration-400 py-2 px-4 border rounded-lg text-white shadow-lg ms-auto flex flex-row gap-4"
               onClick={() => {
                 setDialogProps({
-                  content: <AddActivityContent />,
+                  content: <AddActivityContent setDialogProps={setDialogProps}/>,
                 });
               }}
             >
@@ -77,7 +76,7 @@ export default function Page() {
             </button>
           </DialogTrigger>
         </div>
-        <ActivityTable activitiesProps={activities} />
+        <ActivityTable activitiesProps={activities} setDialogProps={setDialogProps} />
       </div>
     </Dialog>
   );

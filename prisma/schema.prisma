@@ -163,8 +163,6 @@ model UserHydration {
 model SleepTracker {
   id        String   @id @default(cuid())
   userId    String
-  sleepTime String
-  wakeTime  String
   duration  Float // dalam menit
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -176,6 +174,8 @@ model SleepTracker {
 model UserActivites {
   id                    String   @id @default(cuid())
   userId                String
+  category              ACTIVITY_TYPE
+  effectToBody          String?
   sleepTrackerId        String?  @unique
   userHydrationId       String?  @unique
   foodLogId             String?  @unique
@@ -203,4 +203,11 @@ model Chatbot {
 enum SENDER {
   USER
   BOT
+}
+
+enum ACTIVITY_TYPE {
+  SLEEP_TRACKER
+  USER_HYDRATION
+  FOOD_LOG
+  PHYSICAL_ACTIVITY
 }

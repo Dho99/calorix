@@ -11,13 +11,76 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-
+import axios from "axios";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import SleepForm from "./form/sleep";
+import FoodForm from "./form/food";
+import HydrationForm from "./form/hydration";
+import ActivityForm from "./form/activity";
 
-export default function AddActivityContent(): React.ReactNode {
+export default function AddActivityContent({
+  setDialogProps,
+}: {
+  setDialogProps: React.Dispatch<
+    React.SetStateAction<{
+      content?: React.ReactNode;
+    } | null>
+  >;
+}): React.ReactNode {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const category = formData.get("category");
+
+    let data;
+
+    if (category === "USER_HYDRATION") {
+      data = {
+        duration: formData.get("duration"),
+        category: category,
+      };
+    } else if (category === "FOOD_LOG") {
+      data = {
+        foodName: formData.get("foodName"),
+        calories: formData.get("calories"),
+        mealType: formData.get("mealType"),
+        category: category,
+      };
+    }
+
+    const urlParams = new URLSearchParams({
+      category: category as string,
+      type: "create",
+    });
+
+    axios
+      .post(`/api/handler/activities/user?${urlParams.toString()}`, {
+        data: JSON.stringify(data),
+      })
+      .then((res) => {
+        if (res.data.success) {
+          setDialogProps(null);
+        } else {
+          console.log("failed");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  const [categoryInput, setCategory] = useState<string | null>(null);
+
+  function changeInputCategory(value: string) {
+    if (value === "") {
+      setCategory(null);
+    }
+    setCategory(value);
+  }
+
   return (
-    <>
+    <form className="inline-flex flex-col gap-5" onSubmit={handleSubmit}>
       <DialogHeader>
         <DialogTitle>Tambah Aktivitas</DialogTitle>
         <DialogDescription>
@@ -30,28 +93,44 @@ export default function AddActivityContent(): React.ReactNode {
             <label htmlFor="activity-name" className="text-white">
               Pilih Kategori Aktivitas
             </label>
-            <Select>
+            <Select name="category" onValueChange={changeInputCategory}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Choose Categories" className="text-white"/>
+                <SelectValue
+                  placeholder="Choose Categories"
+                  className="text-white"
+                />
               </SelectTrigger>
               <SelectContent className="bg-[#1E1E2F]/30 backdrop-blur text-white">
-                <SelectItem value="sleep">Tidur</SelectItem>
-                <SelectItem value="eat">Makan</SelectItem>
-                <SelectItem value="drink">Minum</SelectItem>
-                <SelectItem value="activity">Beraktivitas</SelectItem>
+                <SelectItem value="SLEEP_TRACKER">Tidur</SelectItem>
+                <SelectItem value="FOOD_LOG">Makan</SelectItem>
+                <SelectItem value="USER_HYDRATION">Minum</SelectItem>
+                <SelectItem value="PHYSICAL_ACTIVITY">Beraktivitas</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div className="flex flex-col gap-3 ">
-            <label htmlFor="activity-name" className="text-white">
-              Masukkan Durasi
-            </label>
-           <Input name="duration" type="number" placeholder="Insert Duration"></Input>
-          </div>
+
+          {categoryInput === "SLEEP_TRACKER" ? (
+            <SleepForm />
+          ) : categoryInput === "FOOD_LOG" ? (
+            <FoodForm />
+          ) : categoryInput === "USER_HYDRATION" ? (
+            <HydrationForm />
+          ) : categoryInput === "PHYSICAL_ACTIVITY" ? (
+            <ActivityForm />
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <DialogFooter>
-        <Button variant="outline" className="bg-transparent">
+        <Button
+          variant="outline"
+          type="button"
+          className="bg-transparent"
+          onClick={() => {
+            setDialogProps(null);
+          }}
+        >
           Batal
         </Button>
         <Button
@@ -62,6 +141,6 @@ export default function AddActivityContent(): React.ReactNode {
           Simpan
         </Button>
       </DialogFooter>
-    </>
+    </form>
   );
 }

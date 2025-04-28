@@ -28,6 +28,7 @@ export type UserActivites = BaseModel & {
   userHydrationId?: String;
   foodLogId?: String;
   physicalActivityLogId?: String;
+  category: ACTIVITY_TYPE;
 
   sleepTracker?: SleepTracker | null;
   userHydration?: UserHydration | null;
@@ -113,3 +114,9 @@ export type BaseModel = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type ACTIVITY_TYPE =
+  | "FOOD_LOG"
+  | "USER_HYDRATION"
+  | "SLEEP_TRACKER"
+  | "PHYSICAL_ACTIVITY";
