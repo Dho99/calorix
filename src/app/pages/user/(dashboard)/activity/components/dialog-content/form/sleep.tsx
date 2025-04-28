@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import type { UserActivites } from "@/app/utils/lib/types/user";
 
-export default function SleepForm({data}: {data: UserActivites|undefined}) {
+export default function SleepForm({data}: {data: UserActivites | null}) {
     return (
         <div className="flex flex-col gap-3 ">
         <label htmlFor="activity-name" className="text-white">
@@ -14,6 +14,7 @@ export default function SleepForm({data}: {data: UserActivites|undefined}) {
           placeholder="Insert Duration"
           defaultValue={data?.sleepTracker?.duration}
         ></Input>
+        
       </div>
     )
 }

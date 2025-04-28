@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import type { UserActivites } from "@/app/utils/lib/types/user";
 
-export default function FoodForm({data}: {data: UserActivites|undefined}) {
+export default function FoodForm({data}: {data: UserActivites|null}) {
   return (
     <div className="flex flex-col gap-6 ">
       <div className="flex flex-col gap-3">
@@ -24,7 +24,7 @@ export default function FoodForm({data}: {data: UserActivites|undefined}) {
           readOnly={!!data}
           placeholder="Insert Amount"
           className="backdrop-blur text-white"
-          defaultValue={data?.foodLog?.calories}
+          defaultValue={data?.foodLog?.calories || ""}
         ></Input>
       </div>
       <div className="flex flex-col gap-3 ">
@@ -37,7 +37,7 @@ export default function FoodForm({data}: {data: UserActivites|undefined}) {
           readOnly={!!data}
           placeholder="Insert Food Name"
           className="backdrop-blur text-white"
-          defaultValue={data?.foodLog?.foodName}
+          defaultValue={data?.foodLog?.foodName || ""}
         ></Input>
       </div>
       <div className="flex flex-col gap-3 ">

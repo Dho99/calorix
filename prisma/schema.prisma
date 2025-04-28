@@ -184,10 +184,10 @@ model UserActivites {
   updatedAt             DateTime @updatedAt
 
   user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sleepTracker        SleepTracker?        @relation(fields: [sleepTrackerId], references: [id])
-  userHydration       UserHydration?       @relation(fields: [userHydrationId], references: [id])
-  foodLog             FoodLog?             @relation(fields: [foodLogId], references: [id])
-  physicalActivityLog PhysicalActivityLog? @relation(fields: [physicalActivityLogId], references: [id])
+  sleepTracker        SleepTracker?        @relation(fields: [sleepTrackerId], references: [id], onDelete: Cascade)
+  userHydration       UserHydration?       @relation(fields: [userHydrationId], references: [id], onDelete: Cascade)
+  foodLog             FoodLog?             @relation(fields: [foodLogId], references: [id], onDelete: Cascade)
+  physicalActivityLog PhysicalActivityLog? @relation(fields: [physicalActivityLogId], references: [id], onDelete: Cascade)
 }
 
 model Chatbot {

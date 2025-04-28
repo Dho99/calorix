@@ -84,6 +84,13 @@ export async function POST(request: NextRequest) {
         category: category as ACTIVITY_TYPE,
         ...childData,
       },
+      include: {
+        user: true,
+        foodLog: true,
+        userHydration: true,
+        sleepTracker: true,
+        physicalActivityLog: true,
+      }
     });
     return NextResponse.json({ success: true, data: res }, { status: 201 });
     

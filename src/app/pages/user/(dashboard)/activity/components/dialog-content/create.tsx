@@ -40,7 +40,7 @@ export default function AddActivityContent({
 
     let data;
 
-    if (category === "USER_HYDRATION") {
+    if (category === "SLEEP_TRACKER") {
       data = {
         duration: formData.get("duration"),
         category: category,
@@ -59,18 +59,43 @@ export default function AddActivityContent({
       type: "create",
     });
 
+    console.log("data", data);
+
     axios
       .post(`/api/handler/activities/user?${urlParams.toString()}`, {
         data: JSON.stringify(data),
       })
       .then((res) => {
         if (res.data.success) {
+          console.log(res.data.data);
           setDialogProps(null);
           setActivities((prev) => {
             if (prev) {
-              return [...prev, res.data.data];
+              if (category === "SLEEP_TRACKER") {
+                return [
+                  ...prev,
+                  {
+                    ...res.data.data,
+                    sleepTracker: {
+                      duration: res.data.data.sleepTracker.duration,
+                    },
+                  },
+                ];
+              } else if (category === "FOOD_LOG") {
+                return [
+                  ...prev,
+                  {
+                    ...res.data.data,
+                    foodLog: {
+                      foodName: res.data.data.foodLog.foodName,
+                      calories: res.data.data.foodLog.calories,
+                      mealType: res.data.data.foodLog.mealType,
+                    },
+                  },
+                ];
+              }
             }
-            return [res.data.data];
+            return prev; // Ensure a valid return value
           });
         } else {
           console.log("failed");
@@ -84,6 +109,7 @@ export default function AddActivityContent({
   const [categoryInput, setCategory] = useState<string | null>(null);
 
   function changeInputCategory(value: string) {
+    console.log("value", value);
     if (value === "") {
       setCategory(null);
     }
@@ -121,9 +147,9 @@ export default function AddActivityContent({
           </div>
 
           {categoryInput === "SLEEP_TRACKER" ? (
-            <SleepForm />
+            <SleepForm data={null}/>
           ) : categoryInput === "FOOD_LOG" ? (
-            <FoodForm />
+            <FoodForm data={null}/>
           ) : categoryInput === "USER_HYDRATION" ? (
             <HydrationForm />
           ) : categoryInput === "PHYSICAL_ACTIVITY" ? (
