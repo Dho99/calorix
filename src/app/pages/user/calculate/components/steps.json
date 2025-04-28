@@ -99,7 +99,7 @@
     },
     {
       "number": 8,
-      "question": "Pilih Tingkat Aktivitas Harian Anda",
+      "question": "Pilih Tingkat Keseringan anda dalam berolahraga",
       "placeholder": "Pilih tingkat aktivitas harian",
       "stateKey": "activityFactor",
       "type": "radio",
@@ -113,7 +113,7 @@
     },
     {
       "number": 9,
-      "question": "Seberapa Intens Anda berolahraga ?",
+      "question": "Jika anda berolahraga, apa yang biasanya anda lakukan ?",
       "placeholder": "Pilih tingkat Intens olahraga anda",
       "stateKey": "sportIntensity",
       "type": "radio",
@@ -129,14 +129,6 @@
       "placeholder": "Contoh: 3",
       "stateKey": "mealsPerDay",
       "indicator": "Porsi",
-      "type": "number"
-    },
-    {
-      "number": 11,
-      "question": "Masukkan Jumlah Air yang Diminum Sehari (liter)",
-      "placeholder": "Contoh: 2.5",
-      "stateKey": "waterIntake",
-      "indicator": "Liter",
       "type": "number"
     },
     {
@@ -165,7 +157,7 @@
     },
     {
       "number": 15,
-      "question": "Masukkan Jumlah Kalori Harian yang Masuk ke tubuh",
+      "question": "Masukkan Jumlah Perkiraan Kalori Harian yang Masuk ke tubuh",
       "placeholder": "Contoh: 2000",
       "stateKey": "caloriesPerDay",
       "type": "number",

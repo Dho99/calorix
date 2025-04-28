@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import {auth} from "../auth";
 import { prisma } from "@/app/utils/lib/prisma/prisma";
-
+import { auth } from "../auth";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -9,13 +8,13 @@ export async function GET(request: NextRequest) {
 
   const methodType = searchParams.get("methodType");
 
-  if(methodType === "getUserHydration") {
+  if (methodType === "getUserSleepTime") {
     const start = searchParams.get("start");
     const end = searchParams.get("end");
 
-    const res = await prisma.userHydration.findMany({
-      select: {
-        waterIntake: true,
+    const res = await prisma.sleepTracker.aggregate({
+    _sum: {
+        duration: true,
       },
       where: {
         userId: session?.user?.id as string,
@@ -26,15 +25,10 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    const sumHydration = res.reduce((acc, curr) => {
-      return acc + parseFloat(curr.waterIntake);
-    }, 0);
 
     return NextResponse.json(
-      { success: true, data: sumHydration },
+      { success: true, data: res },
       { status: 200 }
     );
-
   }
-
 }

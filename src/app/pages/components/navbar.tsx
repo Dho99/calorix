@@ -12,6 +12,8 @@ import {
   InfoIcon,
   HomeIcon,
   BotIcon,
+  MoonIcon,
+  SunIcon,
 } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 import {
@@ -19,6 +21,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTheme } from "next-themes";
 
 import Link from "next/link";
 
@@ -67,12 +70,6 @@ export default function AppNavbar() {
   const pathname = usePathname();
   const isLoginPage = pathname === "/auth/signin";
 
-  // type SidebarContent = {
-  //   title: string;
-  //   link: string;
-  //   icon: typeof MenuIcon;
-  // };
-
   return (
     <div className="flex items-center w-full py-3 lg:px-20 px-10 bg-[#092635]/70 text-white justify-between fixed top-0 z-2 backdrop-blur-xs shadow-md">
       <Link href={"/pages/home"} className="text-2xl font-bold">
@@ -101,6 +98,7 @@ export default function AppNavbar() {
 const ProtectedNav = () => {
   const { open, toggleSidebar } = useSidebar();
   const session = useSession();
+  const { theme, setTheme } = useTheme();
 
   const userSession = session?.data?.user;
 
@@ -135,7 +133,7 @@ const ProtectedNav = () => {
           {dropdownLinks.map((item, index) => {
             return (
               <Link
-                href={item.link}
+                href={`${item.link}`}
                 key={index}
                 className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded"
               >
@@ -143,6 +141,9 @@ const ProtectedNav = () => {
               </Link>
             );
           })}
+          <button className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded justify-between" onClick={() => {setTheme(theme === "dark" ? "light" : "dark")}}>
+            {theme === "dark" ? (<MoonIcon /> ) : (<SunIcon />)} {theme === "dark" ? "Dark" : "Light"} Mode
+          </button>
         </DropdownMenuContent>
       </DropdownMenu>
       <button

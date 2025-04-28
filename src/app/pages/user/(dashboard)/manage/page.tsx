@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { UserRound } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -17,12 +17,15 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import axios from "axios";
 import type { Register as User } from "@/app/utils/lib/types/user";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { scrollToTop } from "@/app/pages/layout";
+
 
 export default function Page() {
   const session = useSession();
 
   const [data, setUserData] = useState<User | null>(null);
   const [openAlert, setOpenAlert] = useState<{success: boolean, message: string} | null>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
 
   function handleAlertClose() {
     setOpenAlert(null);
@@ -85,6 +88,8 @@ export default function Page() {
       });
   }
 
+  
+
   return (
     <Dialog>
       <DialogContent className="sm:max-w-[425px] bg-[#1E1E2F] rounded-lg text-white">
@@ -112,7 +117,7 @@ export default function Page() {
           </DialogClose>
         </div>
       </DialogContent>
-      <div className="w-full h-full px-10 py-15 flex flex-col gap-8">
+      <div className="w-full h-full px-5 py-15 flex flex-col gap-8" ref={pageRef}>
         <div className="flex flex-row gap-5 w-full h-auto items-center">
           <div className="w-24 h-24 bg-[#9EC8B9]/20 p-2 rounded-full flex justify-center items-center p-4">
             <UserRound className="w-full h-full text-white" />
@@ -143,7 +148,7 @@ export default function Page() {
         </div>
         {
           openAlert && (
-            <Alert className={`max-w-3/4 ${openAlert?.success ? 'bg-green-500' : 'bg-red-500/50'} text-white border-0 shadow-lg`} onClick={handleAlertClose}>
+            <Alert className={`lg:max-w-3/4 w-full ${openAlert?.success ? 'bg-green-500' : 'bg-red-500/50'} text-white border-0 shadow-lg`} onClick={handleAlertClose}>
               <AlertTitle>{openAlert?.success ? 'Success' : 'Error'} Alert</AlertTitle>
               <AlertDescription className="text-white text-lg font-bold">
                {openAlert.message}
@@ -153,9 +158,9 @@ export default function Page() {
         }
         <form
           onSubmit={submitFormInput}
-          className="flex flex-col gap-y-5 w-full text-white"
+          className="flex flex-col gap-y-5 w-full text-white lg:items-start  items-center"
           >
-          <div className="grid w-full max-w-3/4 items-center gap-3">
+          <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
             <Label htmlFor="email">Email</Label>
             <Input
               type="email"
@@ -164,13 +169,13 @@ export default function Page() {
               placeholder="Email"
               readOnly
               defaultValue={data?.email as string}
-              className={`${"bg-[#D9D9D9] text-black"} ${
+              className={`${"bg-[#D9D9D9] text-white"} ${
                 isEdit ? "" : `hover:cursor-not-allowed`
               }`}
             />{" "}
             {/* disabled will turn to false if isEdit is true*/}
           </div>
-          <div className="grid w-full max-w-3/4 items-center gap-3">
+          <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
             <Label htmlFor="email">Username</Label>
             <Input
               type="text"
@@ -179,12 +184,12 @@ export default function Page() {
               name="username"
               readOnly={!isEdit}
               defaultValue={data?.username as string}
-              className={`${"bg-[#D9D9D9] text-black"} ${
+              className={`${"bg-[#D9D9D9] text-white"} ${
                 isEdit ? "" : `hover:cursor-not-allowed`
               }`}
             />
           </div>
-          <div className="grid w-full max-w-3/4 items-center gap-3">
+          <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
             <Label htmlFor="name">Nama Lengkap</Label>
             <Input
               type="text"
@@ -193,43 +198,46 @@ export default function Page() {
               name="name"
               readOnly={!isEdit}
               defaultValue={data?.name as string}
-              className={`${"bg-[#D9D9D9] text-black"} ${
+              className={`${"bg-[#D9D9D9] text-white"} ${
                 isEdit ? "" : `hover:cursor-not-allowed`
               }`}
             />
           </div>
           {isEdit && (
             <>
-              <div className="grid w-full max-w-3/4 items-center gap-3">
+              <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   type="password"
                   id="password"
                   name="password"
                   placeholder="New Password"
-                  className="bg-[#D9D9D9] text-black"
+                  className="bg-[#D9D9D9] text-white"
                   required
                 />
               </div>
-              <div className="grid w-full max-w-3/4 items-center gap-3">
+              <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
                 <Label htmlFor="validatePass">Validate Password</Label>
                 <Input
                   type="password"
                   id="validatePass"
                   name="validatePass"
                   placeholder="Validate New Password"
-                  className="bg-[#D9D9D9] text-black"
+                  className="bg-[#D9D9D9] text-white"
                   required
                 />
               </div>
             </>
           )}
           {isEdit && (
-            <div className="mt-4 mb-10 max-w-3/4 flex">
+            <div className="mt-4 mb-10 lg:max-w-3/4 w-full flex">
               <button
                 type="submit"
                 className="w-full py-2 rounded-lg bg-[#1B4242] text-white drop-shadow-xl transition-all transition-duration-400 hover:bg-[#9EC8B9] hover:text-black hover:font-bold"
                 value="Sign In"
+                onClick={() => {
+                  scrollToTop(pageRef);
+                }}
               >
                 Perbarui Profile
               </button>
