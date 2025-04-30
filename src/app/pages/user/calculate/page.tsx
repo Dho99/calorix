@@ -22,6 +22,7 @@ import {
 import { calculateUserData } from "@/app/utils/api/calculate";
 import SaveCalculate from "./components/save-calculate";
 import { scrollToTop } from "@/app/pages/layout";
+import DualCheckbox from "./components/dualCheckbox";
 
 export type Step = {
   number: number;
@@ -39,13 +40,12 @@ export type Step = {
     label: string;
     icon?: string;
   }[];
+  required?: boolean;
 };
 
 export type StepValues = {
   [stepType: string]: string | string[] | number | boolean | null;
 };
-
-
 
 
 export default function Page() {
@@ -100,15 +100,16 @@ export default function Page() {
     }));
   }
 
-  const steps: Step[] = stepsJson;
+  let steps: Step[] = stepsJson;
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const handleNext = async () => {
     scrollToTop(pageRef);
+  
     if (
-      !stepState?.hasOwnProperty(steps[currentStep - 1].stateKey!) &&
-      currentStep < steps.length - 2
+      (!stepState?.hasOwnProperty(steps[currentStep - 1].stateKey!) &&
+      currentStep < steps.length - 2) && steps[currentStep - 1]?.required
     ) {
       setAlert({
         success: false,
@@ -124,6 +125,10 @@ export default function Page() {
 
       if (input instanceof HTMLInputElement) {
         input.value = stepState?.[steps[currentStep]?.stateKey as string] as string
+      }
+
+      if (stepState?.[steps[5].stateKey!] !== undefined && currentStep === 6) {
+        steps.splice(14, 1);
       }
 
       if (currentStep < steps.length) {
@@ -210,21 +215,22 @@ export default function Page() {
     value: string | number | boolean
   ) => {
     setValues((prevValues) => {
-      if (prevValues.includes(value as string)) {
-        return prevValues.filter((v) => v !== (value as string));
-      } else {
-        return [...prevValues, value as string];
-      }
-    });
+      const updatedValues = prevValues.includes(value as string)
+      ? prevValues.filter((v) => v !== (value as string))
+      : [...prevValues, value as string];
 
-    setStepState((prevState) => ({
+      setStepState((prevState) => ({
       ...prevState,
-      [stepType]: values,
-    }));
+      [stepType]: updatedValues,
+      }));
+
+      return updatedValues;
+    });
   };
 
   return (
     <Dialog open={alert?.type === "dialog"}>
+  
       <div
         className="w-full max-h-dvh h-full flex flex-col bg-[#092635] text-white relative py-20 items-center overflow-auto"
         ref={pageRef}
@@ -254,7 +260,8 @@ export default function Page() {
               </AlertDescription>
             </Alert>
           )}
-
+          {/* {JSON.stringify(stepState)} */}
+         
           {
             alert?.type === "dialog" && (
               <DialogContent className="sm:max-w-[425px] bg-[#092635] text-white border-none">
@@ -295,7 +302,6 @@ export default function Page() {
             </DialogContent>
             )
           }
-
           {currentStep < steps.length - 1 ? (
             <>
               <div className="h-full w-full flex flex-wrap py-5">
@@ -351,10 +357,10 @@ export default function Page() {
                         ))}
                       </div>
                     ) : steps[currentStep - 1].type === "checkbox" ? (
-                      <div className={`flex flex-col gap-10`}>
+                      <div className={`grid grid-cols-3 gap-10`}>
                         {steps[currentStep - 1].opts?.map((opt, index) => (
                           <div
-                            className="items-center flex space-x-5 text-black bg-white py-3 px-5 rounded shadow-lg"
+                            className="items-center flex space-x-5 text-black bg-white/70 py-3 px-5 rounded shadow-lg"
                             key={index}
                           >
                             <Checkbox
@@ -389,6 +395,18 @@ export default function Page() {
                           </div>
                         ))}
                       </div>
+                    ) : steps[currentStep - 1].type === "dualCheckbox" ? (
+                      <DualCheckbox
+                        onChange={(value) => {
+                          updateStepState(
+                            steps[currentStep - 1].stateKey!,
+                            value
+                          );
+                        }}
+                        handleOptionInput={handleOptionInput}
+                        stepsValue={stepState?.[steps[currentStep - 1].stateKey!] as unknown as StepValues}
+                        stepsData={steps[currentStep - 1] as Step}
+                      />
                     ) : (
                       <div className={`flex flex-row gap-10`}>
                         <input
@@ -454,6 +472,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-    </Dialog>
+     </Dialog>
   );
 }

@@ -2,22 +2,27 @@
 
 import type { StepValues } from "@/app/pages/user/calculate/page";
 
-/**
- * 
- * @param activityFactor as METVALUE as string, should convert to number
- * @returns 
- */
-
 export const calculateUserData = async (data: StepValues) => {
-   const { currentWeight, height, gender, age, activityFactor, manualCalorieAdjustment, targetWeight, targetTime } = data;
-   
+   const { currentWeight, height, gender, age, activityFactor, targetWeight, targetTime } = data;
+   const manualCalorieAdjustment = data.manualCalorieAdjustment;
+
   const BMI = await calculateBMI(parseFloat(String(currentWeight)), parseFloat(String(height)));
   const BMR = await calculateBMR(parseFloat(String(currentWeight)), parseFloat(String(height)), String(gender), parseInt(String(age)));
-  const TDEE = await calculateTDEE(BMR, parseFloat(String(activityFactor)), parseFloat(String(manualCalorieAdjustment)));
+  const TDEE = await calculateTDEE(BMR, parseFloat(String(activityFactor)));
 
   const bodyFat = (1.2 * BMI) + (0.23 * parseInt(String(age))) - (gender === "male" ? 16.2 : 5.4) ;
   const waterNeeds = parseFloat(String(currentWeight)) * 0.035;
-  const deficitPerDay = await calculateDeficitCalories(TDEE, parseInt(String(currentWeight)), parseInt(String(targetWeight)), parseInt(String(targetTime)));
+  
+  let deficitPerDay;
+  
+  if(manualCalorieAdjustment) {
+    deficitPerDay = {
+      goal: parseFloat(String(manualCalorieAdjustment)) > 0 ? "surplus" : "deficit",
+      deficitPerDay: manualCalorieAdjustment,
+      daysLeft: null
+    }
+  }
+  deficitPerDay = await calculateDeficitCalories(TDEE, parseInt(String(currentWeight)), parseInt(String(targetWeight)), parseInt(String(targetTime)));
 
   const stepNeeds = await calculateStepNeeds(currentWeight as string, activityFactor as string, deficitPerDay.deficitPerDay as string);
 
@@ -50,11 +55,12 @@ const calculateBMR = async (weight: number, height: number, gender: string, age:
   return bmr;
 }
 
-const calculateTDEE = async (bmr: number, activityLevel: number, manualCalorieAdjustment: number) => {
-  return (bmr * activityLevel) + (manualCalorieAdjustment || 0);
+const calculateTDEE = async (bmr: number, activityLevel: number) => {
+  return (bmr * activityLevel);
 }
 
 const calculateDeficitCalories = async (tdee: number, currentWeight: number, targetWeight: number, targetTime: number) => {
+
   let weightDifference = Math.abs(currentWeight - targetWeight);
   
   type Target = {
@@ -90,4 +96,14 @@ const calculateDeficitCalories = async (tdee: number, currentWeight: number, tar
 const calculateStepNeeds = async (currentWeight: string, activityFactor: string, deficitPerDay: string) => {
   const caloriesPerStep = (parseFloat(activityFactor) * parseFloat(currentWeight) * 3.5) / (200 * 60); // MET value for walking
   return (Math.abs(parseFloat(deficitPerDay)) / caloriesPerStep).toString();
+}
+
+const calculateGoalDay = async (targetTime: number) => {
+  const currentDate = new Date();
+  const targetDate = new Date();
+  targetDate.setMonth(currentDate.getMonth() + targetTime);
+
+  const timeDifference = targetDate.getTime() - currentDate.getTime();
+  const daysDifference = timeDifference / (1000 * 60 * 60 * 24); // Convert milliseconds to days
+  return Math.ceil(daysDifference).toString();
 }
