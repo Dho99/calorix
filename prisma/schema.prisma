@@ -26,7 +26,6 @@ model User {
   UserHydration       UserHydration[]
   SleepTracker        SleepTracker[]
   UserGoal            UserGoal?
-  userTraining       UserTraining[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -96,11 +95,10 @@ model UserCharacteristics {
   age                     String
   height                  String
   currentWeight           String
-  physicalActivities      String
   activityFactor          String
   mealsPerDay             String
   sleepHours              String
-  sportIntensity          String?
+  workoutsPerWeek        String
   manualCalorieAdjustment String?
   bmi                     String?
   tdee                    String?
@@ -112,28 +110,20 @@ model UserCharacteristics {
   updatedAt DateTime @updatedAt
 }
 
-model UserTraining {
-  id             String  @id @default(cuid())
-  userId         String
-  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  trainingName   String
-  METValue   String
-  duration       Int     // dalam menit
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-}
-
 model UserGoal {
   id             String  @id @default(cuid())
   userId         String  @unique
   goal           String
   deficitPerDay  String
-  stepsGoal      String
   targetTime     String?
   hydrationNeeds String
   targetWeight   String
+  totalDeficit  String
+  stepNeeds   String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model PhysicalActivityLog {

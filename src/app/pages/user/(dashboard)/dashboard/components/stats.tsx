@@ -1,8 +1,8 @@
 import type { DashboardComponentPageProps } from "../page";
-import Calories from "./statisctics/calories";
-import Steps from "./statisctics/steps";
-import Training from "./statisctics/training";
-import HeartRate from "./statisctics/heart-rate";
+import Calories from "./statistics/calories";
+import Steps from "./statistics/steps";
+import Training from "./statistics/training";
+import HeartRate from "./statistics/heart-rate";
 
 export default function Stats({
   setDialog,

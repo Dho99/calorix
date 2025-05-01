@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import type { DashboardComponentPageProps } from "../page";
 import { Dispatch } from "react";
+import type { UserGoal } from "@prisma/client";
 
 type Activities = {
-  caloriesConsumed: number;
-  caloriesBurned: number;
-  sleepTracking: number;
-  hydration: number;
+  caloriesConsumed?: number;
+  caloriesBurned?: number;
+  sleepTracking?: number;
+  hydration?: number;
+  goal?: UserGoal;
+  TDEE?: number;
 };
 
 export const filterToday = {
@@ -36,6 +39,11 @@ export const getActivities = async (
       url: "/api/handler/sleeptracker",
       methodType: "getUserSleepTime",
     },
+    {
+      url: "/api/handler/characteristics",
+      methodType: "getUserTDEE",
+    },
+    
   ];
 
   const promises = searchDatas.map(async (data) => {
@@ -57,13 +65,15 @@ export const getActivities = async (
   const results = await Promise.all(promises);
   const caloriesBurned = results[0] || 0;
   const caloriesConsumed = results[1] || 0;
-  const sleepTracking = results[2] ||0;
-  const hydration = 0;
+  const hydration = results[2] ||0;
+  const sleepTracking = results[3] ||0;
+  const TDEE = results[4] ||0;
   return {
     caloriesBurned,
     caloriesConsumed,
     sleepTracking,
     hydration,
+    TDEE
   };
 };
 
@@ -77,6 +87,14 @@ export default function Activities({
   useEffect(() => {
     const fetchData = async () => {
       const data = await getActivities(setDialog);
+      const userGoal = axios.get("/api/handler/goal").then((res) => {
+        if (res.status === 200 && res.data.success) {
+          return setPageData((prev) => ({
+            ...prev,
+            goal: res.data.data,
+          }));
+        }
+      });
       setPageData(data);
     };
 
@@ -87,22 +105,26 @@ export default function Activities({
     {
       title: "Calories Consumed",
       value: pageData?.caloriesConsumed || 0,
-      parameter: "Kcal"
+      parameter: "Kcal",
+      target: pageData?.TDEE || 0,
     },
     {
       title: "Calories Burned",
       value: pageData?.caloriesBurned || 0,
-      parameter: "Kcal"
+      parameter: "Kcal",
+      target: parseFloat(pageData?.goal?.deficitPerDay as string).toFixed(2) || 0,
     },
     {
       title: "Sleep Tracking",
       value: pageData?.sleepTracking || 0,
-      parameter: "Jam"
+      parameter: "Jam",
+      target: 8
     },
     {
       title: "Hydration",
       value: pageData?.hydration || 0,
-      parameter: "L"
+      parameter: "L",
+      target: parseFloat(pageData?.goal?.hydrationNeeds as string).toFixed(2) || 0,
     },
   ];
 
@@ -111,14 +133,13 @@ export default function Activities({
       {
         fetchResult().map((item, index) => (
           <div
-            key={index}
-            className="w-full h-full bg-[#1B4242] text-white rounded-lg shadow-md p-4"
+          key={index}
+          className="w-full h-full bg-[#1B4242] text-white rounded-lg shadow-md p-4"
           >
             <h2 className="text-lg font-bold">{item.title}</h2>
             <div className="flex flex-row gap-2 items-baseline">
-            <p className="text-4xl font-bold">{item.value}</p> 
+            <p className="text-4xl font-bold">{item.value} / <span className="text-2xl">{item?.target}</span></p> 
             <p className="text-xl"> {item.parameter}</p>
-
             </div>
           </div>
         ))

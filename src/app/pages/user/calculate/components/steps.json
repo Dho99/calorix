@@ -70,7 +70,7 @@
       }
     },
     {
-      "number": 8,
+      "number": 7,
       "question": "Pilih Tingkat keseringan anda beraktivitas sehari hari",
       "placeholder": "Pilih tingkat aktivitas harian",
       "stateKey": "activityFactor",
@@ -85,7 +85,7 @@
       ]
     },
     {
-      "number": 9,
+      "number": 8,
       "question": "Jika anda berolahraga, apa yang biasanya anda lakukan ?",
       "placeholder": "Masukkan Durasi Olahraga dalam Menit",
       "stateKey": "userMET",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "number": 10,
+      "number": 9,
       "question": "Masukkan Jumlah Makan dalam Sehari",
       "placeholder": "Contoh: 3",
       "stateKey": "mealsPerDay",
@@ -115,7 +115,7 @@
       "required": true
     },
     {
-      "number": 12,
+      "number": 10,
       "question": "Masukkan Jumlah Tidur Sehari (jam)",
       "placeholder": "Contoh: 8",
       "stateKey": "sleepHours",
@@ -124,7 +124,7 @@
       "required": true
     },
     {
-      "number": 13,
+      "number": 11,
       "question": "Masukkan Jumlah Olahraga per Minggu",
       "placeholder": "Contoh: 4",
       "stateKey": "workoutsPerWeek",
@@ -133,25 +133,7 @@
       "required": true
     },
     {
-      "number": 14,
-      "question": "Masukkan Durasi Olahraga Sekali Latihan (dalam menit)",
-      "placeholder": "Contoh: 45",
-      "stateKey": "workoutDuration",
-      "type": "number",
-      "indicator": "Menit",
-      "required": true
-    },
-    {
-      "number": 15,
-      "question": "Masukkan Jumlah Perkiraan Kalori Harian yang Masuk ke tubuh",
-      "placeholder": "Contoh: 2000",
-      "stateKey": "caloriesPerDay",
-      "type": "number",
-      "indicator": "Kalori",
-      "required": true
-    },
-    {
-      "number": 16,
+      "number": 12,
       "question": "Masukkan Kalori Harian Tambahan atau Defisit Manual",
       "placeholder": "Contoh: -500 atau 300",
       "stateKey": "manualCalorieAdjustment",
@@ -160,11 +142,11 @@
       "required": true
     },
     {
-      "number": 17,
+      "number": 13,
       "required": true
     },
     {
-      "number": 18,
+      "number": 14,
       "required": true
     }
   ]

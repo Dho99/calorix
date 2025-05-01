@@ -138,20 +138,20 @@ export default function Page() {
       }
 
       if (stepState?.[steps[5].stateKey!] !== undefined && currentStep === 6) {
-        steps.splice(14, 1);
+        steps.splice(12, 1);
       }
 
       if (currentStep < steps.length) {
         setCurrentStep((prev) => Math.min(prev + 1, steps.length));
       }
 
-      if (currentStep < steps.length - 1) {
+      if (currentStep === steps.length - 1) {
         const calculate = await calculateUserData(stepState!);
-
         setStepState((prevState) => ({
           ...prevState,
           ...calculate,
         }));
+
       }
 
       if (currentStep === steps.length) {

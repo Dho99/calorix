@@ -24,7 +24,28 @@ export async function GET(
       where: {
         userId: userId as string,
       },
+      select: {
+        currentWeight: true,
+        height: true,
+        bmi: true,
+        bodyFatPercentage: true,
+      }
     });
+
+    const goal = await prisma.userGoal.findFirst({
+      where: {
+        userId: userId as string,
+      },
+      select: {
+        targetWeight: true,
+      }
+    });
+
+    const data = {
+      ...characteristics,
+      ...goal
+    }
+    
     
     if (!characteristics) {
       return NextResponse.json({
@@ -38,7 +59,7 @@ export async function GET(
     return NextResponse.json({
       status: 200,
       success: true,
-      data: characteristics,
+      data: data,
     });
 
   } catch (error) {

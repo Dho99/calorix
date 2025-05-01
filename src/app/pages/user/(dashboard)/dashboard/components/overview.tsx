@@ -52,6 +52,7 @@ export default function Overview({
           }
 
           if (response.data.status === 200) {
+            console.log(response?.data?.data)
             setCharacteristics(response.data.data);
           }
         })

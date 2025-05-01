@@ -25,9 +25,20 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    const getUserSleepTime = await prisma.userCharacteristics.findFirst({
+      where: {
+        userId: session?.user?.id as string,
+      },
+      select: {
+        sleepHours: true,
+      },
+    });
+
+    const calculatedSleepTime = res._sum.duration || 0 + getUserSleepTime?.sleepHours!;
+
 
     return NextResponse.json(
-      { success: true, data: res },
+      { success: true, data: parseInt(calculatedSleepTime as string)},
       { status: 200 }
     );
   }
