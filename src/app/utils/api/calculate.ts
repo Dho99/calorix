@@ -81,7 +81,7 @@ const calculateDeficitCalories = async (tdee: number, currentWeight: number, tar
 
   const timeDifference = targetDate.getTime() - currentDate.getTime();
   const daysDifference = timeDifference / (1000 * 60 * 60 * 24); // Convert milliseconds to days
-  target.daysLeft = Math.ceil(daysDifference).toString();
+  target.daysLeft = await calculateGoalDay(targetTime);
   if(target.goal === "deficit") {
    target.deficitPerDay = ((weightDifference * 7700) / daysDifference).toString(); // 7700 calories per kg of body weight
   } else if(target.goal === "surplus") {
@@ -89,6 +89,7 @@ const calculateDeficitCalories = async (tdee: number, currentWeight: number, tar
   } else {
     target.deficitPerDay = tdee.toString();
   }
+
 
   return target
 }

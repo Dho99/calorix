@@ -45,48 +45,52 @@ export async function POST(request: NextRequest) {
       targetTime,
       targetWeight,
       hydrationNeeds,
+      userMET
     } = payload;
 
-    await prisma.$transaction([
-      prisma.userCharacteristics.create({
-        data: {
-          gender: gender,
-          age: age,
-          height: height,
-          currentWeight: currentWeight,
-          physicalActivities: physicalActivities,
-          activityFactor: activityFactor,
-          mealsPerDay: mealsPerDay,
-          sleepHours: sleepHours,
-          sportIntensity: sportIntensity,
-          manualCalorieAdjustment: manualCalorieAdjustment,
-          bmi: bmi,
-          tdee: tdee,
-          bmr: bmr,
-          bodyFatPercentage: bodyFatPercentage,
-          userId: userId,
-        },
-      }),
-      prisma.userGoal.create({
-        data: {
-          userId: userId,
-          goal: goal,
-          deficitPerDay: deficitPerDay,
-          stepsGoal: stepsGoal,
-          targetTime: targetTime,
-          targetWeight: targetWeight,
-          hydrationNeeds: hydrationNeeds,
-        },
-      }),
-    ]);
+    const userMetData = 
+
+    // await prisma.$transaction([
+    //   prisma.userCharacteristics.create({
+    //     data: {
+    //       gender: gender,
+    //       age: age,
+    //       height: height,
+    //       currentWeight: currentWeight,
+    //       physicalActivities: physicalActivities,
+    //       activityFactor: activityFactor,
+    //       mealsPerDay: mealsPerDay,
+    //       sleepHours: sleepHours,
+    //       sportIntensity: sportIntensity,
+    //       manualCalorieAdjustment: manualCalorieAdjustment,
+    //       bmi: bmi,
+    //       tdee: tdee,
+    //       bmr: bmr,
+    //       bodyFatPercentage: bodyFatPercentage,
+    //       userId: userId,
+    //     },
+    //   }),
+    //   prisma.userGoal.create({
+    //     data: {
+    //       userId: userId,
+    //       goal: goal,
+    //       deficitPerDay: deficitPerDay,
+    //       stepsGoal: stepsGoal,
+    //       targetTime: targetTime,
+    //       targetWeight: targetWeight,
+    //       hydrationNeeds: hydrationNeeds,
+    //     },
+    //   }),
+     
+    // ]);
 
     console.log("created");
 
-    return NextResponse.json({
-      status: 200,
-      success: true,
-      message: "Data tersimpan dengan sukses",
-    });
+    // return NextResponse.json({
+    //   status: 200,
+    //   success: true,
+    //   message: "Data tersimpan dengan sukses",
+    // });
   } catch (err) {
     console.log(err);
     if (err instanceof Error) {

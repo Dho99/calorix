@@ -21,64 +21,80 @@ export default function SummaryCalculate({
           preferensi akun anda
         </p>
       </div>
+
       <div className="mt-4 grid lg:grid-cols-2 grid-cols-1 gap-5">
         {stepsTemplate.map((step, index) => {
+          const value = steps?.[step.stateKey as keyof StepValues];
+
           return (
             <div key={index} className="w-full flex flex-col gap-y-1">
-              <h3 className="text-xl font-bold">
-                {stepsTemplate[index].question}
-              </h3>
-              {stepsTemplate[index].type === "number"? (
-                <div className=" w-full h-full flex flex-row items-center gap-x-3 px-5 bg-white/70 rounded-lg">
+              <h3 className="text-xl font-bold">{step.question}</h3>
+
+              {step.type === "number" ? (
+                <div className="w-full h-full flex flex-row items-center gap-x-3 px-5 bg-white/70 rounded-lg">
                   <input
-                    id={stepsTemplate[index].stateKey}
-                    type={stepsTemplate[index].type}
-                    placeholder={stepsTemplate[index].placeholder as string}
-                    className="w-full h-full px-10 py-5 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 "
-                    defaultValue={
-                      steps?.[stepsTemplate[index].stateKey as keyof StepValues] as string
-                    }
+                    id={step.stateKey}
+                    type="number"
+                    placeholder={step.placeholder as string}
+                    className="w-full h-full px-10 py-5 shadow-lg text-black rounded-lg text-2xl font-bold"
+                    defaultValue={value as string}
                     readOnly
                   />
                   <label
-                    htmlFor={stepsTemplate[index].stateKey}
+                    htmlFor={step.stateKey}
                     className="text-black text-2xl font-bold"
                   >
-                    {stepsTemplate[index].indicator as string}
+                    {step.indicator}
                   </label>
                 </div>
-              ) : stepsTemplate[index].type === "radio" ? (
-                <>
-                  <div className={`w-full h-full`}>
-                    {stepsTemplate[index].opts
-                      ?.filter(
-                        (opt) =>
-                          opt.value === steps?.[stepsTemplate[index].stateKey!]
-                      )
-                      .map((opt, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          className={`transition-all transition-duration-30 hover:cursor-pointer w-full h-full p-4 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 focus:bg-[#5C8374] focus:text-white bg-white/70`}
-                          disabled={true}
-                        >
-                          {opt.icon && (
-                            <Image
-                              src={`/assets/static/svg/${opt.icon}`}
-                              alt={opt.label}
-                              width={100}
-                              height={100}
-                              quality={100}
-                              className="m-auto"
-                            />
-                          )}
-                          <div className="">{opt.label}</div>
-                        </button>
-                      ))}
-                  </div>
-                </>
+              ) : step.type === "radio" ? (
+                <div className="w-full h-full">
+                  {step.opts
+                    ?.filter((opt) => opt.value === value)
+                    .map((opt, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        className="transition-all w-full h-full p-4 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 bg-white/70"
+                        disabled
+                      >
+                        {opt.icon && (
+                          <Image
+                            src={`/assets/static/svg/${opt.icon}`}
+                            alt={opt.label}
+                            width={100}
+                            height={100}
+                            quality={100}
+                            className="m-auto"
+                          />
+                        )}
+                        <div>{opt.label}</div>
+                      </button>
+                    ))}
+                </div>
+              ) : Array.isArray(value) ? (
+                <div className={`grid lg:grid-cols-2 grid-cols-1 gap-2 w-full h-full`}>
+                  {value.map((opt: any, i: number) => (
+                    <div
+                      key={i}
+                      className="transition-all w-full h-full p-4 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 bg-white/70"
+                    >
+                      {opt.icon && (
+                        <Image
+                          src={`/assets/static/svg/${opt.icon}`}
+                          alt={opt.label}
+                          width={100}
+                          height={100}
+                          quality={100}
+                          className="m-auto"
+                        />
+                      )}
+                      <div>{opt.label}</div>
+                    </div>
+                  ))}
+                </div>
               ) : (
-                <></>
+               <></>
               )}
             </div>
           );
