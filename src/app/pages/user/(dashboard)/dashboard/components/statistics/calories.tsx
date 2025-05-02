@@ -1,3 +1,6 @@
+"use client"
+
+
 export default function Calories(){
     return (
         <div className="w-full h-full bg-[#1B4242] text-white rounded-lg shadow-md p-4 flex flex-col gap-2">

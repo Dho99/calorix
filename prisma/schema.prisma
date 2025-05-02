@@ -177,6 +177,7 @@ model UserActivites {
   id                    String   @id @default(cuid())
   userId                String
   category              ACTIVITY_TYPE
+  stepsCount              Float?
   effectToBody          String?
   sleepTrackerId        String?  @unique
   userHydrationId       String?  @unique
@@ -212,4 +213,5 @@ enum ACTIVITY_TYPE {
   USER_HYDRATION
   FOOD_LOG
   PHYSICAL_ACTIVITY
+  STEP_TRACKER
 }

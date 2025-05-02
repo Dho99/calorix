@@ -3,38 +3,6 @@ import { characteristicsSchema } from "@/app/utils/lib/validation/characteristic
 import { prisma } from "@/app/utils/lib/prisma/prisma";
 import { auth } from "../auth";
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const session = await auth();
-  const userId = session?.user?.id;
-  const methodType = searchParams.get("methodType");
-
-  if(methodType === "getUserTDEE") {
-    const tdee = await prisma.userCharacteristics.findFirst({
-      where: {
-        userId: userId as string,
-      },
-      select: {
-        tdee: true,
-      }
-    });
-
-    if (!tdee) {
-      return NextResponse.json({
-        status: 404,
-        success: false,
-        message: "User characteristics not found",
-      });
-    }
-
-    return NextResponse.json({
-      status: 200,
-      success: true,
-      data: tdee?.tdee,
-    });
-  }
-
-}
 
 export async function POST(request: NextRequest) {
   const data = await request.json();
@@ -77,7 +45,6 @@ export async function POST(request: NextRequest) {
       hydrationNeeds,
       workoutsPerWeek,
       totalDeficit,
-      maxDailyCalories,
       stepNeeds
     } = payload;
 
@@ -109,7 +76,6 @@ export async function POST(request: NextRequest) {
           targetWeight: targetWeight,
           hydrationNeeds: hydrationNeeds,
           totalDeficit: totalDeficit,
-          maxDailyCalories: maxDailyCalories,
           stepNeeds: stepNeeds,
         },
       }),

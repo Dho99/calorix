@@ -130,8 +130,17 @@ const calculateMET = async(userMET: {label: string, value: string, duration: str
 }
 
 export const calculateStepNeeds = async (currentWeight: string, activityFactor: string, deficitPerDay: string) => {
-  const caloriesPerStep = (parseFloat(activityFactor) * parseFloat(currentWeight) * 3.5) / (200 * 60); // MET value for walking
-  return (Math.abs(parseFloat(deficitPerDay)) / caloriesPerStep).toString();
+  const weight = parseFloat(currentWeight);
+  const activity = parseFloat(activityFactor);
+  const deficit = parseFloat(deficitPerDay);
+
+  if (isNaN(weight) || isNaN(activity) || isNaN(deficit) || weight <= 0 || activity <= 0) {
+    throw new Error("Invalid input values for calculateStepNeeds");
+  }
+  
+
+  const caloriesPerStep = (activity * weight * 3.5) / 200; // Corrected MET value for walking
+  return (Math.abs(deficit) / caloriesPerStep).toFixed(2); // Rounded to 2 decimal places
 }
 
 // const calculateMaxDailyCalories = async (tdee: number, deficitPerDay: string | null) => {
