@@ -16,7 +16,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
                 targetTime: true,
                 hydrationNeeds: true,
                 targetWeight: true,
-                maxDailyCalories: true,
+                stepNeeds: true,
             }
         });
 

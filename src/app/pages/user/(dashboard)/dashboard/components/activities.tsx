@@ -65,14 +65,14 @@ export const getActivities = async (
   const results = await Promise.all(promises);
   const caloriesBurned = results[0] || 0;
   const caloriesConsumed = results[1] || 0;
-  const hydration = results[2] ||0;
+  const hydrationNeeds = results[2] ||0;
   const sleepTracking = results[3] ||0;
   const TDEE = results[4] ||0;
   return {
     caloriesBurned,
     caloriesConsumed,
     sleepTracking,
-    hydration,
+    hydrationNeeds,
     TDEE
   };
 };
@@ -106,13 +106,13 @@ export default function Activities({
       title: "Calories Consumed",
       value: pageData?.caloriesConsumed || 0,
       parameter: "Kcal",
-      target: pageData?.TDEE || 0,
+      target: parseFloat(String(pageData?.TDEE)).toFixed(2) || 0,
     },
     {
       title: "Calories Burned",
       value: pageData?.caloriesBurned || 0,
       parameter: "Kcal",
-      target: parseFloat(pageData?.goal?.deficitPerDay as string).toFixed(2) || 0,
+      target: parseFloat(String(pageData?.goal?.deficitPerDay)).toFixed(2) || 0,
     },
     {
       title: "Sleep Tracking",
@@ -124,7 +124,7 @@ export default function Activities({
       title: "Hydration",
       value: pageData?.hydration || 0,
       parameter: "L",
-      target: parseFloat(pageData?.goal?.hydrationNeeds as string).toFixed(2) || 0,
+      target: pageData?.goal?.hydrationNeeds || 0,
     },
   ];
 
