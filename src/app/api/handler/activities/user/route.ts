@@ -51,10 +51,12 @@ export async function POST(request: NextRequest) {
 
     if (category === "SLEEP_TRACKER") {
 
+      const sleepConvertToHour = parseInt(String(data?.duration)) / 60;
+
       const sleepTracker = await prisma.sleepTracker.create({
         data: {
           userId: session?.user?.id as string,
-          duration: parseFloat(data.duration),
+          duration: sleepConvertToHour,
         }
       });
 

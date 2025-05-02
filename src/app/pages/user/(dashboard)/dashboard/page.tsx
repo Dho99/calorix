@@ -28,7 +28,7 @@ export default function Page() {
   const [pageData, setPageData] = useState<{
     caloriesBurned: number;
     stepsGoal: number;
-    stepsData: number;
+    stepsCount: number;
     tdeeData: number;
     hydrationNeeds: number;
     sleepTracker: number;
@@ -106,7 +106,7 @@ export default function Page() {
     },
     {
       title: "Steps",
-      value: pageData?.stepsData,
+      value: pageData?.stepsCount,
       target: pageData?.goal.stepNeeds,
       parameter: "Langkah",
     },
@@ -126,7 +126,7 @@ export default function Page() {
 
   const statsData: StatsProps = {
     steps: {
-      stepsCount: pageData?.stepsData,
+      stepsCount: pageData?.stepsCount,
       stepsGoal: pageData?.goal?.stepNeeds
     },
     activityData: pageData?.activityData
