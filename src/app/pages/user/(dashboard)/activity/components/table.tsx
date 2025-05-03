@@ -159,7 +159,7 @@ export default function ActivityTable({
                 {activity.category === "FOOD_LOG" ? `${activity?.foodLog?.calories} Kalori `: activity.category === "USER_HYDRATION"
                   ? `${activity?.userHydration?.waterIntake} ml`
                   : activity.category === "SLEEP_TRACKER"
-                  ? `${(activity?.sleepTracker?.duration)} Menit`
+                  ? `${(parseFloat(String(activity?.sleepTracker?.duration)).toFixed(2))} Jam`
                   : `${activity?.physicalActivityLog?.duration} Jam`}
                 
               </div>

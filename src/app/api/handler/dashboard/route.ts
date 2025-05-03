@@ -80,13 +80,14 @@ export async function GET(request: NextRequest) {
           },
         },
       }),
-      prisma.sleepTracker.findMany({
+      prisma.sleepTracker.aggregate({
+        _sum: { duration: true },
         where: {
           userId,
+          createdAt: {
+            gte: start
+          }
         },
-        select: {
-          duration: true
-        }
       }),
       prisma.foodLog.aggregate({
         _sum: { calories: true },
@@ -122,7 +123,7 @@ export async function GET(request: NextRequest) {
       0
     );
     // Calculate sleep time
-    const calculatedSleepTime = (sleepTracker.reduce((acc, curr) => acc + curr.duration, 0) / (sleepTracker?.length)) + parseInt(String(userCharacteristics?.sleepHours));
+    const calculatedSleepTime = sleepTracker._sum.duration;
     
 
     // Prepare response data
@@ -132,7 +133,7 @@ export async function GET(request: NextRequest) {
       stepsCount: stepsData._sum.stepsCount || 0,
       tdee: tdeeData?.tdee || 0,
       hydrationNeeds: sumHydration,
-      sleepTracker: (calculatedSleepTime).toFixed(2),
+      sleepTracker: calculatedSleepTime || 0,
       caloriesConsumed: foodLog._sum.calories || 0,
       goal: stepsGoal,
       userCharacteristics: userCharacteristics,

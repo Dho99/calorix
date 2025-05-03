@@ -58,9 +58,6 @@ export default function AddActivityContent({
       category: category as string,
       type: "create",
     });
-
-    console.log("data", data);
-
     axios
       .post(`/api/handler/activities/user?${urlParams.toString()}`, {
         data: JSON.stringify(data),
@@ -70,20 +67,19 @@ export default function AddActivityContent({
           console.log(res.data.data);
           setDialogProps(null);
           setActivities((prev) => {
-            if (prev) {
+
               if (category === "SLEEP_TRACKER") {
                 return [
-                  ...prev,
                   {
                     ...res.data.data,
                     sleepTracker: {
                       duration: res.data.data.sleepTracker.duration,
                     },
                   },
+                  ...(prev || []),
                 ];
               } else if (category === "FOOD_LOG") {
                 return [
-                  ...prev,
                   {
                     ...res.data.data,
                     foodLog: {
@@ -91,11 +87,12 @@ export default function AddActivityContent({
                       calories: res.data.data.foodLog.calories,
                       mealType: res.data.data.foodLog.mealType,
                     },
+                    ...(prev || []),
                   },
                 ];
               }
-            }
-            return prev; // Ensure a valid return value
+            
+            return prev || []; // Ensure a valid return value
           });
         } else {
           console.log("failed");
