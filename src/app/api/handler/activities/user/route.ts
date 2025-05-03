@@ -19,7 +19,14 @@ export async function GET(request: NextRequest) {
         userId: session?.user?.id,
       },
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          }
+        },
         foodLog: true,
         userHydration: true,
         sleepTracker: true,
@@ -30,7 +37,55 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    return NextResponse.json({ success: true, data: res.length > 0 ? res : null }, { status: 200 });
+    const total = await prisma.userActivites.count({
+      where: {
+        userId: session?.user?.id,
+      }
+    });
+
+    return NextResponse.json({ 
+      success: true, 
+      data: total > 0 ? res : null,
+      total: total,
+      status: 200
+    });
+  }
+
+  if(reqType === "filterActivities") {
+    const category = searchParams.get("category");
+
+    const res = await prisma.userActivites.findMany({
+      where: {
+        userId: session?.user?.id,
+        category: category as ACTIVITY_TYPE,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          }
+        },
+        foodLog: true,
+        userHydration: true,
+        sleepTracker: true,
+        physicalActivityLog: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      }
+    });
+    const total = res.length || 0;
+    return NextResponse.json({
+      success: true,
+      data: total > 0 ? res : null,
+      total: total,
+      status: 200
+    });
+
+
   }
 
   return NextResponse.json({ success: true, data: null }, { status: 200 });

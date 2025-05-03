@@ -117,7 +117,7 @@ export default function Page() {
           </DialogClose>
         </div>
       </DialogContent>
-      <div className="w-full h-full px-5 py-15 flex flex-col gap-8" ref={pageRef}>
+      <div className="w-full h-full px-5 flex flex-col gap-8" ref={pageRef}>
         <div className="flex flex-row gap-5 w-full h-auto items-center">
           <div className="w-24 h-24 bg-[#9EC8B9]/20 p-2 rounded-full flex justify-center items-center p-4">
             <UserRound className="w-full h-full text-white" />
