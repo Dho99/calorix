@@ -20,7 +20,12 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -43,7 +48,8 @@ export default function Page() {
 
   const fetchActivities = async (
     updatedPageData = pageData,
-    category?: string
+    category?: string,
+    findByName?: string
   ) => {
     setPageData((prev) => ({
       ...prev,
@@ -54,7 +60,7 @@ export default function Page() {
         `/api/handler/activities/user?type=${
           category ? "filterActivities" : "getAllUserActivities"
         }&page=${updatedPageData?.start}&limit=${updatedPageData?.limit}${
-          category ? `&category=${category}` : ""
+          category ? `&category=${category}` : `${findByName ? `&title=${findByName}` : ""}`
         }`,
         {
           headers: {
@@ -64,6 +70,7 @@ export default function Page() {
       );
 
       if (res.data.success) {
+        console.log(res);
         setActivities(res.data.data);
         setPageData((prev) => ({
           ...prev,
@@ -105,6 +112,15 @@ export default function Page() {
     fetchActivities(updatedPageData);
   }
 
+  function handleFilterByName(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const title = formData.get("title") as string;
+    if (title) {
+      fetchActivities(pageData, undefined, title);
+    }
+  }
+
   return (
     <Dialog open={dialogProps !== null}>
       {dialogProps && (
@@ -143,20 +159,12 @@ export default function Page() {
         </div>
         <div className="bg-white/2 border border-white rounded-lg shadow-lg p-5 w-full h-auto flex flex-col gap-5">
           <div className="flex flex-row w-full justify-between items-center">
-            {/* <div className="flex w-full items-center max-w-md">
-              <Input
-                type="email"
-                placeholder="Cari Aktivitas"
-                className="rounded-e-none "
-              />
-              <Button
-                type="submit"
-                className="rounded-s-none bg-[#9EC8B9]/10 text-white hover:bg-[#9EC8B9]/50 flex flex-row gap-x-3 text-base w-24 border border-s-0"
-              >
-                <SearchIcon />
-                Cari
-              </Button>
-            </div> */}
+
+            <form className="flex flex-row max-w-md" onSubmit={handleFilterByName}>
+              <Input type="text" className="w-sm border border-white rounded-e-none" name="title" placeholder="Find Activity by Name"></Input>
+              <Button type="submit" variant={"default"} className="rounded-s-none px-5 border border-white bg-white/10 text-white hover:bg-white/40">Cari</Button>
+            </form>
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -174,16 +182,28 @@ export default function Page() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   {dropdownMenuItems.map((item, index) => (
-                    <DropdownMenuItem
-                      key={index}
-                      onClick={() => {
-                        fetchActivities(pageData, item.category);
-                      }}
-                      className="flex flex-row items-center gap-x-2 hover:bg-white/5 hover:cursor-pointer"
-                    >
-                      {item.icon}
-                      {item.title}
-                    </DropdownMenuItem>
+                    <DropdownMenuSub key={index}>
+                      <DropdownMenuSubTrigger className="flex flex-row items-center gap-x-2 hover:bg-white/5 hover:cursor-pointer">
+                        {item.icon}
+                        {item.title}
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent className="bg-black/20 backdrop-blur-xs text-white">
+                          {item.child.map((childItem, childIndex) => (
+                            <DropdownMenuItem
+                              key={childIndex}
+                              onClick={() => {
+                                fetchActivities(pageData, childItem.category);
+                              }}
+                              className="flex flex-row items-center gap-x-2 hover:bg-white/5 hover:cursor-pointer"
+                            >
+                              {childItem.icon}
+                              {childItem.title}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
                   ))}
                   <DropdownMenuItem
                     className="flex flex-row items-center gap-x-2 hover:bg-white/5 hover:cursor-pointer"
@@ -197,7 +217,7 @@ export default function Page() {
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
-            {/* <button className="bg-white/5 text-white rounded-lg px-4 border py-1">Filter</button> */}
+            
           </div>
           <ActivityTable
             activitiesProps={activities}

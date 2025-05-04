@@ -177,6 +177,7 @@ model UserActivites {
   id                    String   @id @default(cuid())
   userId                String
   category              ACTIVITY_TYPE
+  title                 String
   stepsCount              Float?
   effectToBody          String?
   sleepTrackerId        String?  @unique

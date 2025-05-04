@@ -122,8 +122,9 @@ export async function GET(request: NextRequest) {
       (acc, curr) => acc + parseFloat(curr.waterIntake),
       0
     );
+
+    console.log(sleepTracker)
     // Calculate sleep time
-    const calculatedSleepTime = sleepTracker._sum.duration;
     
 
     // Prepare response data
@@ -133,7 +134,7 @@ export async function GET(request: NextRequest) {
       stepsCount: stepsData._sum.stepsCount || 0,
       tdee: tdeeData?.tdee || 0,
       hydrationNeeds: sumHydration,
-      sleepTracker: calculatedSleepTime || 0,
+      sleepTracker: (parseFloat(String(sleepTracker._sum.duration)) / 60) || 0,
       caloriesConsumed: foodLog._sum.calories || 0,
       goal: stepsGoal,
       userCharacteristics: userCharacteristics,
