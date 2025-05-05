@@ -11,8 +11,6 @@ export async function GET(request: NextRequest) {
   let res;
   let total;
 
-
-
   if (reqType === "getAllUserActivities") {
     const page = Number(searchParams.get("page")) || 1;
     const limit = Number(searchParams.get("limit")) || 12;
@@ -50,6 +48,35 @@ export async function GET(request: NextRequest) {
   }
 
   if (reqType === "filterActivities") {
+    const findByName = searchParams.get("title");
+
+    if (findByName) {
+      res = await prisma.userActivites.findMany({
+        where: {
+          userId: session?.user?.id,
+          title: {
+            search: findByName,
+            mode: "insensitive",
+          },
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+          foodLog: true,
+          userHydration: true,
+          sleepTracker: true,
+          physicalActivityLog: true,
+        },
+      });
+      total = res.length || 0;
+    }
+
     const category = searchParams.get("category");
     if (
       category === "TODAY" ||
@@ -105,60 +132,35 @@ export async function GET(request: NextRequest) {
         },
       });
       total = res.length || 0;
-    // } else {
-    //   res = await prisma.userActivites.findMany({
-    //     where: {
-    //       userId: session?.user?.id,
-    //       category: category as ACTIVITY_TYPE,
-    //     },
-    //     include: {
-    //       user: {
-    //         select: {
-    //           id: true,
-    //           name: true,
-    //           email: true,
-    //           image: true,
-    //         },
-    //       },
-    //       foodLog: true,
-    //       userHydration: true,
-    //       sleepTracker: true,
-    //       physicalActivityLog: true,
-    //     },
-    //     orderBy: {
-    //       createdAt: "desc",
-    //     },
-    //   });
-    }
-
-    const findByName = searchParams.get("title");
-    if (findByName) {
-      res = await prisma.userActivites.findMany({
-        where: {
-          userId: session?.user?.id,
-          title: {
-            search: findByName,
-            mode: "insensitive",
-          }
-        },
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              image: true,
-            },
+    } else {
+      if (category) {
+        res = await prisma.userActivites.findMany({
+          where: {
+            userId: session?.user?.id,
+            category: category as ACTIVITY_TYPE,
           },
-          foodLog: true,
-          userHydration: true,
-          sleepTracker: true,
-          physicalActivityLog: true,
-        }
-      });
-      total = res.length || 0;
-    }
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                image: true,
+              },
+            },
+            foodLog: true,
+            userHydration: true,
+            sleepTracker: true,
+            physicalActivityLog: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+        total = res?.length || 0;
+      }
 
+    }
   }
 
   return NextResponse.json({
@@ -207,25 +209,25 @@ export async function POST(request: NextRequest) {
       childData = {
         foodLogId: foodLog.id,
       };
-    }else if(category === "PHYSICAL_ACTIVITY") {
-
-      const caloriesBurned = parseFloat(String(data?.calories_per_hour/60)) * parseInt(String(data?.duration));
+    } else if (category === "PHYSICAL_ACTIVITY") {
+      const caloriesBurned =
+        parseFloat(String(data?.calories_per_hour / 60)) *
+        parseInt(String(data?.duration));
 
       const physicalActivityLog = await prisma.physicalActivityLog.create({
         data: {
           userId: session?.user?.id as string,
           duration: parseInt(String(data?.duration)),
           activityName: data?.activityName as string,
-          metValue: parseFloat(String(data?.calories_per_hour/60)),
+          metValue: parseFloat(String(data?.calories_per_hour / 60)),
           caloriesBurned: caloriesBurned,
         },
       });
 
-
       childData = {
         physicalActivityLogId: physicalActivityLog.id,
       };
-    }else if (category === "USER_HYDRATION") {
+    } else if (category === "USER_HYDRATION") {
       const userHydration = await prisma.userHydration.create({
         data: {
           userId: session?.user?.id as string,
@@ -237,7 +239,7 @@ export async function POST(request: NextRequest) {
         userHydrationId: userHydration.id,
       };
     }
-    
+
     const res = await prisma.userActivites.create({
       data: {
         userId: session?.user?.id as string,

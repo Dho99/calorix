@@ -115,6 +115,7 @@ export default function Page() {
       value: pageData?.hydrationNeeds,
       target: pageData?.goal.hydrationNeeds,
       parameter: "Liter",
+      unit: "ml"
     },
     {
       title: "Sleep",

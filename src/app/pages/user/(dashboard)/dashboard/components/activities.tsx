@@ -6,6 +6,7 @@ export type ActivitiesProps = {
   value?: number | string;
   target?: number | string;
   parameter?: string | number;
+  unit?: string;
 };
 
 export default function Activities({
@@ -24,7 +25,7 @@ export default function Activities({
           >
             <h2 className="text-lg font-bold">{item.title}</h2>
             <div className="flex flex-row gap-2 items-baseline">
-            <p className="text-4xl font-bold">{item.value} / <span className="text-2xl">{item?.target}</span></p> 
+            <p className="text-4xl font-bold">{item.value} {item?.unit} / <span className="text-2xl">{item?.target}</span></p> 
             <p className="text-xl"> {item.parameter}</p>
             </div>
           </div>

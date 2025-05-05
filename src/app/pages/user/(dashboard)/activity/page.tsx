@@ -70,7 +70,6 @@ export default function Page() {
       );
 
       if (res.data.success) {
-        console.log(res);
         setActivities(res.data.data);
         setPageData((prev) => ({
           ...prev,
@@ -112,13 +111,15 @@ export default function Page() {
     fetchActivities(updatedPageData);
   }
 
-  function handleFilterByName(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const title = formData.get("title") as string;
-    // if (title) {
+  function handleFilterByName(event?: React.FormEvent<HTMLFormElement>, emptyInput?: boolean) {
+    event?.preventDefault();
+    if(emptyInput) {
+      (document.getElementById("search-form") as HTMLFormElement)?.reset();
+    }else{
+      const formData = new FormData(event?.currentTarget);
+      const title = formData.get("title") as string;
       fetchActivities(pageData, title, title);
-    // }
+    }
   }
 
   return (
@@ -160,7 +161,7 @@ export default function Page() {
         <div className="bg-white/2 border border-white rounded-lg shadow-lg p-5 w-full h-auto flex flex-col gap-5">
           <div className="flex flex-row w-full justify-between items-center">
 
-            <form className="flex flex-row max-w-md" onSubmit={handleFilterByName}>
+            <form className="flex flex-row max-w-md" onSubmit={handleFilterByName} id="search-form">
               <Input type="text" className="w-sm border border-white rounded-e-none" name="title" placeholder="Find Activity by Name"></Input>
               <Button type="submit" variant={"default"} className="rounded-s-none px-5 border border-white bg-white/10 text-white hover:bg-white/40">Cari</Button>
             </form>
@@ -194,6 +195,7 @@ export default function Page() {
                               key={childIndex}
                               onClick={() => {
                                 fetchActivities(pageData, childItem.category);
+                                handleFilterByName(undefined, true);
                               }}
                               className="flex flex-row items-center gap-x-2 hover:bg-white/5 hover:cursor-pointer"
                             >
