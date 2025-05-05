@@ -105,30 +105,30 @@ export async function GET(request: NextRequest) {
         },
       });
       total = res.length || 0;
-    } else {
-      res = await prisma.userActivites.findMany({
-        where: {
-          userId: session?.user?.id,
-          category: category as ACTIVITY_TYPE,
-        },
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              image: true,
-            },
-          },
-          foodLog: true,
-          userHydration: true,
-          sleepTracker: true,
-          physicalActivityLog: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+    // } else {
+    //   res = await prisma.userActivites.findMany({
+    //     where: {
+    //       userId: session?.user?.id,
+    //       category: category as ACTIVITY_TYPE,
+    //     },
+    //     include: {
+    //       user: {
+    //         select: {
+    //           id: true,
+    //           name: true,
+    //           email: true,
+    //           image: true,
+    //         },
+    //       },
+    //       foodLog: true,
+    //       userHydration: true,
+    //       sleepTracker: true,
+    //       physicalActivityLog: true,
+    //     },
+    //     orderBy: {
+    //       createdAt: "desc",
+    //     },
+    //   });
     }
 
     const findByName = searchParams.get("title");
@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
         where: {
           userId: session?.user?.id,
           title: {
-            contains: findByName,
+            search: findByName,
             mode: "insensitive",
           }
         },
@@ -225,9 +225,19 @@ export async function POST(request: NextRequest) {
       childData = {
         physicalActivityLogId: physicalActivityLog.id,
       };
+    }else if (category === "USER_HYDRATION") {
+      const userHydration = await prisma.userHydration.create({
+        data: {
+          userId: session?.user?.id as string,
+          waterIntake: data?.waterIntake as string,
+        },
+      });
+
+      childData = {
+        userHydrationId: userHydration.id,
+      };
     }
     
-
     const res = await prisma.userActivites.create({
       data: {
         userId: session?.user?.id as string,

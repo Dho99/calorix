@@ -41,6 +41,12 @@ export default function DetailActivity({
     pageData: null,
   });
 
+  const [activityInput, setActivityInput] = useState<{
+    name: string;
+    calories_per_hour: number;
+  } | null>(null);
+
+
   function deleteActivity(id: string) {
     const urlParams = new URLSearchParams({
       type: "delete",
@@ -100,9 +106,9 @@ export default function DetailActivity({
           ) : activity?.category === "FOOD_LOG" ? (
             <FoodForm data={activity} />
           ) : activity?.category === "USER_HYDRATION" ? (
-            <HydrationForm />
+            <HydrationForm data={activity} isEdit={pageState?.edit} />
           ) : activity?.category === "PHYSICAL_ACTIVITY" ? (
-            <ActivityForm />
+              <ActivityForm data={activity} onSelect={setActivityInput} isEdit={pageState?.edit}/>
           ) : (
             <></>
           )}

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { act, useState } from "react";
 import SleepForm from "./form/sleep";
 import FoodForm from "./form/food";
 import HydrationForm from "./form/hydration";
@@ -57,6 +57,10 @@ export default function AddActivityContent({
         calories_per_hour: activityInput?.calories_per_hour,
         duration: formData.get("duration"),
       };
+    } else if (category === "USER_HYDRATION") {
+      data = {
+        waterIntake: formData.get("waterIntake"),
+      }
     }
 
     data = { ...data, title: formData.get("title") };
@@ -93,10 +97,33 @@ export default function AddActivityContent({
                     calories: res.data.data.foodLog.calories,
                     mealType: res.data.data.foodLog.mealType,
                   },
-                  ...(prev || []),
                 },
+                ...(prev || []),
+              ];
+            } else if (category === "PHYSICAL_ACTIVITY") {
+              return [
+                {
+                  ...res.data.data,
+                  physicalActivity: {
+                    activityName: res.data.data.physicalActivity.activityName,
+                    calories_per_hour: res.data.data.physicalActivity.calories_per_hour,
+                    duration: res.data.data.physicalActivity.duration,
+                  },
+                },
+                ...(prev || []),
+              ];
+            } else if (category === "USER_HYDRATION") {
+              return [
+                {
+                  ...res.data.data,
+                  userHydration: {
+                    waterIntake: res.data.data.userHydration.waterIntake,
+                  },
+                },
+                ...(prev || []),
               ];
             }
+
 
             return prev || []; // Ensure a valid return value
           });

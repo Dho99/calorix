@@ -4,9 +4,10 @@ import axios from "axios";
 import React, { useState, useRef, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import type { UserActivites } from "@/app/utils/lib/types/user";
 
-export default function ActivityForm({onSelect}: {onSelect: (option: { name: string; calories_per_hour: number }) => void}) {
-  const [query, setQuery] = useState("");
+export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (option: { name: string; calories_per_hour: number }) => void, data?: UserActivites, isEdit?: boolean}) {
+  const [query, setQuery] = useState(data?.physicalActivityLog?.activityName || "");
   const [isOpen, setIsOpen] = useState(false);
   const [activityData, setActivityData] = useState<
     { id: number; name: string; calories_per_hour: number }[] | null
@@ -14,14 +15,15 @@ export default function ActivityForm({onSelect}: {onSelect: (option: { name: str
 
   useEffect(() => {
     initActivityData();
+    setIsOpen(false);
   }, []);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   function handleSelect(option: { name: string; calories_per_hour: number }) {
-    onSelect(option);
+    onSelect && onSelect(option);
     setQuery(option.name);
-    setIsOpen(false);
+
   }
 
   function initActivityData() {
@@ -92,10 +94,10 @@ export default function ActivityForm({onSelect}: {onSelect: (option: { name: str
   }
 
   return (
-    <div className="relative w-full max-w-md flex flex-col gap-3">
+    <div className="relative w-full max-w-md flex flex-col gap-5">
       <div className="flex flex-col gap-3">
         <Label className="text-base">Masukkan Jenis Aktivitas Anda</Label>
-        <input
+        <Input
           type="text"
           value={query}
           placeholder={"Search activity..."}
@@ -104,9 +106,9 @@ export default function ActivityForm({onSelect}: {onSelect: (option: { name: str
             setIsOpen(true);
             fetchNewActivities(e.target.value);
           }}
-          onFocus={() => setIsOpen(true)}
+          readOnly={!isEdit}
+          // onFocus={() => !defaultValue && setIsOpen(true)}
           ref={inputRef}
-          className="w-full p-2 border rounded-md bg-[#1E1E2F]/30 text-white backdrop-blur"
         />
 
         {isOpen && (
@@ -131,8 +133,8 @@ export default function ActivityForm({onSelect}: {onSelect: (option: { name: str
         )}
       </div>
       <div className="flex flex-col gap-3">
-      <Label className="text-base">Masukkan Durasi Aktivitas Anda</Label>
-      <Input className="w-full" name="duration" placeholder="Masukkan Durasi (menit)" type="number"></Input>
+      <Label className="text-base">Masukkan Durasi Aktivitas Anda (Menit)</Label>
+      <Input className="w-full" name="duration" readOnly={!isEdit} placeholder="Masukkan Durasi (menit)" type="number" defaultValue={data?.physicalActivityLog?.duration}></Input>
       </div>
     </div>
   );

@@ -58,9 +58,9 @@ export default function Page() {
     try {
       const res = await axios.get(
         `/api/handler/activities/user?type=${
-          category ? "filterActivities" : "getAllUserActivities"
+          category ? `filterActivities` : "getAllUserActivities"
         }&page=${updatedPageData?.start}&limit=${updatedPageData?.limit}${
-          category ? `&category=${category}` : `${findByName ? `&title=${findByName}` : ""}`
+          findByName ? `&title=${findByName}` : `${category ? `&category=${category}` : ""}`
         }`,
         {
           headers: {
@@ -116,9 +116,9 @@ export default function Page() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const title = formData.get("title") as string;
-    if (title) {
-      fetchActivities(pageData, undefined, title);
-    }
+    // if (title) {
+      fetchActivities(pageData, title, title);
+    // }
   }
 
   return (
