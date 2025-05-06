@@ -56,7 +56,6 @@ export async function GET(request: NextRequest) {
           userId: session?.user?.id,
           title: {
             search: findByName,
-            mode: "insensitive",
           },
         },
         include: {
@@ -290,15 +289,14 @@ export async function PUT(request: NextRequest) {
   const session = await auth();
   const { searchParams } = new URL(request.url);
   // const category = searchParams.get("category");
-  const id = searchParams.get("id");
   const activityId = searchParams.get("activityId");
   const body = await request.json();
 
-  if (!id) {
+  if (!activityId) {
     return NextResponse.json({
       success: false,
       status: 400,
-      message: "ID is required"
+      message: "Activity ID is required"
     })
   }
 
@@ -371,10 +369,11 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      status: 200,
+      status: 201,
       message: "Sleep Tracker updated successfully"
     })
   } catch (err) {
+    console.log(err)
     if (err instanceof Error) {
       return NextResponse.json({
         success: false,

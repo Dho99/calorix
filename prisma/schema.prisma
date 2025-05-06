@@ -36,8 +36,8 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text // Menggunakan tipe TEXT untuk string panjang
-  access_token      String? @db.Text // Menggunakan tipe TEXT untuk string panjang
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
@@ -75,7 +75,7 @@ model Authenticator {
   credentialID         String  @unique
   userId               String
   providerAccountId    String
-  credentialPublicKey  String  @db.Text // Menggunakan tipe TEXT untuk data panjang
+  credentialPublicKey  String  @db.Text
   counter              Int
   credentialDeviceType String
   credentialBackedUp   Boolean
@@ -192,6 +192,8 @@ model UserActivites {
   userHydration       UserHydration?       @relation(fields: [userHydrationId], references: [id], onDelete: Cascade)
   foodLog             FoodLog?             @relation(fields: [foodLogId], references: [id], onDelete: Cascade)
   physicalActivityLog PhysicalActivityLog? @relation(fields: [physicalActivityLogId], references: [id], onDelete: Cascade)
+
+  @@fulltext([title])
 }
 
 model Chatbot {

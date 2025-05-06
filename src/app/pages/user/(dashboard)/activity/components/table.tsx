@@ -73,7 +73,7 @@ export const dropdownMenuItems = [
 export default function ActivityTable({
   activitiesProps,
   setDialogProps,
-  setActivities,
+  fetchActivities,
 }: {
   activitiesProps: UserActivites[] | null;
   setDialogProps: React.Dispatch<
@@ -81,7 +81,7 @@ export default function ActivityTable({
       content?: React.ReactNode;
     } | null>
   >;
-  setActivities: React.Dispatch<React.SetStateAction<UserActivites[] | null>>;
+  fetchActivities: () => Promise<void>;
 }) {
   return (
     <div className="flex flex-col gap-3">
@@ -96,7 +96,7 @@ export default function ActivityTable({
                     <DetailActivity
                       activity={activity}
                       setDialogProps={setDialogProps}
-                      setActivities={setActivities}
+                      fetchActivities={fetchActivities}
                     />
                   ),
                 })

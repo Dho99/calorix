@@ -27,13 +27,13 @@ import axios from "axios";
 export default function DetailActivity({
   activity,
   setDialogProps,
-  setActivities,
+  fetchActivities,
 }: {
   activity: UserActivites;
   setDialogProps: React.Dispatch<
     React.SetStateAction<{ content?: React.ReactNode } | null>
   >;
-  setActivities: React.Dispatch<React.SetStateAction<UserActivites[] | null>>;
+  fetchActivities: () => Promise<void>;
 }) {
   const [pageState, setPageState] = useState<{
     edit: boolean;
@@ -59,9 +59,31 @@ export default function DetailActivity({
       .delete(`/api/handler/activities/user?${urlParams.toString()}`)
       .then((res) => {
         if (res.data.success) {
-          setActivities((prev) =>
-            prev!.filter((activity) => activity.id !== id)
-          );
+          fetchActivities();
+          setDialogProps(null);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  function submitUpdateActivity(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    const urlParams = new URLSearchParams({
+      activityId: activity.id,
+    });
+
+    axios
+      .put(`/api/handler/activities/user?${urlParams.toString()}`, {
+        ...data,
+        ...activityInput,
+      })
+      .then((res) => {
+        if (res.data.success) {
+          fetchActivities();
           setDialogProps(null);
         }
       })
@@ -71,7 +93,7 @@ export default function DetailActivity({
   }
 
   return (
-    <form className="inline-flex flex-col gap-5">
+    <form className="inline-flex flex-col gap-5" onSubmit={submitUpdateActivity}>
       <DialogHeader>
         <DialogTitle>Detail dan Catatan Aktivitas Anda</DialogTitle>
         <DialogDescription>
@@ -108,7 +130,7 @@ export default function DetailActivity({
             <Input readOnly={!pageState?.edit} defaultValue={activity?.title}></Input>
           </div>
           {activity?.category === "SLEEP_TRACKER" ? (
-            <SleepForm data={activity} />
+            <SleepForm data={activity} isEdit={pageState?.edit} />
           ) : activity?.category === "FOOD_LOG" ? (
             <FoodForm data={activity} />
           ) : activity?.category === "USER_HYDRATION" ? (
