@@ -1,5 +1,0 @@
--- AlterEnum
-ALTER TYPE "ACTIVITY_TYPE" ADD VALUE 'STEP_TRACKER';
-
--- AlterTable
-ALTER TABLE "UserActivites" ADD COLUMN     "stepsCount" DOUBLE PRECISION;
