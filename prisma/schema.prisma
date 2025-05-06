@@ -36,12 +36,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text // Menggunakan tipe TEXT untuk string panjang
+  access_token      String? @db.Text // Menggunakan tipe TEXT untuk string panjang
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
 
   createdAt DateTime @default(now())
@@ -75,7 +75,7 @@ model Authenticator {
   credentialID         String  @unique
   userId               String
   providerAccountId    String
-  credentialPublicKey  String
+  credentialPublicKey  String  @db.Text // Menggunakan tipe TEXT untuk data panjang
   counter              Int
   credentialDeviceType String
   credentialBackedUp   Boolean
@@ -98,7 +98,7 @@ model UserCharacteristics {
   activityFactor          String
   mealsPerDay             String
   sleepHours              String
-  workoutsPerWeek        String
+  workoutsPerWeek         String
   manualCalorieAdjustment String?
   bmi                     String?
   tdee                    String?
@@ -118,8 +118,8 @@ model UserGoal {
   targetTime     String?
   hydrationNeeds String
   targetWeight   String
-  totalDeficit  String
-  stepNeeds   String
+  totalDeficit   String
+  stepNeeds      String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
@@ -178,7 +178,7 @@ model UserActivites {
   userId                String
   category              ACTIVITY_TYPE
   title                 String
-  stepsCount              Float?
+  stepsCount            Float?
   effectToBody          String?
   sleepTrackerId        String?  @unique
   userHydrationId       String?  @unique
@@ -198,7 +198,7 @@ model Chatbot {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  payload   String?
+  payload   String?  @db.Text // Menggunakan tipe TEXT
   sender    SENDER
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
