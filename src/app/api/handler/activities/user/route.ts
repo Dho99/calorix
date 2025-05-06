@@ -332,7 +332,7 @@ export async function PUT(request: NextRequest) {
         break;
 
       case "FOOD_LOG":
-        const foodLog = await prisma.foodLog.update({
+        await prisma.foodLog.update({
           where: {
             id: findActivity?.foodLogId as string
           },
@@ -357,6 +357,29 @@ export async function PUT(request: NextRequest) {
             caloriesBurned: caloriesBurned
           }
         })
+        break;
+      case "USER_HYDRATION":
+        await prisma.userHydration.update({
+          where: {
+            id: findActivity?.userHydrationId as string
+          },
+          data: {
+            waterIntake: body?.waterIntake as string
+          }
+        })
+        break;
+      // case "STEP_TRACKER":
+      //   await prisma.stepTracker.update({
+      //     where: {
+      //       id: findActivity?.stepTrackerId as string
+      //     },
+      //     data: {
+      //       stepCount: parseInt(String(body?.stepCount)),
+      //       distance: parseFloat(body?.distance),
+      //       caloriesBurned: parseFloat(body?.caloriesBurned)
+      //     }
+      //   })
+      //   break;
       default:
         return NextResponse.json({
           success: false,

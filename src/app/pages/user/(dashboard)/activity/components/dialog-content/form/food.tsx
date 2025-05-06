@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import type { UserActivites } from "@/app/utils/lib/types/user";
 
-export default function FoodForm({data}: {data: UserActivites|null}) {
+export default function FoodForm({data, isEdit}: {data?: UserActivites, isEdit: boolean}) {
   return (
     <div className="flex flex-col gap-6 ">
       <div className="flex flex-col gap-3">
@@ -21,7 +21,7 @@ export default function FoodForm({data}: {data: UserActivites|null}) {
         <Input
           name="calories"
           type="number"
-          readOnly={!!data}
+          readOnly={!isEdit}
           placeholder="Insert Amount"
           className="backdrop-blur text-white"
           defaultValue={data?.foodLog?.calories || ""}
@@ -34,7 +34,7 @@ export default function FoodForm({data}: {data: UserActivites|null}) {
         <Input
           name="foodName"
           type="text"
-          readOnly={!!data}
+          readOnly={!isEdit}
           placeholder="Insert Food Name"
           className="backdrop-blur text-white"
           defaultValue={data?.foodLog?.foodName || ""}
@@ -44,7 +44,7 @@ export default function FoodForm({data}: {data: UserActivites|null}) {
         <Label htmlFor="activity-name" className="text-white text-base">
             Meal Type
         </Label>
-        <Select name="mealType" defaultValue={data?.foodLog?.mealType} disabled={!!data}>
+        <Select name="mealType" defaultValue={data?.foodLog?.mealType} disabled={!isEdit}>
           <SelectTrigger className="w-full backdrop-blur text-white">
             <SelectValue placeholder="Select your Meal Type" />
           </SelectTrigger>

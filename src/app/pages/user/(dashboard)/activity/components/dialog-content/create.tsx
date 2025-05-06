@@ -145,13 +145,13 @@ export default function AddActivityContent({
           </div>
 
           {categoryInput === "SLEEP_TRACKER" ? (
-            <SleepForm/>
+            <SleepForm isEdit={true}/>
           ) : categoryInput === "FOOD_LOG" ? (
-            <FoodForm data={null} />
+            <FoodForm isEdit={true}/>
           ) : categoryInput === "USER_HYDRATION" ? (
-            <HydrationForm />
+            <HydrationForm  isEdit={true}/>
           ) : categoryInput === "PHYSICAL_ACTIVITY" ? (
-            <ActivityForm onSelect={(activity) => setActivityInput(activity)} />
+            <ActivityForm onSelect={(activity) => setActivityInput(activity)}  isEdit={true}/>
           ) : (
             <></>
           )}

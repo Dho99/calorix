@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import type { UserActivites } from "@/app/utils/lib/types/user";
 
-export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (option: { name: string; calories_per_hour: number }) => void, data?: UserActivites, isEdit?: boolean}) {
+export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (option: { name: string; calories_per_hour: number }) => void, data?: UserActivites, isEdit: boolean}) {
   const [query, setQuery] = useState(data?.physicalActivityLog?.activityName || "");
   const [isOpen, setIsOpen] = useState(false);
   const [activityData, setActivityData] = useState<
@@ -23,7 +23,7 @@ export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (opti
   function handleSelect(option: { name: string; calories_per_hour: number }) {
     onSelect && onSelect(option);
     setQuery(option.name);
-
+    setIsOpen(false);
   }
 
   function initActivityData() {

@@ -182,6 +182,7 @@ model UserActivites {
   effectToBody          String?
   sleepTrackerId        String?  @unique
   userHydrationId       String?  @unique
+  stepTrackerId         String?  @unique
   foodLogId             String?  @unique
   physicalActivityLogId String?  @unique
   createdAt             DateTime @default(now())

@@ -71,10 +71,17 @@ export default function DetailActivity({
   function submitUpdateActivity(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
     const urlParams = new URLSearchParams({
       activityId: activity.id,
     });
+
+    if(activityInput) {
+      formData.append("activityName", activityInput.name);
+      formData.append("calories_per_hour", activityInput?.calories_per_hour.toString());
+    }
+    
+    const data = Object.fromEntries(formData.entries());
+    
 
     axios
       .put(`/api/handler/activities/user?${urlParams.toString()}`, {
@@ -85,6 +92,7 @@ export default function DetailActivity({
         if (res.data.success) {
           fetchActivities();
           setDialogProps(null);
+          setPageState({edit: false, pageData: null});
         }
       })
       .catch((err) => {
@@ -132,7 +140,7 @@ export default function DetailActivity({
           {activity?.category === "SLEEP_TRACKER" ? (
             <SleepForm data={activity} isEdit={pageState?.edit} />
           ) : activity?.category === "FOOD_LOG" ? (
-            <FoodForm data={activity} />
+            <FoodForm data={activity} isEdit={pageState?.edit} />
           ) : activity?.category === "USER_HYDRATION" ? (
             <HydrationForm data={activity} isEdit={pageState?.edit} />
           ) : activity?.category === "PHYSICAL_ACTIVITY" ? (
