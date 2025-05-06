@@ -5,6 +5,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 model User {
@@ -95,11 +96,10 @@ model UserCharacteristics {
   age                     String
   height                  String
   currentWeight           String
-  physicalActivities      String
   activityFactor          String
   mealsPerDay             String
   sleepHours              String
-  sportIntensity          String?
+  workoutsPerWeek        String
   manualCalorieAdjustment String?
   bmi                     String?
   tdee                    String?
@@ -116,12 +116,15 @@ model UserGoal {
   userId         String  @unique
   goal           String
   deficitPerDay  String
-  stepsGoal      String
   targetTime     String?
   hydrationNeeds String
   targetWeight   String
+  totalDeficit  String
+  stepNeeds   String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model PhysicalActivityLog {
@@ -151,7 +154,7 @@ model FoodLog {
 
 model UserHydration {
   id           String         @id @default(cuid())
-  userId       String         @unique
+  userId       String      
   waterIntake  String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
@@ -175,6 +178,8 @@ model UserActivites {
   id                    String   @id @default(cuid())
   userId                String
   category              ACTIVITY_TYPE
+  title                 String
+  stepsCount              Float?
   effectToBody          String?
   sleepTrackerId        String?  @unique
   userHydrationId       String?  @unique
@@ -210,4 +215,5 @@ enum ACTIVITY_TYPE {
   USER_HYDRATION
   FOOD_LOG
   PHYSICAL_ACTIVITY
+  STEP_TRACKER
 }

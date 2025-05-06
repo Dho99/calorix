@@ -6,6 +6,7 @@
       "placeholder": "Pilih salah satu jenis kelamin",
       "stateKey": "gender",
       "type": "radio",
+      "required": true,
       "opts": [
         { "value": "male", "label": "Laki-laki", "icon": "male.png" },
         { "value": "female", "label": "Perempuan", "icon": "female.png" }
@@ -18,6 +19,7 @@
       "stateKey": "age",
       "type": "number",
       "indicator": "Tahun",
+      "required": true,
       "tips": {
         "title": "Kami menanyakan usia anda untuk membuat program pribadi anda",
         "description": "Orang yang lebih tua cenderung memiliki lebih banyak lemak tubuh daripada orang yang lebih muda dengan IMT yang sama"
@@ -30,6 +32,7 @@
       "stateKey": "height",
       "type": "number",
       "indicator": "cm",
+      "required": true,
       "tips": {
         "title": "Menghitung Index Massa Tubuh Anda",
         "description": "IMT Umumnya digunakan sebagai indikator resiko untuk perkembangan atau prevealensi beberapa masalah kesehatan"
@@ -41,7 +44,8 @@
       "placeholder": "Contoh: 70",
       "stateKey": "currentWeight",
       "type": "number",
-      "indicator": "kg"
+      "indicator": "kg",
+      "required": true
     },
     {
       "number": 5,
@@ -49,7 +53,8 @@
       "placeholder": "Contoh: 65",
       "stateKey": "targetWeight",
       "type": "number",
-      "indicator": "kg"
+      "indicator": "kg",
+      "required": true
     },
     {
       "number": 6,
@@ -58,6 +63,7 @@
       "stateKey": "targetTime",
       "indicator": "Bulan",
       "type": "number",
+      "required": false,
       "tips": {
         "title": "MUDAH MENANG: Hasilkan 17% dari berat badan Anda",
         "description": "Menurut sebuah penelitian dari University of Utah, bahkan olahraga 5 menit setiap hari dapat membantu anda tetap bugar dan meningkatkan kualitas tidur dan energi anda"
@@ -65,44 +71,11 @@
     },
     {
       "number": 7,
-      "question": "Pilih Aktivitas Fisik Dinamis anda sehari - hari",
-      "placeholder": "Pilih aktivitas fisik yang dilakukan",
-      "stateKey": "physicalActivities",
-      "type": "radio",
-      "opts": [
-        {
-          "value": "1",
-          "label": "Rebahan",
-          "icon": "rebahan.svg"
-        },
-        {
-          "value": "2",
-          "label": "Bekerja di sambil duduk",
-          "icon": "work-sit.svg"
-        },
-        {
-          "value": "3",
-          "label": "Bekerja sambil berdiri atau jalan kaki",
-          "icon": "work-by-walk-or-run.svg"
-        },
-        {
-          "value": "4",
-          "label": "Pekerjaan Fisik Berat",
-          "icon": "heavy-work.svg"
-        },
-        {
-          "value": "5",
-          "label": "Pekerjaan Fisik Berat + Olahraga harian atau atlet",
-          "icon": "heavy-work-with-sport.svg"
-        }
-      ]
-    },
-    {
-      "number": 8,
-      "question": "Pilih Tingkat Keseringan anda dalam berolahraga",
+      "question": "Pilih Tingkat keseringan anda beraktivitas sehari hari",
       "placeholder": "Pilih tingkat aktivitas harian",
       "stateKey": "activityFactor",
       "type": "radio",
+      "required": true,
       "opts": [
         { "value": "1.2", "label": "Sangat Sedikit (Sedentari)" },
         { "value": "1.375", "label": "Ringan (1–3x/minggu)" },
@@ -112,70 +85,69 @@
       ]
     },
     {
-      "number": 9,
+      "number": 8,
       "question": "Jika anda berolahraga, apa yang biasanya anda lakukan ?",
-      "placeholder": "Pilih tingkat Intens olahraga anda",
-      "stateKey": "sportIntensity",
-      "type": "radio",
+      "placeholder": "Masukkan Durasi Olahraga dalam Menit",
+      "stateKey": "userMET",
+      "type": "dualCheckbox",
+      "required": true,
       "opts": [
-        {"value": "1", "label": "Ringan (Jalan / Yoga)"},
-        {"value": "2", "label": "Sedang (Lari / Sepeda)"},
-        {"value": "3", "label": "Berat (Angkat Beban / HIIT), Atlet"}
+        { "value": "8.0", "label": "Berlari (8 km/jam)" },
+        { "value": "12.0", "label": "Berlari (12 km/jam)" },
+        { "value": "8.001", "label": "Bersepeda (Moderat 20 km/jam)" },
+        { "value": "4.0", "label": "Berjalan cepat (6 km/jam)" },
+        { "value": "3.8", "label": "Berjalan santai (4.8 km/jam)" },
+        { "value": "6.0", "label": "Senam aerobik" },
+        { "value": "2.5", "label": "Yoga" },
+        { "value": "7.0", "label": "Berenang (moderate)" },
+        { "value": "3.0", "label": "Angkat beban" },
+        { "value": "1.8", "label": "Catur (duduk)" },
+        { "value": "7.0", "label": "Bermain tenis" }
       ]
     },
     {
-      "number": 10,
+      "number": 9,
       "question": "Masukkan Jumlah Makan dalam Sehari",
       "placeholder": "Contoh: 3",
       "stateKey": "mealsPerDay",
       "indicator": "Porsi",
-      "type": "number"
+      "type": "number",
+      "required": true
     },
     {
-      "number": 12,
+      "number": 10,
       "question": "Masukkan Jumlah Tidur Sehari (jam)",
       "placeholder": "Contoh: 8",
       "stateKey": "sleepHours",
       "type": "number",
-      "indicator": "Jam"
+      "indicator": "Jam",
+      "required": true
     },
     {
-      "number": 13,
+      "number": 11,
       "question": "Masukkan Jumlah Olahraga per Minggu",
       "placeholder": "Contoh: 4",
       "stateKey": "workoutsPerWeek",
       "type": "number",
-      "indicator": "Minggu"
+      "indicator": "Minggu",
+      "required": true
     },
     {
-      "number": 14,
-      "question": "Masukkan Durasi Olahraga Sekali Latihan (dalam menit)",
-      "placeholder": "Contoh: 45",
-      "stateKey": "workoutDuration",
-      "type": "number",
-      "indicator": "Menit"
-    },
-    {
-      "number": 15,
-      "question": "Masukkan Jumlah Perkiraan Kalori Harian yang Masuk ke tubuh",
-      "placeholder": "Contoh: 2000",
-      "stateKey": "caloriesPerDay",
-      "type": "number",
-      "indicator": "Kalori"
-    },
-    {
-      "number": 16,
+      "number": 12,
       "question": "Masukkan Kalori Harian Tambahan atau Defisit Manual",
       "placeholder": "Contoh: -500 atau 300",
       "stateKey": "manualCalorieAdjustment",
       "type": "number",
-      "indicator": "Kalori"
+      "indicator": "Kalori",
+      "required": true
     },
     {
-      "number": 17
+      "number": 13,
+      "required": true
     },
     {
-      "number": 18
+      "number": 14,
+      "required": true
     }
   ]
 }

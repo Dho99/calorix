@@ -13,25 +13,24 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { act, useState } from "react";
 import SleepForm from "./form/sleep";
 import FoodForm from "./form/food";
 import HydrationForm from "./form/hydration";
 import ActivityForm from "./form/activity";
 import type { UserActivites } from "@/app/utils/lib/types/user";
+import { Input } from "@/components/ui/input";
 
 export default function AddActivityContent({
   setDialogProps,
-  setActivities
+  setActivities,
 }: {
   setDialogProps: React.Dispatch<
     React.SetStateAction<{
       content?: React.ReactNode;
     } | null>
   >;
-  setActivities: React.Dispatch<
-    React.SetStateAction<UserActivites[] | null>
-  >;
+  setActivities: React.Dispatch<React.SetStateAction<UserActivites[] | null>>;
 }): React.ReactNode {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -52,15 +51,24 @@ export default function AddActivityContent({
         mealType: formData.get("mealType"),
         category: category,
       };
+    } else if (category === "PHYSICAL_ACTIVITY") {
+      data = {
+        activityName: activityInput?.name,
+        calories_per_hour: activityInput?.calories_per_hour,
+        duration: formData.get("duration"),
+      };
+    } else if (category === "USER_HYDRATION") {
+      data = {
+        waterIntake: formData.get("waterIntake"),
+      }
     }
+
+    data = { ...data, title: formData.get("title") };
 
     const urlParams = new URLSearchParams({
       category: category as string,
       type: "create",
     });
-
-    console.log("data", data);
-
     axios
       .post(`/api/handler/activities/user?${urlParams.toString()}`, {
         data: JSON.stringify(data),
@@ -70,32 +78,54 @@ export default function AddActivityContent({
           console.log(res.data.data);
           setDialogProps(null);
           setActivities((prev) => {
-            if (prev) {
-              if (category === "SLEEP_TRACKER") {
-                return [
-                  ...prev,
-                  {
-                    ...res.data.data,
-                    sleepTracker: {
-                      duration: res.data.data.sleepTracker.duration,
-                    },
+            if (category === "SLEEP_TRACKER") {
+              return [
+                {
+                  ...res.data.data,
+                  sleepTracker: {
+                    duration: res.data.data.sleepTracker.duration,
                   },
-                ];
-              } else if (category === "FOOD_LOG") {
-                return [
-                  ...prev,
-                  {
-                    ...res.data.data,
-                    foodLog: {
-                      foodName: res.data.data.foodLog.foodName,
-                      calories: res.data.data.foodLog.calories,
-                      mealType: res.data.data.foodLog.mealType,
-                    },
+                },
+                ...(prev || []),
+              ];
+            } else if (category === "FOOD_LOG") {
+              return [
+                {
+                  ...res.data.data,
+                  foodLog: {
+                    foodName: res.data.data.foodLog.foodName,
+                    calories: res.data.data.foodLog.calories,
+                    mealType: res.data.data.foodLog.mealType,
                   },
-                ];
-              }
+                },
+                ...(prev || []),
+              ];
+            } else if (category === "PHYSICAL_ACTIVITY") {
+              return [
+                {
+                  ...res.data.data,
+                  physicalActivity: {
+                    activityName: res.data.data.physicalActivity.activityName,
+                    calories_per_hour: res.data.data.physicalActivity.calories_per_hour,
+                    duration: res.data.data.physicalActivity.duration,
+                  },
+                },
+                ...(prev || []),
+              ];
+            } else if (category === "USER_HYDRATION") {
+              return [
+                {
+                  ...res.data.data,
+                  userHydration: {
+                    waterIntake: res.data.data.userHydration.waterIntake,
+                  },
+                },
+                ...(prev || []),
+              ];
             }
-            return prev; // Ensure a valid return value
+
+
+            return prev || []; // Ensure a valid return value
           });
         } else {
           console.log("failed");
@@ -107,6 +137,10 @@ export default function AddActivityContent({
   }
 
   const [categoryInput, setCategory] = useState<string | null>(null);
+  const [activityInput, setActivityInput] = useState<{
+    name: string;
+    calories_per_hour: number;
+  } | null>(null);
 
   function changeInputCategory(value: string) {
     console.log("value", value);
@@ -146,14 +180,27 @@ export default function AddActivityContent({
             </Select>
           </div>
 
+          <div className="flex flex-col gap-3 ">
+            <label htmlFor="activity-name" className="text-white">
+              Masukkan Nama Aktivitas
+            </label>
+
+            <Input
+              name="title"
+              type="text"
+              required
+              placeholder="Insert Title"
+            ></Input>
+          </div>
+
           {categoryInput === "SLEEP_TRACKER" ? (
-            <SleepForm data={null}/>
+            <SleepForm data={null} />
           ) : categoryInput === "FOOD_LOG" ? (
-            <FoodForm data={null}/>
+            <FoodForm data={null} />
           ) : categoryInput === "USER_HYDRATION" ? (
             <HydrationForm />
           ) : categoryInput === "PHYSICAL_ACTIVITY" ? (
-            <ActivityForm />
+            <ActivityForm onSelect={(activity) => setActivityInput(activity)} />
           ) : (
             <></>
           )}

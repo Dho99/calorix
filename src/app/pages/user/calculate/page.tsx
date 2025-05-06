@@ -22,6 +22,7 @@ import {
 import { calculateUserData } from "@/app/utils/api/calculate";
 import SaveCalculate from "./components/save-calculate";
 import { scrollToTop } from "@/app/pages/layout";
+import DualCheckbox from "./components/dualCheckbox";
 
 export type Step = {
   number: number;
@@ -39,18 +40,24 @@ export type Step = {
     label: string;
     icon?: string;
   }[];
+  required?: boolean;
 };
 
 export type StepValues = {
-  [stepType: string]: string | string[] | number | boolean | null;
+  [stepType: string]:
+    | string
+    | string[]
+    | number
+    | boolean
+    | null
+    | {
+        value?: string;
+        duration?: string;
+      }[];
 };
-
-
-
 
 export default function Page() {
   const pageRef = useRef<HTMLDivElement>(null);
-
 
   const router = useRouter();
 
@@ -63,7 +70,7 @@ export default function Page() {
     type: string;
     success: boolean;
     message: string;
-    markdownComponent?: React.ReactNode
+    markdownComponent?: React.ReactNode;
   } | null>(null);
 
   const { data } = useSession();
@@ -100,15 +107,17 @@ export default function Page() {
     }));
   }
 
-  const steps: Step[] = stepsJson;
+  let steps: Step[] = stepsJson;
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const handleNext = async () => {
     scrollToTop(pageRef);
+
     if (
       !stepState?.hasOwnProperty(steps[currentStep - 1].stateKey!) &&
-      currentStep < steps.length - 2
+      currentStep < steps.length - 2 &&
+      steps[currentStep - 1]?.required
     ) {
       setAlert({
         success: false,
@@ -123,27 +132,35 @@ export default function Page() {
       );
 
       if (input instanceof HTMLInputElement) {
-        input.value = stepState?.[steps[currentStep]?.stateKey as string] as string
+        input.value = stepState?.[
+          steps[currentStep]?.stateKey as string
+        ] as string;
+      }
+
+      if (stepState?.[steps[5].stateKey!] !== undefined && currentStep === 6) {
+        steps.splice(12, 1);
       }
 
       if (currentStep < steps.length) {
         setCurrentStep((prev) => Math.min(prev + 1, steps.length));
       }
 
-      if (currentStep < steps.length - 1) {
+      if (currentStep === steps.length - 1) {
         const calculate = await calculateUserData(stepState!);
-
         setStepState((prevState) => ({
           ...prevState,
           ...calculate,
         }));
+
       }
 
       if (currentStep === steps.length) {
-        console.log(stepState)
+        console.log(stepState);
         axios({
           method: isUpdatePage ? "PUT" : "POST",
-          url: `/api/handler/characteristics${isUpdatePage ? '/'+data?.user?.id : ''}`,
+          url: `/api/handler/characteristics${
+            isUpdatePage ? "/" + data?.user?.id : ""
+          }`,
           data: stepState!,
         })
           .then((res) => {
@@ -158,7 +175,7 @@ export default function Page() {
                 success: true,
                 type: "dialog",
                 message: "Data berhasil disimpan",
-                markdownComponent: (handleAfterSubmitSuccess()),
+                markdownComponent: handleAfterSubmitSuccess(),
               });
             }
             setCurrentStep(1);
@@ -183,8 +200,8 @@ export default function Page() {
           Kembali ke Dashboard
         </button>
       </div>
-    )
-  }
+    );
+  };
 
   const handlePrev = () => {
     scrollToTop(pageRef);
@@ -210,17 +227,17 @@ export default function Page() {
     value: string | number | boolean
   ) => {
     setValues((prevValues) => {
-      if (prevValues.includes(value as string)) {
-        return prevValues.filter((v) => v !== (value as string));
-      } else {
-        return [...prevValues, value as string];
-      }
-    });
+      const updatedValues = prevValues.includes(value as string)
+        ? prevValues.filter((v) => v !== (value as string))
+        : [...prevValues, value as string];
 
-    setStepState((prevState) => ({
-      ...prevState,
-      [stepType]: values,
-    }));
+      setStepState((prevState) => ({
+        ...prevState,
+        [stepType]: updatedValues,
+      }));
+
+      return updatedValues;
+    });
   };
 
   return (
@@ -255,11 +272,12 @@ export default function Page() {
             </Alert>
           )}
 
-          {
-            alert?.type === "dialog" && (
-              <DialogContent className="sm:max-w-[425px] bg-[#092635] text-white border-none">
+          {alert?.type === "dialog" && (
+            <DialogContent className="sm:max-w-[425px] bg-[#092635] text-white border-none">
               <DialogHeader>
-                <DialogTitle>{alert?.title ? alert?.title : "Calculate Alert"}</DialogTitle>
+                <DialogTitle>
+                  {alert?.title ? alert?.title : "Calculate Alert"}
+                </DialogTitle>
                 <DialogDescription className="text-slate-400 text-base my-5">
                   {alert?.message}
                 </DialogDescription>
@@ -269,44 +287,40 @@ export default function Page() {
                   alert?.markdownComponent
                 ) : (
                   <>
-                  <button
-                    type="button"
-                    className="border border-[#5C8374] rounded-lg py-2 px-4 text-white"
-                    onClick={() => {
-                      setIsUpdatePage(true);
-                      setAlert(null);
-                    }}
-                  >
-                    Perbarui
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-[#5C8374] text-white rounded-lg py-2 px-4"
-                    onClick={() => {
-                      router.push("/pages/user/dashboard");
-                    }}
-                  >
-                    Kembali ke Dashboard
-                  </button>
+                    <button
+                      type="button"
+                      className="border border-[#5C8374] rounded-lg py-2 px-4 text-white"
+                      onClick={() => {
+                        setIsUpdatePage(true);
+                        setAlert(null);
+                      }}
+                    >
+                      Perbarui
+                    </button>
+                    <button
+                      type="submit"
+                      className="bg-[#5C8374] text-white rounded-lg py-2 px-4"
+                      onClick={() => {
+                        router.push("/pages/user/dashboard");
+                      }}
+                    >
+                      Kembali ke Dashboard
+                    </button>
                   </>
                 )}
-             
               </DialogFooter>
             </DialogContent>
-            )
-          }
-
+          )}
           {currentStep < steps.length - 1 ? (
             <>
-              <div className="h-full w-full flex flex-wrap py-5">
+              <div className="h-full w-full flex flex-wrap py-5 ">
                 <div className="w-full h-full flex justify-center items-center flex-col">
                   <div className="w-full h-max flex flex-col gap-10 p-10 ring ring-black/30 shadow-xl/20 rounded-xl justify-center items-center">
-                    <div className="w-full flex justify-center items-center">
+                    <div className="w-full flex justify-center items-center ">
                       <h1 className="text-4xl font-bold text-center">
                         {steps[currentStep - 1].question}
                       </h1>
                     </div>
-
                     {steps[currentStep - 1].type === "radio" ? (
                       <div
                         className={`grid 
@@ -351,10 +365,10 @@ export default function Page() {
                         ))}
                       </div>
                     ) : steps[currentStep - 1].type === "checkbox" ? (
-                      <div className={`flex flex-col gap-10`}>
+                      <div className={`grid grid-cols-3 gap-10`}>
                         {steps[currentStep - 1].opts?.map((opt, index) => (
                           <div
-                            className="items-center flex space-x-5 text-black bg-white py-3 px-5 rounded shadow-lg"
+                            className="items-center flex space-x-5 text-black bg-white/70 py-3 px-5 rounded shadow-lg"
                             key={index}
                           >
                             <Checkbox
@@ -389,6 +403,18 @@ export default function Page() {
                           </div>
                         ))}
                       </div>
+                    ) : steps[currentStep - 1].type === "dualCheckbox" ? (
+                      <DualCheckbox
+                        stepsValue={
+                          stepState?.[
+                            steps[currentStep - 1].stateKey!
+                          ] as unknown as StepValues
+                        }
+                        stepsData={steps[currentStep - 1] as Step}
+                        setAlert={setAlert}
+                        scrollToTop={scrollToTop}
+                        setStepState={setStepState}
+                      />
                     ) : (
                       <div className={`flex flex-row gap-10`}>
                         <input

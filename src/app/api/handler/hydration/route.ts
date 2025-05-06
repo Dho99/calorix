@@ -25,13 +25,23 @@ export async function GET(request: NextRequest) {
         },
       },
     });
+    
 
     const sumHydration = res.reduce((acc, curr) => {
       return acc + parseFloat(curr.waterIntake);
     }, 0);
 
+    const hydrationGoal = await prisma.userGoal.findFirst({
+      where: {
+        userId: session?.user?.id as string,
+      },
+      select: {
+        hydrationNeeds: true,
+      },
+    });
+
     return NextResponse.json(
-      { success: true, data: sumHydration },
+      { success: true, data: sumHydration + parseFloat(String(hydrationGoal?.hydrationNeeds)) },
       { status: 200 }
     );
 

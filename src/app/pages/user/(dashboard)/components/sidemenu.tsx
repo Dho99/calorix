@@ -62,8 +62,8 @@ export default function SideMenu() {
   const pathname = usePathname();
 
   return (
-    <div className="h-dvh border-e-3 border-[#5D5D5D] flex flex-col gap-5 px-3 w-full py-4">
-      <div className="flex flex-col gap-5 w-full h-full">
+    <div className="h-dvh flex flex-col gap-5 px-3 w-full py-4 relative ">
+      <div className="flex flex-col gap-5 w-full h-full sticky top-0">
         <div className="flex flex-col gap-2">
           {dashboardMenu.map((item, index) => {
             return item.collapsible ? (

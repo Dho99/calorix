@@ -23,6 +23,7 @@ export type User = {
 export type UserActivites = BaseModel & {
   id: string;
   userId: string;
+  title: string;
   createdAt: Date;
   sleepTrackerId?: String;
   userHydrationId?: String;

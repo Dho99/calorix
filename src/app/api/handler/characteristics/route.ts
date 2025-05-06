@@ -3,6 +3,7 @@ import { characteristicsSchema } from "@/app/utils/lib/validation/characteristic
 import { prisma } from "@/app/utils/lib/prisma/prisma";
 import { auth } from "../auth";
 
+
 export async function POST(request: NextRequest) {
   const data = await request.json();
   const session = await auth();
@@ -28,11 +29,8 @@ export async function POST(request: NextRequest) {
       age,
       height,
       currentWeight,
-      physicalActivities,
       activityFactor,
       mealsPerDay,
-      sleepHours,
-      sportIntensity,
       manualCalorieAdjustment,
       bmi,
       tdee,
@@ -40,11 +38,14 @@ export async function POST(request: NextRequest) {
       bodyFatPercentage,
       userId,
       goal,
+      sleepHours,
       deficitPerDay,
-      stepsGoal,
       targetTime,
       targetWeight,
       hydrationNeeds,
+      workoutsPerWeek,
+      totalDeficit,
+      stepNeeds
     } = payload;
 
     await prisma.$transaction([
@@ -54,11 +55,10 @@ export async function POST(request: NextRequest) {
           age: age,
           height: height,
           currentWeight: currentWeight,
-          physicalActivities: physicalActivities,
           activityFactor: activityFactor,
           mealsPerDay: mealsPerDay,
           sleepHours: sleepHours,
-          sportIntensity: sportIntensity,
+          workoutsPerWeek: workoutsPerWeek,
           manualCalorieAdjustment: manualCalorieAdjustment,
           bmi: bmi,
           tdee: tdee,
@@ -72,12 +72,14 @@ export async function POST(request: NextRequest) {
           userId: userId,
           goal: goal,
           deficitPerDay: deficitPerDay,
-          stepsGoal: stepsGoal,
           targetTime: targetTime,
           targetWeight: targetWeight,
           hydrationNeeds: hydrationNeeds,
+          totalDeficit: totalDeficit,
+          stepNeeds: stepNeeds,
         },
       }),
+      
     ]);
 
     console.log("created");
