@@ -284,3 +284,104 @@ export async function DELETE(request: NextRequest) {
 
   return NextResponse.json({ success: false }, { status: 400 });
 }
+
+
+export async function PUT(request: NextRequest) {
+  const session = await auth();
+  const { searchParams } = new URL(request.url);
+  // const category = searchParams.get("category");
+  const id = searchParams.get("id");
+  const activityId = searchParams.get("activityId");
+  const body = await request.json();
+
+  if (!id) {
+    return NextResponse.json({
+      success: false,
+      status: 400,
+      message: "ID is required"
+    })
+  }
+
+  try {
+    const findActivity = await prisma.userActivites.findFirst({
+      where: {
+        id: activityId as string,
+        userId: session?.user?.id as string
+      }
+    })
+    if (!findActivity) {
+      return NextResponse.json({
+        success: false,
+        status: 404,
+        message: "Activity not found"
+      })
+    }
+
+    // let res;
+
+    switch (findActivity.category) {
+      case "SLEEP_TRACKER":
+        const duration = parseFloat(String(body?.duration));
+
+        await prisma.sleepTracker.update({
+          where: {
+            id: findActivity?.sleepTrackerId as string
+          },
+          data: {
+            duration: duration
+          }
+        })
+        break;
+
+      case "FOOD_LOG":
+        const foodLog = await prisma.foodLog.update({
+          where: {
+            id: findActivity?.foodLogId as string
+          },
+          data: {
+            foodName: body?.foodName,
+            calories: parseFloat(body?.calories),
+            mealType: body?.mealType
+          }
+        });
+        break;
+        
+      case "PHYSICAL_ACTIVITY":
+        const caloriesBurned = parseFloat(String(body?.calories_per_hour / 60)) * parseInt(String(body?.duration));
+        await prisma.physicalActivityLog.update({
+          where: {
+            id: findActivity?.physicalActivityLogId as string
+          },
+          data: {
+            duration: parseInt(String(body?.duration)),
+            activityName: body?.activityName as string,
+            metValue: parseFloat(String(body?.calories_per_hour / 60)),
+            caloriesBurned: caloriesBurned
+          }
+        })
+      default:
+        return NextResponse.json({
+          success: false,
+          status: 400,
+          message: "Invalid category"
+        })
+    }
+
+
+
+    return NextResponse.json({
+      success: true,
+      status: 200,
+      message: "Sleep Tracker updated successfully"
+    })
+  } catch (err) {
+    if (err instanceof Error) {
+      return NextResponse.json({
+        success: false,
+        status: 500,
+        message: err.message
+      })
+    }
+  }
+
+}

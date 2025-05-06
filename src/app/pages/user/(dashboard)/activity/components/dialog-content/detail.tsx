@@ -7,7 +7,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -100,6 +102,10 @@ export default function DetailActivity({
                 <SelectItem value="PHYSICAL_ACTIVITY">Beraktivitas</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div className="flex flex-col gap-3">
+            <Label className="text-base">Nama Aktivitas</Label>
+            <Input readOnly={!pageState?.edit} defaultValue={activity?.title}></Input>
           </div>
           {activity?.category === "SLEEP_TRACKER" ? (
             <SleepForm data={activity} />

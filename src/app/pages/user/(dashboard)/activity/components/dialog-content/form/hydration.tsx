@@ -12,7 +12,7 @@ export default function HydrationForm({data, isEdit}: {data?: UserActivites, isE
         type="number"
         placeholder="Insert Amount"
         defaultValue={data?.userHydration?.waterIntake}
-        readOnly={isEdit}
+        readOnly={!isEdit}
       ></Input>
     </div>
   );
