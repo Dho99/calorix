@@ -54,7 +54,7 @@ export default function Page() {
       .get("/api/handler/dashboard")
       .then((response) => {
         const userCharacteristics = response.data.data.userCharacteristics;
-        if (!userCharacteristics) {
+        if (!userCharacteristics || userCharacteristics?.isDeleted) {
           setDialog({
             open: true,
             title: "Perhitungan",
@@ -88,7 +88,7 @@ export default function Page() {
         });
       });
     // }
-  }, []);
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   const overviewData = {
       currentWeight: pageData?.userCharacteristics.currentWeight,

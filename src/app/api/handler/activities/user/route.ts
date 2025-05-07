@@ -56,7 +56,6 @@ export async function GET(request: NextRequest) {
           userId: session?.user?.id,
           title: {
             search: findByName,
-            mode: "insensitive",
           },
         },
         include: {
@@ -84,7 +83,7 @@ export async function GET(request: NextRequest) {
       category === "THIS_MONTH" ||
       category === "THIS_YEAR"
     ) {
-      let day = new Date();
+      const day = new Date();
       switch (category) {
         case "TODAY":
           day.setHours(0, 0, 0, 0);
@@ -264,7 +263,6 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const reqType = searchParams.get("type");
-  const session = await auth();
 
   if (reqType === "delete") {
     const id = searchParams.get("id");
@@ -290,15 +288,14 @@ export async function PUT(request: NextRequest) {
   const session = await auth();
   const { searchParams } = new URL(request.url);
   // const category = searchParams.get("category");
-  const id = searchParams.get("id");
   const activityId = searchParams.get("activityId");
   const body = await request.json();
 
-  if (!id) {
+  if (!activityId) {
     return NextResponse.json({
       success: false,
       status: 400,
-      message: "ID is required"
+      message: "Activity ID is required"
     })
   }
 
@@ -334,7 +331,7 @@ export async function PUT(request: NextRequest) {
         break;
 
       case "FOOD_LOG":
-        const foodLog = await prisma.foodLog.update({
+        await prisma.foodLog.update({
           where: {
             id: findActivity?.foodLogId as string
           },
@@ -359,6 +356,29 @@ export async function PUT(request: NextRequest) {
             caloriesBurned: caloriesBurned
           }
         })
+        break;
+      case "USER_HYDRATION":
+        await prisma.userHydration.update({
+          where: {
+            id: findActivity?.userHydrationId as string
+          },
+          data: {
+            waterIntake: body?.waterIntake as string
+          }
+        })
+        break;
+      // case "STEP_TRACKER":
+      //   await prisma.stepTracker.update({
+      //     where: {
+      //       id: findActivity?.stepTrackerId as string
+      //     },
+      //     data: {
+      //       stepCount: parseInt(String(body?.stepCount)),
+      //       distance: parseFloat(body?.distance),
+      //       caloriesBurned: parseFloat(body?.caloriesBurned)
+      //     }
+      //   })
+      //   break;
       default:
         return NextResponse.json({
           success: false,
@@ -371,10 +391,11 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      status: 200,
+      status: 201,
       message: "Sleep Tracker updated successfully"
     })
   } catch (err) {
+    console.log(err)
     if (err instanceof Error) {
       return NextResponse.json({
         success: false,

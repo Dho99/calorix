@@ -22,7 +22,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -87,7 +86,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchActivities();
-  }, []);
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   const [dialogProps, setDialogProps] = useState<DialogProps | null>(null);
 
@@ -147,7 +146,7 @@ export default function Page() {
                   content: (
                     <AddActivityContent
                       setDialogProps={setDialogProps}
-                      setActivities={setActivities}
+                      fetchActivities={fetchActivities}
                     />
                   ),
                 });
@@ -224,7 +223,7 @@ export default function Page() {
           <ActivityTable
             activitiesProps={activities}
             setDialogProps={setDialogProps}
-            setActivities={setActivities}
+            fetchActivities={fetchActivities}
           />
           <div className="w-full flex justify-end">
             <div className="flex flex-row border border-white/20 rounded-lg bg-white/5 p-2 gap-2">

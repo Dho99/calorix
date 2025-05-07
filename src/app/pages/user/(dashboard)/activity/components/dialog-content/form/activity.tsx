@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import type { UserActivites } from "@/app/utils/lib/types/user";
 
-export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (option: { name: string; calories_per_hour: number }) => void, data?: UserActivites, isEdit?: boolean}) {
+export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (option: { name: string; calories_per_hour: number }) => void, data?: UserActivites, isEdit: boolean}) {
   const [query, setQuery] = useState(data?.physicalActivityLog?.activityName || "");
   const [isOpen, setIsOpen] = useState(false);
   const [activityData, setActivityData] = useState<
@@ -21,9 +21,9 @@ export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (opti
   const inputRef = useRef<HTMLInputElement>(null);
 
   function handleSelect(option: { name: string; calories_per_hour: number }) {
-    onSelect && onSelect(option);
+    onSelect && onSelect(option); //eslint-disable-line @typescript-eslint/no-unused-expressions
     setQuery(option.name);
-
+    setIsOpen(false);
   }
 
   function initActivityData() {
@@ -75,7 +75,7 @@ export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (opti
               const currentMaxId =
                 prev?.reduce((maxId, item) => Math.max(maxId, item.id), 0) || 0;
               const newDataWithIds = res.data.map(
-                (item: any, index: number) => ({
+                (item: any, index: number) => ({ //eslint-disable-line @typescript-eslint/no-explicit-any
                   ...item,
                   id: currentMaxId + index + 1,
                 })

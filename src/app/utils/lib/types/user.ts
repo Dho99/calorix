@@ -25,10 +25,10 @@ export type UserActivites = BaseModel & {
   userId: string;
   title: string;
   createdAt: Date;
-  sleepTrackerId?: String;
-  userHydrationId?: String;
-  foodLogId?: String;
-  physicalActivityLogId?: String;
+  sleepTrackerId?: string;
+  userHydrationId?: string;
+  foodLogId?: string;
+  physicalActivityLogId?: string;
   category: ACTIVITY_TYPE;
 
   sleepTracker?: SleepTracker | null;
@@ -90,6 +90,9 @@ export type UserCharacteristics = BaseModel & {
   tdee?: string | null;
   bmr?: string | null;
   bodyFatPercentage?: string | null;
+
+  isDeleted?: boolean;
+  
 };
 
 export type PhysicalActivityLog = BaseModel & {

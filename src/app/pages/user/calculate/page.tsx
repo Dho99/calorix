@@ -81,7 +81,7 @@ export default function Page() {
         `/api/handler/characteristics/${data?.user?.id as string}`
       );
 
-      if (res.data.data && res.data.status === 200) {
+      if(res.data.data) {
         setAlert({
           success: true,
           type: "dialog",
@@ -107,7 +107,7 @@ export default function Page() {
     }));
   }
 
-  let steps: Step[] = stepsJson;
+  const steps: Step[] = stepsJson;
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 

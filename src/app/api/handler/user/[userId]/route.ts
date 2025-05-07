@@ -13,6 +13,18 @@ export async function GET(
     },
   });
 
+  const userCharacteristics = await prisma.userCharacteristics.findMany({
+    where: {
+      userId: user?.id,
+    },
+    omit: {
+      userId: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    }
+  });
+
   if (!user) {
     return NextResponse.json(
       {
@@ -30,6 +42,7 @@ export async function GET(
       success: true,
       message: "User found",
       user: user,
+      characteristics: userCharacteristics,
     },
     {
       status: 200,

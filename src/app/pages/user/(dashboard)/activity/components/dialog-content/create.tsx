@@ -13,24 +13,23 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { act, useState } from "react";
+import { useState } from "react";
 import SleepForm from "./form/sleep";
 import FoodForm from "./form/food";
 import HydrationForm from "./form/hydration";
 import ActivityForm from "./form/activity";
-import type { UserActivites } from "@/app/utils/lib/types/user";
 import { Input } from "@/components/ui/input";
 
 export default function AddActivityContent({
   setDialogProps,
-  setActivities,
+  fetchActivities,
 }: {
   setDialogProps: React.Dispatch<
     React.SetStateAction<{
       content?: React.ReactNode;
     } | null>
   >;
-  setActivities: React.Dispatch<React.SetStateAction<UserActivites[] | null>>;
+  fetchActivities: () => Promise<void>;
 }): React.ReactNode {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -77,56 +76,7 @@ export default function AddActivityContent({
         if (res.data.success) {
           console.log(res.data.data);
           setDialogProps(null);
-          setActivities((prev) => {
-            if (category === "SLEEP_TRACKER") {
-              return [
-                {
-                  ...res.data.data,
-                  sleepTracker: {
-                    duration: res.data.data.sleepTracker.duration,
-                  },
-                },
-                ...(prev || []),
-              ];
-            } else if (category === "FOOD_LOG") {
-              return [
-                {
-                  ...res.data.data,
-                  foodLog: {
-                    foodName: res.data.data.foodLog.foodName,
-                    calories: res.data.data.foodLog.calories,
-                    mealType: res.data.data.foodLog.mealType,
-                  },
-                },
-                ...(prev || []),
-              ];
-            } else if (category === "PHYSICAL_ACTIVITY") {
-              return [
-                {
-                  ...res.data.data,
-                  physicalActivity: {
-                    activityName: res.data.data.physicalActivity.activityName,
-                    calories_per_hour: res.data.data.physicalActivity.calories_per_hour,
-                    duration: res.data.data.physicalActivity.duration,
-                  },
-                },
-                ...(prev || []),
-              ];
-            } else if (category === "USER_HYDRATION") {
-              return [
-                {
-                  ...res.data.data,
-                  userHydration: {
-                    waterIntake: res.data.data.userHydration.waterIntake,
-                  },
-                },
-                ...(prev || []),
-              ];
-            }
-
-
-            return prev || []; // Ensure a valid return value
-          });
+          fetchActivities()
         } else {
           console.log("failed");
         }
@@ -194,13 +144,13 @@ export default function AddActivityContent({
           </div>
 
           {categoryInput === "SLEEP_TRACKER" ? (
-            <SleepForm data={null} />
+            <SleepForm isEdit={true}/>
           ) : categoryInput === "FOOD_LOG" ? (
-            <FoodForm data={null} />
+            <FoodForm isEdit={true}/>
           ) : categoryInput === "USER_HYDRATION" ? (
-            <HydrationForm />
+            <HydrationForm  isEdit={true}/>
           ) : categoryInput === "PHYSICAL_ACTIVITY" ? (
-            <ActivityForm onSelect={(activity) => setActivityInput(activity)} />
+            <ActivityForm onSelect={(activity) => setActivityInput(activity)}  isEdit={true}/>
           ) : (
             <></>
           )}

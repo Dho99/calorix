@@ -2,7 +2,7 @@
 import { useSidebar } from "@/components/ui/sidebar";
 import { SidebarHeader, SidebarContent } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { dropdownLinks, navigContent } from "./navbar";
+import { navigContent } from "./navbar";
 import {dashboardMenu} from "@/app/pages/user/(dashboard)/components/sidemenu";
 import type { Preference } from "@/app/pages/user/(dashboard)/components/sidemenu";
 

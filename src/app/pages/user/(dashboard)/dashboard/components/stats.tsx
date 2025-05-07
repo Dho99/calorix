@@ -1,4 +1,3 @@
-import type { DashboardComponentPageProps } from "../page";
 import Calories from "./statistics/calories";
 import Steps from "./statistics/steps";
 import Training from "./statistics/training";

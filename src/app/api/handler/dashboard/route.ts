@@ -1,8 +1,8 @@
 import { prisma } from "@/app/utils/lib/prisma/prisma";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse} from "next/server";
 import { auth } from "../auth";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
         },
       }),
       prisma.userCharacteristics.findFirst({
-        where: { userId },
+        where: { userId, isDeleted: false },
         omit: {
             userId: true
         }
@@ -129,12 +129,12 @@ export async function GET(request: NextRequest) {
 
     // Prepare response data
     const responseData = {
-      caloriesBurned: caloriesBurnedData._sum.caloriesBurned || 0,
+      caloriesBurned: caloriesBurnedData._sum.caloriesBurned && caloriesBurnedData._sum.caloriesBurned || 0,
       stepsGoal: stepsGoal?.stepNeeds || 0,
       stepsCount: stepsData._sum.stepsCount || 0,
       tdee: tdeeData?.tdee || 0,
       hydrationNeeds: sumHydration,
-      sleepTracker: (parseFloat(String(sleepTracker._sum.duration)) / 60) || 0,
+      sleepTracker: sleepTracker?._sum.duration && (parseFloat(String(sleepTracker._sum.duration)) / 60).toFixed(2) || 0,
       caloriesConsumed: foodLog._sum.calories || 0,
       goal: stepsGoal,
       userCharacteristics: userCharacteristics,
