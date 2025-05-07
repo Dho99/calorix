@@ -22,7 +22,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -87,7 +86,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchActivities();
-  }, []);
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   const [dialogProps, setDialogProps] = useState<DialogProps | null>(null);
 

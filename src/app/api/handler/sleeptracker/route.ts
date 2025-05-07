@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/app/utils/lib/prisma/prisma";
-import { auth } from "../auth";
+// import { NextRequest, NextResponse } from "next/server";
+// import { prisma } from "@/app/utils/lib/prisma/prisma";
+// import { auth } from "../auth";
 
 // export async function GET(request: NextRequest) {
 //   const { searchParams } = new URL(request.url);

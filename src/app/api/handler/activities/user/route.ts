@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
       category === "THIS_MONTH" ||
       category === "THIS_YEAR"
     ) {
-      let day = new Date();
+      const day = new Date();
       switch (category) {
         case "TODAY":
           day.setHours(0, 0, 0, 0);
@@ -263,7 +263,6 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const reqType = searchParams.get("type");
-  const session = await auth();
 
   if (reqType === "delete") {
     const id = searchParams.get("id");

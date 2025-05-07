@@ -1,5 +1,4 @@
 "use client";
-import type { UserGoal } from "@prisma/client";
 
 export type ActivitiesProps = {
   title?: string | number;

@@ -103,3 +103,79 @@ export async function POST(request: NextRequest) {
     }
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const characteristicsId = searchParams.get("characteristicsId");
+  const session = await auth();
+  try{
+
+    const findCharacteristics = await prisma.userCharacteristics.findUnique({
+      where: {
+        id: characteristicsId as string,
+        userId: session?.user?.id as string,
+      },
+    });
+    if (!findCharacteristics) {
+      return NextResponse.json({
+        status: 400,
+        success: false,
+        message: "Data tidak ditemukan",
+      });
+    }
+    await prisma.userCharacteristics.update({
+      where: {
+        id: characteristicsId as string,
+      },
+      data: {
+        isDeleted: true,
+      },
+    });
+
+    await prisma.$transaction([
+      prisma.userGoal.delete({
+        where: {
+          userId: session?.user?.id as string,
+        }
+      }),
+      prisma.foodLog.deleteMany({
+        where: {
+          userId: session?.user?.id as string,
+        }
+      }),
+      prisma.userHydration.deleteMany({
+        where: {
+          userId: session?.user?.id as string,
+        }
+      }),
+      prisma.physicalActivityLog.deleteMany({
+        where: {
+          userId: session?.user?.id as string,
+        }
+      }),
+      prisma.sleepTracker.deleteMany({
+        where: {
+          userId: session?.user?.id as string,
+        }
+      }),
+    ]);
+
+    return NextResponse.json({
+      status: 200,
+      success: true,
+      message: "Data berhasil dihapus",
+    });
+    
+  }catch(err){
+    if(err instanceof Error){
+      return NextResponse.json(
+        {
+          message: err.message,
+        },
+        {
+          status: 500,
+        }
+      );
+    }
+  }
+}

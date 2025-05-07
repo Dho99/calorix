@@ -15,16 +15,25 @@ import {
 } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import axios from "axios";
-import type { Register as User } from "@/app/utils/lib/types/user";
+import type {
+  Register as User,
+  UserCharacteristics,
+} from "@/app/utils/lib/types/user";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { scrollToTop } from "@/app/pages/layout";
-
+import Characteristics from "./characteristics";
 
 export default function Page() {
   const session = useSession();
 
-  const [data, setUserData] = useState<User | null>(null);
-  const [openAlert, setOpenAlert] = useState<{success: boolean, message: string} | null>(null);
+  const [data, setUserData] = useState<{
+    user?: User;
+    characteristics?: UserCharacteristics[];
+  } | null>(null);
+  const [openAlert, setOpenAlert] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
   function handleAlertClose() {
@@ -35,10 +44,13 @@ export default function Page() {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `/api/handler/user/${session?.data?.user?.email}`,
+          `/api/handler/user/${session?.data?.user?.email}`
         );
         if (res.status === 200) {
-          setUserData(res.data.user);
+          setUserData({
+            user: res.data.user,
+            characteristics: res.data.characteristics,
+          });
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -65,7 +77,7 @@ export default function Page() {
     const validatePass = formData.get("validatePass");
 
     if (payload.password !== validatePass) {
-      setOpenAlert({success: false, message: "Password tidak sama"});
+      setOpenAlert({ success: false, message: "Password tidak sama" });
       return;
     }
 
@@ -74,21 +86,19 @@ export default function Page() {
       .then((res) => {
         if (res.status === 200) {
           if (res.data.success) {
-            setOpenAlert({success: true, message: res.data.message});
+            setOpenAlert({ success: true, message: res.data.message });
             setEdit(false);
-          }else{
-            setOpenAlert({success: false, message: res.data.message});
+          } else {
+            setOpenAlert({ success: false, message: res.data.message });
           }
         }
       })
       .catch((err) => {
         if (err instanceof Error) {
-          setOpenAlert({success: false, message: err.message});
+          setOpenAlert({ success: false, message: err.message });
         }
       });
   }
-
-  
 
   return (
     <Dialog>
@@ -117,133 +127,146 @@ export default function Page() {
           </DialogClose>
         </div>
       </DialogContent>
-      <div className="w-full h-full px-5 flex flex-col gap-8" ref={pageRef}>
-        <div className="flex flex-row gap-5 w-full h-auto items-center">
-          <div className="w-24 h-24 bg-[#9EC8B9]/20 p-2 rounded-full flex justify-center items-center p-4">
-            <UserRound className="w-full h-full text-white" />
-          </div>
-          <div className="flex flex-col gap-3">
-            <h1 className="text-xl font-bold text-white">{data?.name}</h1>
-            {isEdit ? (
-              <DialogTrigger asChild>
+      <div className="max-w-3xl flex flex-col gap-3">
+        <div
+          className="w-full h-auto px-15 pb-15 pt-10 flex flex-col gap-8 border bg-white/2 rounded-lg"
+          ref={pageRef}
+        >
+          <div className="flex flex-row gap-5 w-full h-auto items-center">
+            <div className="w-24 h-24 bg-[#9EC8B9]/20 p-2 rounded-full flex justify-center items-center">
+              <UserRound className="w-full h-full text-white" />
+            </div>
+            <div className="flex flex-col gap-3">
+              <h1 className="text-xl font-bold text-white">
+                {data?.user?.name}
+              </h1>
+              {isEdit ? (
+                <DialogTrigger asChild>
+                  <button
+                    className="py-1 w-fit px-4 border border-[#9EC8B9] rounded-lg text-[#9EC8B9] hover:cursor-pointer hover:bg-[#9EC8B9] hover:text-white hover:font-bold hover:shadow-lg transition-all transition-duration-400"
+                    type="button"
+                  >
+                    Batal Edit Profile
+                  </button>
+                </DialogTrigger>
+              ) : (
                 <button
                   className="py-1 w-fit px-4 border border-[#9EC8B9] rounded-lg text-[#9EC8B9] hover:cursor-pointer hover:bg-[#9EC8B9] hover:text-white hover:font-bold hover:shadow-lg transition-all transition-duration-400"
                   type="button"
+                  onClick={() => {
+                    setEdit(true);
+                  }}
                 >
-                  Batal Edit Profile
+                  Edit Profile
                 </button>
-              </DialogTrigger>
-            ) : (
-              <button
-                className="py-1 w-fit px-4 border border-[#9EC8B9] rounded-lg text-[#9EC8B9] hover:cursor-pointer hover:bg-[#9EC8B9] hover:text-white hover:font-bold hover:shadow-lg transition-all transition-duration-400"
-                type="button"
-                onClick={() => {
-                  setEdit(true);
-                }}
-              >
-                Edit Profile
-              </button>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-        {
-          openAlert && (
-            <Alert className={`lg:max-w-3/4 w-full ${openAlert?.success ? 'bg-green-500' : 'bg-red-500/50'} text-white border-0 shadow-lg`} onClick={handleAlertClose}>
-              <AlertTitle>{openAlert?.success ? 'Success' : 'Error'} Alert</AlertTitle>
+          {openAlert && (
+            <Alert
+              className={`lg:max-w-3/4 w-full ${
+                openAlert?.success ? "bg-green-500" : "bg-red-500/50"
+              } text-white border-0 shadow-lg`}
+              onClick={handleAlertClose}
+            >
+              <AlertTitle>
+                {openAlert?.success ? "Success" : "Error"} Alert
+              </AlertTitle>
               <AlertDescription className="text-white text-lg font-bold">
-               {openAlert.message}
+                {openAlert.message}
               </AlertDescription>
             </Alert>
-          )
-        }
-        <form
-          onSubmit={submitFormInput}
-          className="flex flex-col gap-y-5 w-full text-white lg:items-start  items-center"
+          )}
+          <form
+            onSubmit={submitFormInput}
+            className="flex flex-col gap-y-5 w-full text-white lg:items-start items-center"
           >
-          <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
-              readOnly
-              defaultValue={data?.email as string}
-              className={`${"bg-[#D9D9D9] text-white"} ${
-                isEdit ? "" : `hover:cursor-not-allowed`
-              }`}
-            />{" "}
-            {/* disabled will turn to false if isEdit is true*/}
-          </div>
-          <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
-            <Label htmlFor="email">Username</Label>
-            <Input
-              type="text"
-              id="username"
-              placeholder="Username"
-              name="username"
-              readOnly={!isEdit}
-              defaultValue={data?.username as string}
-              className={`${"bg-[#D9D9D9] text-white"} ${
-                isEdit ? "" : `hover:cursor-not-allowed`
-              }`}
-            />
-          </div>
-          <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
-            <Label htmlFor="name">Nama Lengkap</Label>
-            <Input
-              type="text"
-              id="name"
-              placeholder="Name"
-              name="name"
-              readOnly={!isEdit}
-              defaultValue={data?.name as string}
-              className={`${"bg-[#D9D9D9] text-white"} ${
-                isEdit ? "" : `hover:cursor-not-allowed`
-              }`}
-            />
-          </div>
-          {isEdit && (
-            <>
-              <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="New Password"
-                  className="bg-[#D9D9D9] text-white"
-                  required
-                />
-              </div>
-              <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
-                <Label htmlFor="validatePass">Validate Password</Label>
-                <Input
-                  type="password"
-                  id="validatePass"
-                  name="validatePass"
-                  placeholder="Validate New Password"
-                  className="bg-[#D9D9D9] text-white"
-                  required
-                />
-              </div>
-            </>
-          )}
-          {isEdit && (
-            <div className="mt-4 mb-10 lg:max-w-3/4 w-full flex">
-              <button
-                type="submit"
-                className="w-full py-2 rounded-lg bg-[#1B4242] text-white drop-shadow-xl transition-all transition-duration-400 hover:bg-[#9EC8B9] hover:text-black hover:font-bold"
-                value="Sign In"
-                onClick={() => {
-                  scrollToTop(pageRef);
-                }}
-              >
-                Perbarui Profile
-              </button>
+            <div className="grid w-full w-full items-center gap-3">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email"
+                readOnly
+                defaultValue={data?.user?.email as string}
+                className={`${"bg-[#D9D9D9] text-white"} ${
+                  isEdit ? "" : `hover:cursor-not-allowed`
+                }`}
+              />{" "}
+              {/* disabled will turn to false if isEdit is true*/}
             </div>
-          )}
-        </form>
+            <div className="grid w-full w-full items-center gap-3">
+              <Label htmlFor="email">Username</Label>
+              <Input
+                type="text"
+                id="username"
+                placeholder="Username"
+                name="username"
+                readOnly={!isEdit}
+                defaultValue={data?.user?.username as string}
+                className={`${"bg-[#D9D9D9] text-white"} ${
+                  isEdit ? "" : `hover:cursor-not-allowed`
+                }`}
+              />
+            </div>
+            <div className="grid w-full w-full items-center gap-3">
+              <Label htmlFor="name">Nama Lengkap</Label>
+              <Input
+                type="text"
+                id="name"
+                placeholder="Name"
+                name="name"
+                readOnly={!isEdit}
+                defaultValue={data?.user?.name as string}
+                className={`${"bg-[#D9D9D9] text-white"} ${
+                  isEdit ? "" : `hover:cursor-not-allowed`
+                }`}
+              />
+            </div>
+            {isEdit && (
+              <>
+                <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="New Password"
+                    className="bg-[#D9D9D9] text-white"
+                    required
+                  />
+                </div>
+                <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
+                  <Label htmlFor="validatePass">Validate Password</Label>
+                  <Input
+                    type="password"
+                    id="validatePass"
+                    name="validatePass"
+                    placeholder="Validate New Password"
+                    className="bg-[#D9D9D9] text-white"
+                    required
+                  />
+                </div>
+              </>
+            )}
+            {isEdit && (
+              <div className="mt-4 mb-10 lg:max-w-3/4 w-full flex">
+                <button
+                  type="submit"
+                  className="w-full py-2 rounded-lg bg-[#1B4242] text-white drop-shadow-xl transition-all transition-duration-400 hover:bg-[#9EC8B9] hover:text-black hover:font-bold"
+                  value="Sign In"
+                  onClick={() => {
+                    scrollToTop(pageRef);
+                  }}
+                >
+                  Perbarui Profile
+                </button>
+              </div>
+            )}
+          </form>
+        </div>
+        <Characteristics data={data?.characteristics}/>
       </div>
     </Dialog>
   );

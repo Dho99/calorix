@@ -68,7 +68,7 @@ const calculateTDEE = async (bmr: number, activityLevel: number) => {
 
 const calculateDeficitCalories = async (tdee: number, currentWeight: number, targetWeight: number, targetTime: number) => {
 
-  let weightDifference = Math.abs(currentWeight - targetWeight);
+  const weightDifference = Math.abs(currentWeight - targetWeight);
   
   type Target = {
     goal: string;
@@ -78,7 +78,7 @@ const calculateDeficitCalories = async (tdee: number, currentWeight: number, tar
     // maxDailyCalories: string | null;
   }
 
-  let target: Target = {
+  const target: Target = {
     goal: currentWeight > targetWeight ? "deficit" : "surplus",
     deficitPerDay: null,
     daysLeft: null,

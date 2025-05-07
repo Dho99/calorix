@@ -10,8 +10,7 @@ export async function GET(
   const { userId } = await params;
   const session = await auth();
 
-
-  if(session?.user?.id !== userId) {
+  if (session?.user?.id !== userId) {
     return NextResponse.json({
       status: 400,
       success: false,
@@ -23,13 +22,14 @@ export async function GET(
     const characteristics = await prisma.userCharacteristics.findFirst({
       where: {
         userId: userId as string,
+        isDeleted: false,
       },
       select: {
         currentWeight: true,
         height: true,
         bmi: true,
         bodyFatPercentage: true,
-      }
+      },
     });
 
     const goal = await prisma.userGoal.findFirst({
@@ -38,15 +38,14 @@ export async function GET(
       },
       select: {
         targetWeight: true,
-      }
+      },
     });
 
     const data = {
       ...characteristics,
-      ...goal
-    }
-    
-    
+      ...goal,
+    };
+
     if (!characteristics) {
       return NextResponse.json({
         status: 404,
@@ -55,75 +54,68 @@ export async function GET(
       });
     }
 
-
     return NextResponse.json({
       status: 200,
       success: true,
       data: data,
     });
-
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch characteristics" },
-      { status: 500 }
-    );
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
   }
 }
 
 export async function PUT(
-    request: NextRequest,
-    { params }: { params: Promise<{ userId: string }> }
-  ) {
-    const body = await request.json();
-    const session = await auth();
-    const { userId } = await params;
-    
-    if(session?.user?.id !== userId) {
+  request: NextRequest,
+  { params }: { params: Promise<{ userId: string }> }
+) {
+  const body = await request.json();
+  const session = await auth();
+  const { userId } = await params;
+
+  if (session?.user?.id !== userId) {
+    return NextResponse.json({
+      status: 400,
+      success: false,
+      message: "You cannot access this data",
+    });
+  }
+
+  try {
+    const { success, error } = characteristicsSchema.safeParse(body);
+
+    if (!success && error) {
       return NextResponse.json({
         status: 400,
         success: false,
-        message: "You cannot access this data",
+        message: error.issues.map((issue) => issue.message).join(", "),
       });
     }
-  
-    try {
-      const { success, error } = characteristicsSchema.safeParse(body);
 
-      if (!success && error) {
-          return NextResponse.json(
-            {
-              status: 400,
-              success: false,
-              message: error.issues.map((issue) => issue.message).join(", "),
-            },
-          );
-      }
-  
-      await prisma.userCharacteristics.updateMany({
-        where: {
-          userId: session?.user?.id as string,
-        },
-        data: body
-      });
-  
+    await prisma.userCharacteristics.updateMany({
+      where: {
+        userId: session?.user?.id as string,
+      },
+      data: body,
+    });
+
+    return NextResponse.json({
+      status: 200,
+      success: true,
+      message: "Data tersimpan dengan sukses",
+    });
+  } catch (err) {
+    console.log(err);
+    if (err instanceof Error) {
       return NextResponse.json(
         {
-          status: 200,
-          success: true,
-          message: "Data tersimpan dengan sukses",
+          message: err.message,
+        },
+        {
+          status: 500,
         }
       );
-    } catch (err) {
-      console.log(err);
-      if (err instanceof Error) {
-        return NextResponse.json(
-          {
-            message: err.message,
-          },
-          {
-            status: 500,
-          }
-        );
-      }
     }
   }
+}

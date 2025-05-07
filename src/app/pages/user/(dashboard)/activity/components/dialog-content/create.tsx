@@ -13,12 +13,11 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { act, useState } from "react";
+import { useState } from "react";
 import SleepForm from "./form/sleep";
 import FoodForm from "./form/food";
 import HydrationForm from "./form/hydration";
 import ActivityForm from "./form/activity";
-import type { UserActivites } from "@/app/utils/lib/types/user";
 import { Input } from "@/components/ui/input";
 
 export default function AddActivityContent({

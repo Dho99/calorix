@@ -20,12 +20,12 @@ CREATE TABLE `Account` (
     `type` VARCHAR(191) NOT NULL,
     `provider` VARCHAR(191) NOT NULL,
     `providerAccountId` VARCHAR(191) NOT NULL,
-    `refresh_token` VARCHAR(191) NULL,
-    `access_token` VARCHAR(191) NULL,
+    `refresh_token` TEXT NULL,
+    `access_token` TEXT NULL,
     `expires_at` INTEGER NULL,
     `token_type` VARCHAR(191) NULL,
     `scope` VARCHAR(191) NULL,
-    `id_token` VARCHAR(191) NULL,
+    `id_token` TEXT NULL,
     `session_state` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE `Authenticator` (
     `credentialID` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `providerAccountId` VARCHAR(191) NOT NULL,
-    `credentialPublicKey` VARCHAR(191) NOT NULL,
+    `credentialPublicKey` TEXT NOT NULL,
     `counter` INTEGER NOT NULL,
     `credentialDeviceType` VARCHAR(191) NOT NULL,
     `credentialBackedUp` BOOLEAN NOT NULL,
@@ -89,7 +89,6 @@ CREATE TABLE `UserCharacteristics` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `UserCharacteristics_userId_key`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -169,6 +168,7 @@ CREATE TABLE `UserActivites` (
     `effectToBody` VARCHAR(191) NULL,
     `sleepTrackerId` VARCHAR(191) NULL,
     `userHydrationId` VARCHAR(191) NULL,
+    `stepTrackerId` VARCHAR(191) NULL,
     `foodLogId` VARCHAR(191) NULL,
     `physicalActivityLogId` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -176,8 +176,10 @@ CREATE TABLE `UserActivites` (
 
     UNIQUE INDEX `UserActivites_sleepTrackerId_key`(`sleepTrackerId`),
     UNIQUE INDEX `UserActivites_userHydrationId_key`(`userHydrationId`),
+    UNIQUE INDEX `UserActivites_stepTrackerId_key`(`stepTrackerId`),
     UNIQUE INDEX `UserActivites_foodLogId_key`(`foodLogId`),
     UNIQUE INDEX `UserActivites_physicalActivityLogId_key`(`physicalActivityLogId`),
+    FULLTEXT INDEX `UserActivites_title_idx`(`title`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -185,7 +187,7 @@ CREATE TABLE `UserActivites` (
 CREATE TABLE `Chatbot` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
-    `payload` VARCHAR(191) NULL,
+    `payload` TEXT NULL,
     `sender` ENUM('USER', 'BOT') NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,

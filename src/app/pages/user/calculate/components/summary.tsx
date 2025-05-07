@@ -74,7 +74,7 @@ export default function SummaryCalculate({
                 </div>
               ) : Array.isArray(value) ? (
                 <div className={`grid lg:grid-cols-2 grid-cols-1 gap-2 w-full h-full`}>
-                  {value.map((opt: any, i: number) => (
+                  {value.map((opt: any, i: number) => ( //eslint-disable-line
                     <div
                       key={i}
                       className="transition-all w-full h-full p-4 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 bg-white/70"
