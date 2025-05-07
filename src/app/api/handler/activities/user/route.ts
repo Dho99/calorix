@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/utils/lib/prisma/prisma";
 import { auth } from "../../auth";
-import type { ACTIVITY_TYPE } from "@/app/utils/lib/types/user";
+import type { ACTIVITY_TYPE, ActivityType } from "@/app/utils/lib/types/user";
+
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -174,10 +175,11 @@ export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const reqType = searchParams.get("type");
   const session = await auth();
+  const body = await request.json();
+  const data = JSON.parse(body.data);
+
 
   if (reqType === "create") {
-    const body = await request.json();
-    const data = JSON.parse(body.data);
     const category = searchParams.get("category");
 
     let childData;
@@ -209,18 +211,35 @@ export async function POST(request: NextRequest) {
         foodLogId: foodLog.id,
       };
     } else if (category === "PHYSICAL_ACTIVITY") {
-      const caloriesBurned =
-        parseFloat(String(data?.calories_per_hour / 60)) *
-        parseInt(String(data?.duration));
+
+      let pyhsicalActivityData = {
+        caloriesBurned: 0,
+        duration: 0
+      }
+    
+      data?.activityData?.map(async(item: ActivityType, index: number) => {
+        const duration = parseInt(String(item?.duration));
+        const caloriesPerHour = parseFloat(String(item?.calories_per_hour as number / 60));
+    
+        pyhsicalActivityData.caloriesBurned += caloriesPerHour * duration;
+        pyhsicalActivityData.duration += duration;
+      })
 
       const physicalActivityLog = await prisma.physicalActivityLog.create({
         data: {
           userId: session?.user?.id as string,
-          duration: parseInt(String(data?.duration)),
-          activityName: data?.activityName as string,
-          metValue: parseFloat(String(data?.calories_per_hour / 60)),
-          caloriesBurned: caloriesBurned,
+          duration: pyhsicalActivityData.duration,
+          caloriesBurned: pyhsicalActivityData.caloriesBurned,
         },
+      });
+
+      await prisma.activityType.createMany({
+        data: data?.activityData?.map((item: ActivityType) => ({
+          name: item?.name,
+          metValue: parseFloat(String(item?.calories_per_hour / 60)),
+          duration: parseInt(String(item?.duration)),
+          physicalActivityId: physicalActivityLog.id,
+        })),
       });
 
       childData = {
@@ -343,20 +362,20 @@ export async function PUT(request: NextRequest) {
         });
         break;
         
-      case "PHYSICAL_ACTIVITY":
-        const caloriesBurned = parseFloat(String(body?.calories_per_hour / 60)) * parseInt(String(body?.duration));
-        await prisma.physicalActivityLog.update({
-          where: {
-            id: findActivity?.physicalActivityLogId as string
-          },
-          data: {
-            duration: parseInt(String(body?.duration)),
-            activityName: body?.activityName as string,
-            metValue: parseFloat(String(body?.calories_per_hour / 60)),
-            caloriesBurned: caloriesBurned
-          }
-        })
-        break;
+      // case "PHYSICAL_ACTIVITY":
+      //   const caloriesBurned = parseFloat(String(body?.calories_per_hour / 60)) * parseInt(String(body?.duration));
+      //   await prisma.physicalActivityLog.update({
+      //     where: {
+      //       id: findActivity?.physicalActivityLogId as string
+      //     },
+      //     data: {
+      //       duration: parseInt(String(body?.duration)),
+      //       activityName: body?.activityName as string,
+      //       metValue: parseFloat(String(body?.calories_per_hour / 60)),
+      //       caloriesBurned: caloriesBurned
+      //     }
+      //   })
+      //   break;
       case "USER_HYDRATION":
         await prisma.userHydration.update({
           where: {

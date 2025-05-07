@@ -62,7 +62,7 @@ export default function Characteristics({
       <div className="w-full flex flex-col gap-3">
         <div className="w-full h-auto flex flex-col gap-3">
           <div className="flex flex-row w-full justify-between">
-            <h1 className="text-xl font-bold text-white">Karakteristik Anda</h1>
+            <h1 className="text-2xl font-bold text-white">Data Karakteristik tubuh</h1>
             <Link href={"/pages/user/calculate"}>
               {data && data[0]?.isDeleted ? (
                 <Button

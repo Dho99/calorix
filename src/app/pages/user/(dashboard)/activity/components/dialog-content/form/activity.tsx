@@ -5,25 +5,94 @@ import React, { useState, useRef, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import type { UserActivites } from "@/app/utils/lib/types/user";
+import { Button } from "@/components/ui/button";
 
-export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (option: { name: string; calories_per_hour: number }) => void, data?: UserActivites, isEdit: boolean}) {
-  const [query, setQuery] = useState(data?.physicalActivityLog?.activityName || "");
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+export default function ActivityForm({
+  setActivityInput,
+  data,
+  activityInput,
+  isEdit,
+}: {
+  setActivityInput: React.Dispatch<
+    React.SetStateAction<
+      { name: string; duration: number; calories_per_hour: number }[]
+    >
+  >;
+  data?: UserActivites;
+  activityInput?: { name: string; duration: number; calories_per_hour: number }[];
+  isEdit: boolean;
+}) {
+  const [query, setQuery] = useState(
+    data?.physicalActivityLog?.activityName || ""
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [activityData, setActivityData] = useState<
-    { id: number; name: string; calories_per_hour: number }[] | null
-  >(null);
+    { id: number; name: string; calories_per_hour: number }[]
+  >([]);
+  const [inputDurationOpen, setInputDurationOpen] = useState<{
+    open: boolean;
+    inputId: string;
+  }>({
+    open: false,
+    inputId: "",
+  });
 
   useEffect(() => {
     initActivityData();
     setIsOpen(false);
   }, []);
 
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   function handleSelect(option: { name: string; calories_per_hour: number }) {
-    onSelect && onSelect(option); //eslint-disable-line @typescript-eslint/no-unused-expressions
     setQuery(option.name);
     setIsOpen(false);
+    setInputDurationOpen({
+      open: true,
+      inputId: `input${activityInput?.length}${option.name}`,
+    });
+  }
+
+  function handleInputDurationSubmit() {
+    const input = document.getElementById(
+      inputDurationOpen.inputId
+    ) as HTMLInputElement;
+    if (input) {
+      const duration = parseInt(input.value);
+      if (isNaN(duration)) {
+        alert("Please enter a valid number");
+        return;
+      }
+      setActivityInput((prev) => {
+        const isExist = prev.some((item) => item.name === query);
+        if (isExist) {
+          return prev.map((item) =>
+            item.name === query
+              ? { ...item, duration: duration }
+              : item
+          );
+        }
+        const newActivity = {
+          name: query,
+          duration: duration,
+          calories_per_hour:
+            activityData?.find((item) => item.name === query)
+              ?.calories_per_hour || 0,
+        };
+        setActivityInput?.([newActivity]);
+        return [...prev, newActivity];
+      });
+
+    }
   }
 
   function initActivityData() {
@@ -44,7 +113,7 @@ export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (opti
   let debounceTimeout: NodeJS.Timeout | null = null;
 
   function fetchNewActivities(query: string) {
-    if(query === "") return initActivityData();
+    if (query === "") return initActivityData();
 
     if (debounceTimeout) {
       clearTimeout(debounceTimeout);
@@ -75,7 +144,7 @@ export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (opti
               const currentMaxId =
                 prev?.reduce((maxId, item) => Math.max(maxId, item.id), 0) || 0;
               const newDataWithIds = res.data.map(
-                (item: any, index: number) => ({ //eslint-disable-line @typescript-eslint/no-explicit-any
+                (item: any, index: number) => ({
                   ...item,
                   id: currentMaxId + index + 1,
                 })
@@ -83,12 +152,12 @@ export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (opti
               return [...newDataWithIds];
             });
           } else {
-            setActivityData(null);
+            setActivityData([]);
           }
         })
         .catch((err) => {
           console.log(err);
-          setActivityData(null);
+          setActivityData([]);
         });
     }, 1000); // 300ms debounce delay
   }
@@ -132,9 +201,64 @@ export default function ActivityForm({onSelect, data, isEdit}: {onSelect?: (opti
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-3">
-      <Label className="text-base">Masukkan Durasi Aktivitas Anda (Menit)</Label>
-      <Input className="w-full" name="duration" readOnly={!isEdit} placeholder="Masukkan Durasi (menit)" type="number" defaultValue={data?.physicalActivityLog?.duration}></Input>
+      {inputDurationOpen && (
+        <div className="flex flex-col gap-3">
+          <Label className="text-base">
+            Masukkan Durasi Aktivitas Anda (Menit)
+          </Label>
+          <Input
+            className="w-full"
+            name="duration"
+            readOnly={!isEdit}
+            id={`${inputDurationOpen.inputId}`}
+            placeholder="Masukkan Durasi (menit)"
+            type="number"
+            defaultValue={data?.physicalActivityLog?.duration}
+          ></Input>
+        </div>
+      )}
+      {inputDurationOpen.open && (
+        <Button
+          variant={"secondary"}
+          type="button"
+          onClick={handleInputDurationSubmit}
+        >
+          Tambah Jenis Aktivitas
+        </Button>
+      )}
+
+      <div className="border p-2 border-white rounded-lg">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableCell>Nama Aktivitas</TableCell>
+              <TableCell>Durasi</TableCell>
+              {data ? <TableCell>MET / Jam</TableCell> : null}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data ? (
+              <TableRow>
+                <TableCell>
+                  {data?.physicalActivityLog?.activityName || "Tidak ada"}
+                </TableCell>
+                <TableCell>
+                  {data?.physicalActivityLog?.duration || "Tidak ada"} menit
+                </TableCell>
+                <TableCell>
+                  {data?.physicalActivityLog?.metValue || "Tidak ada"} KKal/jam
+                </TableCell>
+              </TableRow>
+            ) : (
+              activityInput?.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.duration} Menit</TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

@@ -113,7 +113,7 @@ export default function Page() {
     {
       title: "Hydration",
       value: pageData?.hydrationNeeds,
-      target: pageData?.goal.hydrationNeeds,
+      target: parseFloat(String(pageData?.goal.hydrationNeeds)).toFixed(2),
       parameter: "Liter",
       unit: "ml"
     },

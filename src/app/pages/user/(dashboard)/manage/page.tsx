@@ -127,7 +127,7 @@ export default function Page() {
           </DialogClose>
         </div>
       </DialogContent>
-      <div className="max-w-3xl flex flex-col gap-3">
+      <div className="w-full flex flex-col gap-3">
         <div
           className="w-full h-auto px-15 pb-15 pt-10 flex flex-col gap-8 border bg-white/2 rounded-lg"
           ref={pageRef}
