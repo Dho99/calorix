@@ -3,7 +3,6 @@ import { prisma } from "@/app/utils/lib/prisma/prisma";
 import { auth } from "../../auth";
 import type { ACTIVITY_TYPE, ActivityType } from "@/app/utils/lib/types/user";
 
-
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const reqType = searchParams.get("type");
@@ -34,7 +33,11 @@ export async function GET(request: NextRequest) {
         foodLog: true,
         userHydration: true,
         sleepTracker: true,
-        physicalActivityLog: true,
+        physicalActivityLog: {
+          include: {
+            activityType: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
@@ -159,7 +162,6 @@ export async function GET(request: NextRequest) {
         });
         total = res?.length || 0;
       }
-
     }
   }
 
@@ -177,7 +179,6 @@ export async function POST(request: NextRequest) {
   const session = await auth();
   const body = await request.json();
   const data = JSON.parse(body.data);
-
 
   if (reqType === "create") {
     const category = searchParams.get("category");
@@ -211,19 +212,20 @@ export async function POST(request: NextRequest) {
         foodLogId: foodLog.id,
       };
     } else if (category === "PHYSICAL_ACTIVITY") {
-
       let pyhsicalActivityData = {
         caloriesBurned: 0,
-        duration: 0
-      }
-    
-      data?.activityData?.map(async(item: ActivityType, index: number) => {
+        duration: 0,
+      };
+
+      data?.activityData?.map(async (item: ActivityType, index: number) => {
         const duration = parseInt(String(item?.duration));
-        const caloriesPerHour = parseFloat(String(item?.calories_per_hour as number / 60));
-    
+        const caloriesPerHour = parseFloat(
+          String((item?.calories_per_hour as number) / 60)
+        );
+
         pyhsicalActivityData.caloriesBurned += caloriesPerHour * duration;
         pyhsicalActivityData.duration += duration;
-      })
+      });
 
       const physicalActivityLog = await prisma.physicalActivityLog.create({
         data: {
@@ -296,12 +298,26 @@ export async function DELETE(request: NextRequest) {
       },
     });
 
+    if (res?.category === "PHYSICAL_ACTIVITY" && res.physicalActivityLogId) {
+      await prisma.$transaction([
+        prisma.activityType.deleteMany({
+          where: {
+            physicalActivityId: res.physicalActivityLogId,
+          },
+        }),
+        prisma.physicalActivityLog.delete({
+          where: {
+            id: res.physicalActivityLogId,
+          },
+        }),
+      ]);
+    }
+
     return NextResponse.json({ success: true, data: res }, { status: 200 });
   }
 
   return NextResponse.json({ success: false }, { status: 400 });
 }
-
 
 export async function PUT(request: NextRequest) {
   const session = await auth();
@@ -314,23 +330,23 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({
       success: false,
       status: 400,
-      message: "Activity ID is required"
-    })
+      message: "Activity ID is required",
+    });
   }
 
   try {
     const findActivity = await prisma.userActivites.findFirst({
       where: {
         id: activityId as string,
-        userId: session?.user?.id as string
-      }
-    })
+        userId: session?.user?.id as string,
+      },
+    });
     if (!findActivity) {
       return NextResponse.json({
         success: false,
         status: 404,
-        message: "Activity not found"
-      })
+        message: "Activity not found",
+      });
     }
 
     // let res;
@@ -341,27 +357,27 @@ export async function PUT(request: NextRequest) {
 
         await prisma.sleepTracker.update({
           where: {
-            id: findActivity?.sleepTrackerId as string
+            id: findActivity?.sleepTrackerId as string,
           },
           data: {
-            duration: duration
-          }
-        })
+            duration: duration,
+          },
+        });
         break;
 
       case "FOOD_LOG":
         await prisma.foodLog.update({
           where: {
-            id: findActivity?.foodLogId as string
+            id: findActivity?.foodLogId as string,
           },
           data: {
             foodName: body?.foodName,
             calories: parseFloat(body?.calories),
-            mealType: body?.mealType
-          }
+            mealType: body?.mealType,
+          },
         });
         break;
-        
+
       // case "PHYSICAL_ACTIVITY":
       //   const caloriesBurned = parseFloat(String(body?.calories_per_hour / 60)) * parseInt(String(body?.duration));
       //   await prisma.physicalActivityLog.update({
@@ -379,12 +395,12 @@ export async function PUT(request: NextRequest) {
       case "USER_HYDRATION":
         await prisma.userHydration.update({
           where: {
-            id: findActivity?.userHydrationId as string
+            id: findActivity?.userHydrationId as string,
           },
           data: {
-            waterIntake: body?.waterIntake as string
-          }
-        })
+            waterIntake: body?.waterIntake as string,
+          },
+        });
         break;
       // case "STEP_TRACKER":
       //   await prisma.stepTracker.update({
@@ -402,26 +418,23 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({
           success: false,
           status: 400,
-          message: "Invalid category"
-        })
+          message: "Invalid category",
+        });
     }
-
-
 
     return NextResponse.json({
       success: true,
       status: 201,
-      message: "Sleep Tracker updated successfully"
-    })
+      message: "Sleep Tracker updated successfully",
+    });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     if (err instanceof Error) {
       return NextResponse.json({
         success: false,
         status: 500,
-        message: err.message
-      })
+        message: err.message,
+      });
     }
   }
-
 }

@@ -100,7 +100,7 @@ export default function Page() {
   const activitiesData: ActivitiesProps[] = [
     {
       title: "Calories Burned",
-      value: pageData?.caloriesBurned,
+      value: parseFloat(String(pageData?.caloriesBurned)).toFixed(2),
       target: parseFloat(String(pageData?.goal.deficitPerDay)).toFixed(2),
       parameter: "Kkal",
     },

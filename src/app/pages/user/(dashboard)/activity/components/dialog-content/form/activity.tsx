@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import type { UserActivites } from "@/app/utils/lib/types/user";
 import { Button } from "@/components/ui/button";
-
 import {
   Table,
   TableBody,
@@ -21,13 +20,17 @@ export default function ActivityForm({
   activityInput,
   isEdit,
 }: {
-  setActivityInput: React.Dispatch<
+  setActivityInput?: React.Dispatch<
     React.SetStateAction<
       { name: string; duration: number; calories_per_hour: number }[]
     >
   >;
   data?: UserActivites;
-  activityInput?: { name: string; duration: number; calories_per_hour: number }[];
+  activityInput?: {
+    name: string;
+    duration: number;
+    calories_per_hour: number;
+  }[];
   isEdit: boolean;
 }) {
   const [query, setQuery] = useState(
@@ -50,7 +53,6 @@ export default function ActivityForm({
     setIsOpen(false);
   }, []);
 
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   function handleSelect(option: { name: string; calories_per_hour: number }) {
@@ -72,13 +74,11 @@ export default function ActivityForm({
         alert("Please enter a valid number");
         return;
       }
-      setActivityInput((prev) => {
+      setActivityInput && setActivityInput((prev) => {
         const isExist = prev.some((item) => item.name === query);
         if (isExist) {
           return prev.map((item) =>
-            item.name === query
-              ? { ...item, duration: duration }
-              : item
+            item.name === query ? { ...item, duration: duration } : item
           );
         }
         const newActivity = {
@@ -91,7 +91,6 @@ export default function ActivityForm({
         setActivityInput?.([newActivity]);
         return [...prev, newActivity];
       });
-
     }
   }
 
@@ -164,67 +163,71 @@ export default function ActivityForm({
 
   return (
     <div className="relative w-full max-w-md flex flex-col gap-5">
-      <div className="flex flex-col gap-3">
-        <Label className="text-base">Masukkan Jenis Aktivitas Anda</Label>
-        <Input
-          type="text"
-          value={query}
-          placeholder={"Search activity..."}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setIsOpen(true);
-            fetchNewActivities(e.target.value);
-          }}
-          readOnly={!isEdit}
-          // onFocus={() => !defaultValue && setIsOpen(true)}
-          ref={inputRef}
-        />
+      {!data && (
+        <>
+          <div className="flex flex-col gap-3">
+            <Label className="text-base">Masukkan Jenis Aktivitas Anda</Label>
+            <Input
+              type="text"
+              value={query}
+              placeholder={"Search activity..."}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setIsOpen(true);
+                fetchNewActivities(e.target.value);
+              }}
+              readOnly={!isEdit}
+              // onFocus={() => !defaultValue && setIsOpen(true)}
+              ref={inputRef}
+            />
 
-        {isOpen && (
-          <div className="absolute z-10 mt-1 w-full max-h-64 overflow-auto rounded-md bg-[#1E1E2F]/70 backdrop-blur border shadow-lg">
-            {activityData?.length === 0 ? (
-              <div className="p-2 text-sm text-gray-400">No results</div>
-            ) : (
-              activityData?.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => handleSelect(item)}
-                  className="p-2 hover:bg-white/10 cursor-pointer flex justify-between text-white"
-                >
-                  <span>{item.name}</span>
-                  <span className="text-xs opacity-70">
-                    {(item.calories_per_hour / 60).toFixed(2)} KKal/min
-                  </span>
-                </div>
-              ))
+            {isOpen && (
+              <div className="absolute z-10 mt-1 w-full max-h-64 overflow-auto rounded-md bg-[#1E1E2F]/70 backdrop-blur border shadow-lg">
+                {activityData?.length === 0 ? (
+                  <div className="p-2 text-sm text-gray-400">No results</div>
+                ) : (
+                  activityData?.map((item) => (
+                    <div
+                      key={item.id}
+                      onClick={() => handleSelect(item)}
+                      className="p-2 hover:bg-white/10 cursor-pointer flex justify-between text-white"
+                    >
+                      <span>{item.name}</span>
+                      <span className="text-xs opacity-70">
+                        {(item.calories_per_hour / 60).toFixed(2)} KKal/min
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
-      {inputDurationOpen && (
-        <div className="flex flex-col gap-3">
-          <Label className="text-base">
-            Masukkan Durasi Aktivitas Anda (Menit)
-          </Label>
-          <Input
-            className="w-full"
-            name="duration"
-            readOnly={!isEdit}
-            id={`${inputDurationOpen.inputId}`}
-            placeholder="Masukkan Durasi (menit)"
-            type="number"
-            defaultValue={data?.physicalActivityLog?.duration}
-          ></Input>
-        </div>
-      )}
-      {inputDurationOpen.open && (
-        <Button
-          variant={"secondary"}
-          type="button"
-          onClick={handleInputDurationSubmit}
-        >
-          Tambah Jenis Aktivitas
-        </Button>
+
+          {inputDurationOpen.open && (
+            <div className="flex flex-col gap-3">
+              <Label className="text-base">
+                Masukkan Durasi Aktivitas Anda (Menit)
+              </Label>
+              <Input
+                className="w-full"
+                name="duration"
+                readOnly={!isEdit}
+                id={`${inputDurationOpen.inputId}`}
+                placeholder="Masukkan Durasi (menit)"
+                type="number"
+              ></Input>
+            </div>
+          )}
+          {inputDurationOpen.open && (
+            <Button
+              variant={"secondary"}
+              type="button"
+              onClick={handleInputDurationSubmit}
+            >
+              Tambah Jenis Aktivitas
+            </Button>
+          )}
+        </>
       )}
 
       <div className="border p-2 border-white rounded-lg">
@@ -233,30 +236,30 @@ export default function ActivityForm({
             <TableRow>
               <TableCell>Nama Aktivitas</TableCell>
               <TableCell>Durasi</TableCell>
-              {data ? <TableCell>MET / Jam</TableCell> : null}
+              {data ? <TableCell>MET Value</TableCell> : (null)}
+              {data ? <TableCell>Kalori Terbakar</TableCell> :  <TableCell>MET / Jam</TableCell>}
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {data ? (
-              <TableRow>
-                <TableCell>
-                  {data?.physicalActivityLog?.activityName || "Tidak ada"}
-                </TableCell>
-                <TableCell>
-                  {data?.physicalActivityLog?.duration || "Tidak ada"} menit
-                </TableCell>
-                <TableCell>
-                  {data?.physicalActivityLog?.metValue || "Tidak ada"} KKal/jam
-                </TableCell>
-              </TableRow>
-            ) : (
-              activityInput?.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.duration} Menit</TableCell>
-                </TableRow>
-              ))
-            )}
+          <TableBody className="overflow-auto">
+            {data
+              ? data?.physicalActivityLog?.activityType.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{item?.name || "Tidak ada"}</TableCell>
+                    <TableCell>{item?.duration || "Tidak ada"} menit</TableCell>
+                    <TableCell>{parseFloat(String(item?.metValue)).toFixed(2)}</TableCell>
+                    <TableCell>
+                      {parseFloat(parseFloat(String(item?.metValue)).toFixed(2)) * parseInt(String(item?.duration)) ||
+                        "Tidak ada"}{" "}
+                      KKal
+                    </TableCell>
+                  </TableRow>
+                ))
+              : activityInput?.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.duration} Menit</TableCell>
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
       </div>

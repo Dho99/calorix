@@ -103,6 +103,7 @@ export type PhysicalActivityLog = BaseModel & {
   metValue: number;
   duration: number; // dalam menit
   caloriesBurned: number;
+  activityType: ActivityType[];
 };
 
 export type SleepTracker = BaseModel & {
