@@ -129,12 +129,12 @@ export async function GET(request: NextRequest) {
 
     // Prepare response data
     const responseData = {
-      caloriesBurned: caloriesBurnedData._sum.caloriesBurned || 0,
+      caloriesBurned: caloriesBurnedData._sum.caloriesBurned && caloriesBurnedData._sum.caloriesBurned || 0,
       stepsGoal: stepsGoal?.stepNeeds || 0,
       stepsCount: stepsData._sum.stepsCount || 0,
       tdee: tdeeData?.tdee || 0,
       hydrationNeeds: sumHydration,
-      sleepTracker: (parseFloat(String(sleepTracker._sum.duration)) / 60).toFixed(2) || 0,
+      sleepTracker: sleepTracker?._sum.duration && (parseFloat(String(sleepTracker._sum.duration)) / 60).toFixed(2) || 0,
       caloriesConsumed: foodLog._sum.calories || 0,
       goal: stepsGoal,
       userCharacteristics: userCharacteristics,
