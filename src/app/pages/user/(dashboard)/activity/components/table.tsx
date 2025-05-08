@@ -89,7 +89,7 @@ export default function ActivityTable({
         activitiesProps.map((activity, key) => (
           <DialogTrigger asChild key={key}>
             <div
-              className="w-full flex flex-row gap-2 border  border-white bg-white/2 rounded-lg py-2 px-4 text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center"
+              className="w-full flex flex-row gap-2 border border-white bg-white/2 rounded-lg py-2 px-4 text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center"
               onClick={() =>
                 setDialogProps({
                   content: (
@@ -116,13 +116,6 @@ export default function ActivityTable({
               <div>
                 <h1 className="text-white text-2xl font-semibold">
                   {activity?.title}
-                  {/* {activity.category === "FOOD_LOG"
-                    ? "Makan"
-                    : activity.category === "USER_HYDRATION"
-                    ? "Minum"
-                    : activity.category === "SLEEP_TRACKER"
-                    ? "Tidur"
-                    : "Aktivitas Fisik"} */}
                 </h1>
                 <p className="text-white/50 text-sm">
                   {formatDate(activity.createdAt)}
@@ -130,12 +123,12 @@ export default function ActivityTable({
               </div>
               <div>
                 {activity.category === "FOOD_LOG"
-                  ? `${activity?.foodLog?.calories} Kalori `
+                  ? `Menambah ${activity?.foodLog?.calories} Kalori `
                   : activity.category === "USER_HYDRATION"
-                  ? `${activity?.userHydration?.waterIntake} ml`
+                  ? `Meminum sebanyak ${activity?.userHydration?.waterIntake} ml`
                   : activity.category === "SLEEP_TRACKER"
-                  ? `${activity?.sleepTracker?.duration as number < 60 ? `${parseInt(String(activity?.sleepTracker?.duration))} Menit` : `${(parseFloat(String(activity?.sleepTracker?.duration)) / 60).toFixed(2)} Jam`} `
-                  : `${activity?.physicalActivityLog?.duration} Jam`}
+                  ? `Menambah Jam tidur ${activity?.sleepTracker?.duration as number < 60 ? `${parseInt(String(activity?.sleepTracker?.duration))} Menit` : `${(parseFloat(String(activity?.sleepTracker?.duration)) / 60).toFixed(2)} Jam`} `
+                  : `Membakar ${activity?.physicalActivityLog?.caloriesBurned} Kalori`}
               </div>
             </div>
           </DialogTrigger>

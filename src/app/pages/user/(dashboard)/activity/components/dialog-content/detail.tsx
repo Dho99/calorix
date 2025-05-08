@@ -144,7 +144,7 @@ export default function DetailActivity({
           ) : activity?.category === "USER_HYDRATION" ? (
             <HydrationForm data={activity} isEdit={pageState?.edit} />
           ) : activity?.category === "PHYSICAL_ACTIVITY" ? (
-              <ActivityForm data={activity} onSelect={setActivityInput} isEdit={pageState?.edit}/>
+              <ActivityForm data={activity} isEdit={pageState?.edit}/>
           ) : (
             <></>
           )}
@@ -169,24 +169,29 @@ export default function DetailActivity({
             setDialogProps(null);
           }}
         >
-          Batal
+          Tutup
         </Button>
-        <Button
-          type={pageState.edit ? "submit" : "button"}
-          variant={"outline"}
-          className="bg-[#9EC8B9]/50 hover:bg-[#9EC8B9] hover:text-black"
-          onClick={(e) => {
-            if (!pageState.edit) {
-              e.preventDefault(); // Prevent form submission
-              setPageState((prev) => ({
-                ...prev,
-                edit: true,
-              }));
-            }
-          }}
-        >
-          {pageState.edit ? "Simpan" : "Edit"}
-        </Button>
+        {
+          activity?.category !== "PHYSICAL_ACTIVITY" ? (
+            <Button
+            type={pageState.edit ? "submit" : "button"}
+            variant={"outline"}
+            className="bg-[#9EC8B9]/50 hover:bg-[#9EC8B9] hover:text-black"
+            onClick={(e) => {
+              if (!pageState.edit) {
+                e.preventDefault(); // Prevent form submission
+                setPageState((prev) => ({
+                  ...prev,
+                  edit: true,
+                }));
+              }
+            }}
+          >
+            {pageState.edit ? "Simpan" : "Edit"}
+          </Button>
+          ) : (null)
+        }
+      
       </DialogFooter>
     </form>
   );

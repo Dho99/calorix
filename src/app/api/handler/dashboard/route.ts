@@ -122,8 +122,6 @@ export async function GET() {
       (acc, curr) => acc + parseFloat(curr.waterIntake),
       0
     );
-
-    console.log(sleepTracker)
     // Calculate sleep time
     
 

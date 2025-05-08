@@ -18,6 +18,7 @@ import SleepForm from "./form/sleep";
 import FoodForm from "./form/food";
 import HydrationForm from "./form/hydration";
 import ActivityForm from "./form/activity";
+import type { UserActivites } from "@/app/utils/lib/types/user";
 import { Input } from "@/components/ui/input";
 
 export default function AddActivityContent({
@@ -52,9 +53,7 @@ export default function AddActivityContent({
       };
     } else if (category === "PHYSICAL_ACTIVITY") {
       data = {
-        activityName: activityInput?.name,
-        calories_per_hour: activityInput?.calories_per_hour,
-        duration: formData.get("duration"),
+        activityData: activityInput,
       };
     } else if (category === "USER_HYDRATION") {
       data = {
@@ -76,7 +75,7 @@ export default function AddActivityContent({
         if (res.data.success) {
           console.log(res.data.data);
           setDialogProps(null);
-          fetchActivities()
+          fetchActivities();
         } else {
           console.log("failed");
         }
@@ -88,9 +87,12 @@ export default function AddActivityContent({
 
   const [categoryInput, setCategory] = useState<string | null>(null);
   const [activityInput, setActivityInput] = useState<{
-    name: string;
-    calories_per_hour: number;
-  } | null>(null);
+        name: string;
+        calories_per_hour: number;
+        duration: number;
+      }[]
+  >([]);
+
 
   function changeInputCategory(value: string) {
     console.log("value", value);
@@ -144,13 +146,13 @@ export default function AddActivityContent({
           </div>
 
           {categoryInput === "SLEEP_TRACKER" ? (
-            <SleepForm isEdit={true}/>
+            <SleepForm isEdit={true} />
           ) : categoryInput === "FOOD_LOG" ? (
-            <FoodForm isEdit={true}/>
+            <FoodForm isEdit={true} />
           ) : categoryInput === "USER_HYDRATION" ? (
-            <HydrationForm  isEdit={true}/>
+            <HydrationForm isEdit={true} />
           ) : categoryInput === "PHYSICAL_ACTIVITY" ? (
-            <ActivityForm onSelect={(activity) => setActivityInput(activity)}  isEdit={true}/>
+            <ActivityForm setActivityInput={setActivityInput} isEdit={true} activityInput={activityInput} />
           ) : (
             <></>
           )}
