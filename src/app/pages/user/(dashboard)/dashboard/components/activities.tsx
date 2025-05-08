@@ -20,11 +20,11 @@ export default function Activities({
         pageData.map((item, index) => (
           <div
           key={index}
-          className="w-full h-full bg-[#1B4242] text-white rounded-lg shadow-md p-4"
+          className="w-full h-full bg-[#1B4242] text-white rounded-lg shadow-md p-4 flex flex-col"
           >
             <h2 className="text-lg font-bold">{item.title}</h2>
-            <div className="flex flex-row gap-2 items-baseline">
-            <p className="text-4xl font-bold">{item.value || 0} {item?.unit} / <span className="text-2xl">{item?.target || 0}</span></p> 
+            <div className="flex flex-wrap gap-2 items-baseline">
+            <p className="text-3xl font-bold">{item.value || 0} {item?.unit} / <span className="text-2xl">{item?.target || 0}</span></p> 
             <p className="text-xl"> {item.parameter}</p>
             </div>
           </div>

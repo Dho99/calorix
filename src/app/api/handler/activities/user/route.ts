@@ -224,7 +224,7 @@ export async function POST(request: NextRequest) {
         foodLogId: foodLog.id,
       };
     } else if (category === "PHYSICAL_ACTIVITY") {
-      let pyhsicalActivityData = {
+      const pyhsicalActivityData = {
         caloriesBurned: 0,
         duration: 0,
       };
@@ -256,18 +256,27 @@ export async function POST(request: NextRequest) {
 
       if (aggregateTodayActivity._sum.caloriesBurned) {
         const caloriesBurned = parseFloat(String(aggregateTodayActivity._sum.caloriesBurned)).toFixed(2) || 0
-        const isDecreasing: boolean = caloriesBurned > userTarget?.deficitPerDay! 
+        const isDecreasing: boolean = caloriesBurned > userTarget!.deficitPerDay
 
-        let changeDailyCalories = 0;
+        let changeDailyCalories: number;
         if (isDecreasing) {
-          changeDailyCalories = (parseFloat(String(caloriesBurned)) - parseFloat(String(userTarget?.deficitPerDay!)) / parseFloat(String(userTarget?.targetTime!)));
+          changeDailyCalories = (parseFloat(String(caloriesBurned)) - parseFloat(String(userTarget!.deficitPerDay)) / parseFloat(String(userTarget!.targetTime)));
         } else{ 
-          changeDailyCalories = (parseFloat(String(caloriesBurned)) + parseFloat(String(userTarget?.deficitPerDay!)) / parseFloat(String(userTarget?.targetTime!)));
+          changeDailyCalories = (parseFloat(String(caloriesBurned)) + parseFloat(String(userTarget!.deficitPerDay)) / parseFloat(String(userTarget!.targetTime)));
         }
+
+        await prisma.userGoal.update({
+          where: {
+            userId: session?.user?.id as string,
+          },
+          data: {
+            deficitPerDay: changeDailyCalories.toString(),
+          },
+        });
         
       }
 
-      data?.activityData?.map(async (item: ActivityType, index: number) => {
+      data?.activityData?.map(async (item: ActivityType) => {
         const duration = parseInt(String(item?.duration));
         const caloriesPerHour = parseFloat(
           String((item?.calories_per_hour as number) / 60)

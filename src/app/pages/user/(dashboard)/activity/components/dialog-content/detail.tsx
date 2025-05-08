@@ -43,7 +43,7 @@ export default function DetailActivity({
     pageData: null,
   });
 
-  const [activityInput, setActivityInput] = useState<{
+  const [activityInput, setActivityInput] = useState<{ //eslint-disable-line @typescript-eslint/no-unused-vars
     name: string;
     calories_per_hour: number;
   } | null>(null);

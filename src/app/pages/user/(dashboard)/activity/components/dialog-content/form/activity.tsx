@@ -74,7 +74,7 @@ export default function ActivityForm({
         alert("Please enter a valid number");
         return;
       }
-      setActivityInput && setActivityInput((prev) => {
+      setActivityInput!((prev) => {
         const isExist = prev.some((item) => item.name === query);
         if (isExist) {
           return prev.map((item) =>
@@ -143,7 +143,7 @@ export default function ActivityForm({
               const currentMaxId =
                 prev?.reduce((maxId, item) => Math.max(maxId, item.id), 0) || 0;
               const newDataWithIds = res.data.map(
-                (item: any, index: number) => ({
+                (item: any, index: number) => ({ //eslint-disable-line
                   ...item,
                   id: currentMaxId + index + 1,
                 })

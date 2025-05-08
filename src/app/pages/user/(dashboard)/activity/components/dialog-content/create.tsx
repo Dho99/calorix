@@ -18,7 +18,6 @@ import SleepForm from "./form/sleep";
 import FoodForm from "./form/food";
 import HydrationForm from "./form/hydration";
 import ActivityForm from "./form/activity";
-import type { UserActivites } from "@/app/utils/lib/types/user";
 import { Input } from "@/components/ui/input";
 
 export default function AddActivityContent({
