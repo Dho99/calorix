@@ -74,7 +74,11 @@ export async function GET(request: NextRequest) {
           foodLog: true,
           userHydration: true,
           sleepTracker: true,
-          physicalActivityLog: true,
+          physicalActivityLog: {
+            include: {
+              activityType: true,
+            },
+          },
         },
       });
       total = res.length || 0;
@@ -128,7 +132,11 @@ export async function GET(request: NextRequest) {
           foodLog: true,
           userHydration: true,
           sleepTracker: true,
-          physicalActivityLog: true,
+          physicalActivityLog: {
+            include: {
+              activityType: true,
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",
@@ -154,7 +162,11 @@ export async function GET(request: NextRequest) {
             foodLog: true,
             userHydration: true,
             sleepTracker: true,
-            physicalActivityLog: true,
+            physicalActivityLog: {
+              include: {
+                activityType: true,
+              },
+            },
           },
           orderBy: {
             createdAt: "desc",
@@ -212,12 +224,59 @@ export async function POST(request: NextRequest) {
         foodLogId: foodLog.id,
       };
     } else if (category === "PHYSICAL_ACTIVITY") {
-      let pyhsicalActivityData = {
+      const pyhsicalActivityData = {
         caloriesBurned: 0,
         duration: 0,
       };
 
-      data?.activityData?.map(async (item: ActivityType, index: number) => {
+      const aggregateTodayActivity = await prisma.physicalActivityLog.aggregate(
+        {
+          _sum: {
+            caloriesBurned: true,
+            duration: true,
+          },
+          where: {
+            userId: session?.user?.id as string,
+            createdAt: {
+              gte: new Date(new Date().setHours(0, 0, 0, 0)),
+            },
+          },
+        }
+      );
+
+      const userTarget = await prisma.userGoal.findFirst({
+        where: {
+          userId: session?.user?.id as string,
+        },
+        select: {
+          deficitPerDay: true,
+          targetTime: true,
+        },
+      });
+
+      if (aggregateTodayActivity._sum.caloriesBurned) {
+        const caloriesBurned = parseFloat(String(aggregateTodayActivity._sum.caloriesBurned)).toFixed(2) || 0
+        const isDecreasing: boolean = caloriesBurned > userTarget!.deficitPerDay
+
+        let changeDailyCalories: number;
+        if (isDecreasing) {
+          changeDailyCalories = (parseFloat(String(caloriesBurned)) - parseFloat(String(userTarget!.deficitPerDay)) / parseFloat(String(userTarget!.targetTime)));
+        } else{ 
+          changeDailyCalories = (parseFloat(String(caloriesBurned)) + parseFloat(String(userTarget!.deficitPerDay)) / parseFloat(String(userTarget!.targetTime)));
+        }
+
+        await prisma.userGoal.update({
+          where: {
+            userId: session?.user?.id as string,
+          },
+          data: {
+            deficitPerDay: changeDailyCalories.toString(),
+          },
+        });
+        
+      }
+
+      data?.activityData?.map(async (item: ActivityType) => {
         const duration = parseInt(String(item?.duration));
         const caloriesPerHour = parseFloat(
           String((item?.calories_per_hour as number) / 60)
