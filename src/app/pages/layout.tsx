@@ -3,15 +3,6 @@ import AppNavbar from "./components/navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "./components/sidebar";
 
-export const scrollToTop = (pageRef: React.RefObject<HTMLDivElement | null>) => {
-  if (pageRef.current) {
-    pageRef.current.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
-};
-
 export default async function Layout({
   children,
 }: {

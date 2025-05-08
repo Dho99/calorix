@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/dialog";
 import { calculateUserData } from "@/app/utils/api/calculate";
 import SaveCalculate from "./components/save-calculate";
-import { scrollToTop } from "@/app/pages/layout";
 import DualCheckbox from "./components/dualCheckbox";
 
 export type Step = {
@@ -106,6 +105,15 @@ export default function Page() {
       [stepType]: value,
     }));
   }
+
+  const scrollToTop = (pageRef: React.RefObject<HTMLDivElement | null>) => {
+    if (pageRef.current) {
+      pageRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
 
   const steps: Step[] = stepsJson;
 
