@@ -76,7 +76,7 @@ export async function GET() {
         where: {
           userId,
           createdAt: {
-            gte: monthAgo.toISOString(),
+            gte: start
           },
         },
       }),

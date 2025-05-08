@@ -240,7 +240,7 @@ export default function ActivityForm({
               {data ? <TableCell>Kalori Terbakar</TableCell> :  <TableCell>MET / Jam</TableCell>}
             </TableRow>
           </TableHeader>
-          <TableBody className="overflow-auto">
+          <TableBody className="overflow-auto"> 
             {data
               ? data?.physicalActivityLog?.activityType.map((item, index) => (
                   <TableRow key={index}>

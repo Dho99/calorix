@@ -26,6 +26,7 @@ model User {
   UserHydration       UserHydration[]
   SleepTracker        SleepTracker[]
   UserGoal            UserGoal?
+  lastSeen            DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
