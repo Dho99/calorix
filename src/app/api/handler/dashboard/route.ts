@@ -119,7 +119,7 @@ export async function GET() {
 
     // Calculate hydration sum
     const sumHydration = hydrationNeeds.reduce(
-      (acc, curr) => acc + parseFloat(curr.waterIntake), //eslint-disable-line
+      (acc: number, curr: {waterIntake: string}) => acc + parseFloat(curr.waterIntake),
       0
     );
     // Calculate sleep time
