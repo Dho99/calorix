@@ -9,7 +9,7 @@ export default function Training({
     Array.isArray(actData) && actData?.reduce((acc, curr) => acc + curr);
 
   return (
-    <div className="w-full h-full bg-[#1B4242] text-white rounded-lg shadow-md p-4 flex flex-col gap-4">
+    <div className="w-full h-full bg-[#1B4242]/70 border border-white/50 text-white rounded-lg shadow-md p-4 flex flex-col gap-4">
       <div>
         <h2 className="text-lg font-bold">Activities</h2>
         <div className="flex flex-row items-baseline w-full">

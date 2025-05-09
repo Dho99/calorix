@@ -8,6 +8,11 @@ export type ActivitiesProps = {
   unit?: string;
 };
 
+export type CaloriesByMonthProps = {
+  caloriesBurnedByMonth: number;
+  targetBurnedCaloriesByMonth: number;
+}
+
 export default function Activities({
   pageData,
 }: {
@@ -15,12 +20,12 @@ export default function Activities({
 }) {
 
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-2 gap-2 ">
       {
         pageData.map((item, index) => (
           <div
           key={index}
-          className="w-full h-full bg-[#1B4242] text-white rounded-lg shadow-md p-4 flex flex-col"
+          className="w-full h-full bg-[#1B4242]/70 text-white rounded-lg shadow-md p-4 flex flex-col border border-white/50"
           >
             <h2 className="text-lg font-bold">{item.title}</h2>
             <div className="flex flex-wrap gap-2 items-baseline">
