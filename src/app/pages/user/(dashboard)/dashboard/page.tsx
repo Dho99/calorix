@@ -53,6 +53,7 @@ export default function Page() {
     axios
       .get("/api/handler/dashboard")
       .then((response) => {
+        console.log(response.data); 
         const userCharacteristics = response.data.data.userCharacteristics;
         if (!userCharacteristics || userCharacteristics?.isDeleted) {
           setDialog({

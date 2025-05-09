@@ -32,6 +32,8 @@ export async function GET() {
 
     // Fetch all required data in parallel
 
+    const startOfMonth = new Date(new Date(new Date().setDate(1)).setHours(0,0,0,0)).toISOString();
+
     const [
       caloriesBurnedData,
       stepsGoal,
@@ -41,7 +43,7 @@ export async function GET() {
       sleepTracker,
       foodLog,
       userCharacteristics,
-      activitiesData,
+      activitiesData
     ] = await Promise.all([
       prisma.physicalActivityLog.aggregate({
         _sum: { caloriesBurned: true },
@@ -114,8 +116,19 @@ export async function GET() {
         select: {
             duration: true
         }
-      })
+      }),
     ]);
+
+    const caloriesBurnedByMonth = await prisma.physicalActivityLog.aggregate({
+      _sum: { caloriesBurned: true },
+      where: {
+        userId: session?.user?.id,
+        createdAt: {
+          gte: startOfMonth
+        }
+      }
+    });
+
 
     // Calculate hydration sum
     const sumHydration = hydrationNeeds.reduce(
@@ -136,7 +149,8 @@ export async function GET() {
       caloriesConsumed: foodLog._sum.calories || 0,
       goal: stepsGoal,
       userCharacteristics: userCharacteristics,
-      activitiesData: activitiesData
+      activitiesData: activitiesData,
+      caloriesBurnedByMonth: caloriesBurnedByMonth._sum.caloriesBurned || 0
     };
 
 
@@ -145,6 +159,7 @@ export async function GET() {
       data: responseData,
     });
   } catch (error) {
+    console.log(error);
     if (error instanceof Error) {
       return NextResponse.json({
         success: false,

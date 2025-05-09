@@ -4,7 +4,7 @@ export default function Steps({stepData}: {stepData: {stepsCount?: number|string
  
 
     return (
-        <div className="w-full h-full bg-[#1B4242] text-white rounded-lg shadow-md p-4 flex flex-col gap-2">
+        <div className="w-full h-full bg-[#1B4242]/70 border border-white/50 text-white rounded-lg shadow-md p-4 flex flex-col gap-2">
         <h2 className="text-lg font-bold">Steps</h2>
         <div className="flex flex-row items-baseline w-full">
         <p className="font-bold text-4xl">{parseInt(String(stepData?.stepsCount)) || 0}</p>
