@@ -20,7 +20,6 @@ import type {
   UserCharacteristics,
 } from "@/app/utils/lib/types/user";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { scrollToTop } from "@/app/pages/layout";
 import Characteristics from "./characteristics";
 
 export default function Page() {
@@ -39,6 +38,15 @@ export default function Page() {
   function handleAlertClose() {
     setOpenAlert(null);
   }
+
+  const scrollToTop = (pageRef: React.RefObject<HTMLDivElement | null>) => {
+    if (pageRef.current) {
+      pageRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {

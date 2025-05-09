@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { email: string } }
+  { params }: { params:  Promise<{ email: string }> }
 ) {
-  const { email } = params;
+  const { email } = await params;
 
   const user = await prisma.user.findFirst({
     where: {

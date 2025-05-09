@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     });
     
 
-    const sumHydration = res.reduce((acc, curr) => {
+    const sumHydration = res.reduce((acc: number, curr: {waterIntake: string}) => {
       return acc + parseFloat(curr.waterIntake);
     }, 0);
 
