@@ -20,7 +20,7 @@ export default function Stats({
 
 
   return (
-    <div className="grid grid-cols-2 h-full w-full gap-2">
+    <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 h-full w-full gap-2">
       <Calories />
       <HeartRate />
       <Steps stepData={pageData?.steps}/>

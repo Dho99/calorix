@@ -41,8 +41,8 @@ export default function FAQ() {
   return (
     <div className="w-full h-[dvh] flex flex-col justify-between bg-[#092635] text-white relative py-10 px-20 items-center" id="faq">
       <p className="text-4xl font-bold">Frequently Asked Questions</p>
-      <div className="flex lg:flex-row w-full mt-15">
-        <div className="rounded-lg overflow-hidden lg:block hidden w-full">
+      <div className="flex lg:flex-row w-full mt-7">
+        <div className="rounded-lg lg:flex hidden w-3/4 flex-row items-center justify-center">
           <Image
             src={FAQImage}
             alt={"FAQImage"}

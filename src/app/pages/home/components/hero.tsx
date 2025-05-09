@@ -59,9 +59,9 @@ export default function Hero() {
       className="w-full min-h-dvh h-auto flex lg:flex-row flex-col gap-y-10 bg-[#092635] text-white relative items-center py-20 px-20"
       ref={ref}
     >
-      <div className="lg:max-w-xl flex-col lg:order-1 order-2">
-        <h1 className="lg:text-5xl text-7xl font-bold">Solusi dalam Merencanakan diet</h1>
-        <p className="lg:text-lg text-2xl mt-5">
+      <div className="lg:max-w-1/2 flex-col lg:order-1 order-2">
+        <h1 className="lg:text-6xl md:text-6xl text-4xl font-bold">Solusi dalam Merencanakan{" "} diet</h1>
+        <p className="lg:text-2xl md:text-2xl text-lg mt-5">
           Kami siap membantu anda dengan bantuan AI dan juga para ahli di
           bidangnya
         </p>
@@ -72,8 +72,7 @@ export default function Hero() {
             duration: 1,
             scale: { visualDuration: 0.4, bouncing: 0.2 },
           }}
-          // style={ball}
-          className="flex flex-row gap-x-3 mt-15"
+          className="flex lg:flex-row md:flex-row flex-col gap-3 mt-15"
         >
           <button
             className="bg-[#5C8374] py-3 px-10 text-white font-bold rounded-lg  text-xl shadow-xl"
@@ -97,7 +96,7 @@ export default function Hero() {
           repeat: Infinity,
           repeatType: "loop",
         }}
-        className="w-max flex lg:ms-auto mx-auto rounded-lg overflow-hidden drop-shadow-2xl/40 lg:order-2 order-1"
+        className="w-max flex lg:ms-auto mx-auto rounded-lg overflow-hidden drop-shadow-2xl/40 lg:order-2 order-1 lg:w-1/2 md:max-w-[500px] max-w-[300px] w-full"
       >
         <Image src={HeroImage} alt={"Hero Image"} width={500} height={500} />
       </motion.div>

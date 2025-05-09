@@ -46,7 +46,7 @@ export default function RegisterForm({
           id="email"
           name="email"
           placeholder="Email"
-          className="mt-2 bg-[#D9D9D9] text-black"
+          className="mt-2 bg-[#D9D9D9] text-white"
           required
         />
       </div>
@@ -57,7 +57,7 @@ export default function RegisterForm({
           id="Name"
           name="name"
           placeholder="Name"
-          className="mt-2 bg-[#D9D9D9] text-black"
+          className="mt-2 bg-[#D9D9D9] text-white"
           required
         />
       </div>
@@ -68,7 +68,7 @@ export default function RegisterForm({
           id="password"
           name="password"
           placeholder="Password"
-          className="mt-2 bg-[#D9D9D9] text-black"
+          className="mt-2 bg-[#D9D9D9] text-white"
           required
         />
       </div>
@@ -84,7 +84,7 @@ export default function RegisterForm({
         </p>
         <button
           type="submit"
-          className="w-full py-2 rounded-lg bg-[#1B4242] text-white"
+          className="w-full py-2 rounded-lg bg-[#1B4242] text-white hover:cursor-pointer"
         >
           Register
         </button>

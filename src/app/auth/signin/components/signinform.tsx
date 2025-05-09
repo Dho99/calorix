@@ -44,7 +44,7 @@ export default function SigninForm({
           id="email"
           name="email"
           placeholder="Email"
-          className="mt-2 bg-[#D9D9D9] text-black"
+          className="mt-2 bg-[#D9D9D9] text-white"
           required
         />
       </div>
@@ -55,7 +55,7 @@ export default function SigninForm({
           id="password"
           name="password"
           placeholder="Password"
-          className="mt-2 bg-[#D9D9D9] text-black"
+          className="mt-2 bg-[#D9D9D9] text-white"
           required
         />
       </div>
@@ -71,7 +71,7 @@ export default function SigninForm({
         </p>
         <button
           type="submit"
-          className="w-full py-2 rounded-lg bg-[#1B4242] text-white"
+          className="w-full py-2 rounded-lg bg-[#1B4242] text-white hover:cursor-pointer"
           value="Sign In"
         >
           Sign In
