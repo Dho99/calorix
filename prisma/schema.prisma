@@ -1,11 +1,11 @@
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
-  
 }
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
 
 }
 
@@ -39,12 +39,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   createdAt DateTime @default(now())
@@ -208,15 +208,13 @@ model UserActivites {
   userHydration       UserHydration?       @relation(fields: [userHydrationId], references: [id], onDelete: Cascade)
   foodLog             FoodLog?             @relation(fields: [foodLogId], references: [id], onDelete: Cascade)
   physicalActivityLog PhysicalActivityLog? @relation(fields: [physicalActivityLogId], references: [id], onDelete: Cascade)
-
-  @@fulltext([title])
 }
 
 model Chatbot {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  payload   String?  @db.Text // Menggunakan tipe TEXT
+  payload   String? // Menggunakan tipe TEXT
   sender    SENDER
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
