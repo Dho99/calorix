@@ -11,7 +11,7 @@ export default function AppSidebar() {
 
   useEffect(() => {
     setOpen(false);
-  }, []);
+  }, []); //eslint-disable-line  
 
 
   return (

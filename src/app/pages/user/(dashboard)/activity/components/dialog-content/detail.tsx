@@ -101,7 +101,7 @@ export default function DetailActivity({
   }
 
   return (
-    <form className="inline-flex flex-col gap-5" onSubmit={submitUpdateActivity}>
+    <form className="flex flex-col gap-5 w-full overflow-auto" onSubmit={submitUpdateActivity}>
       <DialogHeader>
         <DialogTitle>Detail dan Catatan Aktivitas Anda</DialogTitle>
         <DialogDescription>
