@@ -19,10 +19,11 @@ export async function POST() {
                 lastSeen: true,
             },
         });
+        
 
         const calculateDifferentDays = Math.floor((new Date().getTime() - new Date(findLastSeen?.lastSeen as Date).getTime()) / (1000 * 60 * 60 * 24));
 
-        if (calculateDifferentDays > 0) {
+        if (calculateDifferentDays > 0 && findLastSeen?.lastSeen) {
             const getUserGoal = await prisma.userGoal.findUnique({
                 where: {
                     userId: session?.user?.id,

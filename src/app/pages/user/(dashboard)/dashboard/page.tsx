@@ -53,7 +53,6 @@ export default function Page() {
     axios
       .get("/api/handler/dashboard")
       .then((response) => {
-        console.log(response.data); 
         const userCharacteristics = response.data.data.userCharacteristics;
         if (!userCharacteristics || userCharacteristics?.isDeleted) {
           setDialog({
@@ -151,8 +150,8 @@ export default function Page() {
         </div>
 
         <div className="w-full h-full flex flex-col gap-2">
-          <div className="flex flex-row gap-x-2 w-full items-baseline">
-            <h1 className="text-white text-4xl font-bold mb-3">Statistic</h1>
+          <div className="flex lg:flex-row md:flex-row flex-col gap-x-2 w-full items-baseline mb-3">
+            <h1 className="text-white text-4xl font-bold">Statistic</h1>
             <p className="text-white">This Month</p>
           </div>
           <Stats pageData={statsData}/>
