@@ -39,8 +39,8 @@ export default function FAQ() {
     ]
 
   return (
-    <div className="w-full h-[dvh] flex flex-col justify-between bg-[#092635] text-white relative py-10 px-20 items-center" id="faq">
-      <p className="text-4xl font-bold">Frequently Asked Questions</p>
+    <div className="w-full h-[dvh] flex flex-col justify-between bg-[#092635] text-white relative py-10 items-center" id="faq">
+      <p className="text-4xl font-bold text-center">Frequently Asked Questions</p>
       <div className="flex lg:flex-row w-full mt-7">
         <div className="rounded-lg lg:flex hidden w-3/4 flex-row items-center justify-center">
           <Image
@@ -51,7 +51,7 @@ export default function FAQ() {
           ></Image>
         </div>
         <div className="w-full flex items-center justify-center">
-          <Accordion type="single" collapsible className="w-full bg-white/10 px-5 rounded-lg shadow-lg">
+          <Accordion type="single" collapsible className="lg:w-3/4 w-full bg-white/10 px-5 rounded-lg shadow-lg">
             {faqs.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`} className="my-2">
                 <AccordionTrigger className="text-white text-base">{faq.title}</AccordionTrigger>

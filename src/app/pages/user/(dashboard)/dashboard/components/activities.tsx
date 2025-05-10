@@ -26,7 +26,7 @@ export default function Activities({
           className="w-full h-full bg-[#1B4242]/70 text-white rounded-lg shadow-md p-4 flex flex-col border border-white/50"
         >
           <h2 className="text-lg font-bold">{item.title}</h2>
-          <div className="flex flex-row items-baseline gap-2">
+          <div className="flex flex-wrap items-baseline gap-2">
             <p className="text-3xl font-bold">
               {item.value || 0} {item?.unit}{" "}
    

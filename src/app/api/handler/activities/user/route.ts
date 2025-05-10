@@ -276,7 +276,7 @@ export async function POST(request: NextRequest) {
         
       }
 
-      data?.activityData?.map(async (item: ActivityType) => {
+      data?.activityData?.map((item: ActivityType) => {
         const duration = parseInt(String(item?.duration));
         const caloriesPerHour = parseFloat(
           String((item?.calories_per_hour as number) / 60)

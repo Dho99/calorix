@@ -46,7 +46,7 @@ export default function Overview({ pageData }: { pageData: OverviewProps }) {
             <h1 className="text-4xl font-bold text-white mb-3">{user?.name}</h1>
           </div>
         </div>
-        <div className="w-full grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-2">
+        <div className="w-full grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 grid-cols-2 gap-2">
           <div className="w-full bg-[#1B4242] text-white rounded-lg shadow-md p-4 border border-white/50">
             <h2 className="text-lg font-bold">Weight</h2>
             <p>{pageData?.currentWeight} Kg</p>
@@ -66,7 +66,7 @@ export default function Overview({ pageData }: { pageData: OverviewProps }) {
           <div className="w-full bg-[#1B4242] text-white rounded-lg border border-white/50 shadow-md p-4 flex flex-row gap-2  lg:col-span-3">
             <div className="flex flex-col">
               <h2 className="text-lg font-bold">BMI</h2>
-              <div className="flex w-full h-full items-center justify-between flex flex-row gap-2">
+              <div className="flex w-full h-full items-center justify-between flex lg:flex-row md:flex-row sm:flex-row flex-col gap-2">
                 <p>
                   {pageData?.bmi &&
                     parseFloat(String(pageData?.bmi)).toFixed(2)}

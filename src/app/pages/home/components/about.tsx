@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full bg-[#092635] text-white px-10 lg:px-20 py-10" id="about">
+    <div className="flex flex-col items-center justify-center w-full h-full bg-[#092635] text-white py-10" id="about">
       <div className="flex flex-col items-center justify-center w-full h-full bg-black/30 rounded-lg shadow-lg p-10">
         <div className="flex flex-col items-center justify-center w-full h-full">
           <h1 className="text-4xl font-bold mb-4 text-center">Tentang Projek Ini</h1>
