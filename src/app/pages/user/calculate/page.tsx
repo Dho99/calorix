@@ -80,7 +80,7 @@ export default function Page() {
         `/api/handler/characteristics/${data?.user?.id as string}`
       );
 
-      if(res.data.data) {
+      if (res.data.data) {
         setAlert({
           success: true,
           type: "dialog",
@@ -139,6 +139,30 @@ export default function Page() {
         `input#${steps[currentStep - 1].stateKey}`
       );
 
+      const value = (input as HTMLInputElement)?.value;
+
+      if (steps[currentStep - 1].stateKey !== "manualCalorieAdjustment") {
+        if (value === "") {
+          setAlert({
+            success: false,
+            type: "alert",
+            message: `Silahkan isi ${steps[currentStep - 1].stateKey}`,
+          });
+          return;
+        }
+
+        if (parseInt(value) < 1) {
+          setAlert({
+            success: false,
+            type: "alert",
+            message: `${
+              steps[currentStep - 1].stateKey
+            } tidak boleh kurang dari 0`,
+          });
+          return;
+        }
+      }
+
       if (input instanceof HTMLInputElement) {
         input.value = stepState?.[
           steps[currentStep]?.stateKey as string
@@ -159,7 +183,6 @@ export default function Page() {
           ...prevState,
           ...calculate,
         }));
-
       }
 
       if (currentStep === steps.length) {
@@ -325,27 +348,17 @@ export default function Page() {
                 <div className="w-full h-full flex justify-center items-center flex-col">
                   <div className="w-full h-max flex flex-col gap-10 p-10 ring ring-black/30 shadow-xl/20 rounded-xl justify-center items-center">
                     <div className="w-full flex justify-center items-center ">
-                      <h1 className="text-4xl font-bold text-center">
+                      <h1 className="lg:text-4xl md:text-xl text-lg font-bold text-center">
                         {steps[currentStep - 1].question}
                       </h1>
                     </div>
                     {steps[currentStep - 1].type === "radio" ? (
-                      <div
-                        className={`grid 
-                        
-                        ${
-                          steps[currentStep - 1].opts!.length < 3
-                            ? "lg:grid-cols-2"
-                            : "lg:grid-cols-3"
-                        }
-  
-                        grid-cols-1 lg:gap-10 gap-3 lg:w-fit w-1/2`}
-                      >
+                      <div className="flex flex-wrap gap-10 justify-center items-center w-full">
                         {steps[currentStep - 1].opts?.map((opt, index) => (
                           <button
                             key={index}
                             type="button"
-                            className={`hover:-mt-5 transition-all transition-duration-30 hover:cursor-pointer h-full p-5 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 focus:bg-[#5C8374] focus:text-white ${
+                            className={`hover:-mt-5 transition-all transition-duration-30 hover:cursor-pointer h-full p-5 shadow-lg text-black rounded-lg lg:text-2xl text-base font-bold flex flex-col items-center justify-center gap-5 focus:bg-[#5C8374] focus:text-white max-w-[200px] ${
                               opt.value ===
                               stepState?.[steps[currentStep - 1].stateKey!]
                                 ? "bg-[#5C8374] text-white"
@@ -362,13 +375,13 @@ export default function Page() {
                               <Image
                                 src={`/assets/static/svg/${opt.icon}`}
                                 alt={opt.label}
-                                width={300}
-                                height={300}
+                                width={200}
+                                height={200}
                                 quality={100}
                                 className="m-auto"
                               />
                             )}
-                            <div>{opt.label}</div>
+                            <div className="">{opt.label}</div>
                           </button>
                         ))}
                       </div>
@@ -451,11 +464,11 @@ export default function Page() {
                     {steps[currentStep - 1].tips && (
                       <div className="w-full flex justify-center items-center bg-[#EBF5FF] rounded-lg">
                         <div className="w-full h-max flex flex-col gap-3 p-5 ring ring-black/30 shadow-xl/20 rounded-xl">
-                          <h1 className="text-2xl font-bold text-start text-slate-600">
+                          <h1 className="lg:text-2xl md:text-lg text-sm font-bold text-start text-slate-600">
                             Tips :{" "}
                             {steps[currentStep - 1].tips?.title as string}
                           </h1>
-                          <p className="text-lg text-start text-slate-600">
+                          <p className="lg:text-lg md:text-sm text-xs lg:block md:block hidden text-start text-slate-600">
                             {steps[currentStep - 1].tips?.description as string}
                           </p>
                         </div>
@@ -470,17 +483,17 @@ export default function Page() {
           ) : (
             <SummaryCalculate props={stepState!} />
           )}
-          <div className="w-full pt-10 pb-20 flex flex-row justify-between">
+          <div className="w-full pt-10 pb-20 flex lg:flex-row md:flex-row flex-col justify-between gap-5">
             {currentStep > 1 && (
               <button
                 onClick={handlePrev}
-                className="text-xl w-56 bg-[#5C8374] py-3 px-5 rounded-lg text-white font-bold"
+                className="text-xl lg:w-56 md:w-56 w-full bg-[#5C8374] py-3 px-5 rounded-lg text-white font-bold lg:order-1 md:order-1 order-2"
               >
                 Kembali
               </button>
             )}
             <button
-              className="text-xl w-56 bg-[#5C8374] py-3 px-5 rounded-lg ms-auto text-white font-bold"
+              className="text-xl lg:w-56 md:w-56 w-full bg-[#5C8374] py-3 px-5 rounded-lg ms-auto text-white font-bold lg:order-2 md:order-2 order-1"
               onClick={handleNext}
             >
               Lanjutkan

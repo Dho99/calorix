@@ -6,7 +6,7 @@ import { findUser } from "@/app/utils/api/user";
 import { hashPassword } from "@/app/utils/hasher";
 import { registerSchema } from "@/app/utils/lib/validation/user";
 import type { Register } from "@/app/utils/lib/types/user";
-
+import { auth } from "../auth";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
   const result = registerSchema.safeParse(rawUserData);
 
-  if(!result.success) {
+  if (!result.success) {
     return NextResponse.json(
       {
         success: false,
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   }
 
   const user = await findUser(body.email);
-   
+
   if (user.success)
     return NextResponse.json(
       {
@@ -45,16 +45,13 @@ export async function POST(request: NextRequest) {
       }
     );
 
-
-
   const hashedPassword = await hashPassword(body.password);
-
 
   const userData: Register = {
     ...rawUserData,
     password: hashedPassword,
     username: rawUserData.username.replace(" ", "_").toLowerCase(),
-  }
+  };
 
   try {
     await prisma.user.create({
@@ -81,15 +78,13 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function PUT(req: NextRequest){
+export async function PUT(req: NextRequest) {
   const body = await req.json();
   const { ...data } = body;
 
- 
   const result = registerSchema.safeParse(data);
 
-  
-  if(!result.success) {
+  if (!result.success) {
     return NextResponse.json(
       {
         success: false,
@@ -137,7 +132,55 @@ export async function PUT(req: NextRequest){
       message: "User not found",
     },
     {
-      status: 404,  
+      status: 404,
     }
-  )
+  );
+}
+
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const category = searchParams.get("category");
+  const session = await auth();
+
+  if (category === "getUserCharacteristics") {
+    const findUser = await prisma.user.findFirst({
+      where: {
+        id: session?.user?.id,
+      },
+      include: {
+        UserCharacteristic: {
+          omit: {
+            userId: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "User found",
+        user: findUser,
+      },
+      {
+        status: 200,  
+      }
+    );
+
+  }
+
+  return NextResponse.json(
+    {
+      success: false,
+      message: "User not found",
+    },
+    {
+      status: 404,
+    }
+  );
 }

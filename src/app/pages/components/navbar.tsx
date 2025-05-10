@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import Link from "next/link";
 
@@ -96,7 +97,7 @@ export default function AppNavbar() {
 }
 
 const ProtectedNav = () => {
-  const { open, toggleSidebar } = useSidebar();
+
   const session = useSession();
   const { theme, setTheme } = useTheme();
 
@@ -106,6 +107,7 @@ const ProtectedNav = () => {
   const isLoginPage = pathname === "/auth/signin";
 
   if (isLoginPage) return null;
+
 
   if (!userSession)
     return (
@@ -146,16 +148,7 @@ const ProtectedNav = () => {
           </button>
         </DropdownMenuContent>
       </DropdownMenu>
-      <button
-        className="bg-black/20 lg:hidden  py-2 px-4 rounded-lg shadow-lg"
-        onClick={toggleSidebar}
-      >
-        {open ? (
-          <XIcon className="w-10 h-10 text-white" />
-        ) : (
-          <MenuIcon className="w-10 h-10 text-white" />
-        )}
-      </button>
+      <SidebarTrigger className="lg:hidden flex bg-black/10 w-auto h-auto rounded-lg p-1"/>  
     </>
   );
 };

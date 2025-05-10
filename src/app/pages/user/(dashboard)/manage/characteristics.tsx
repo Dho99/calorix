@@ -18,11 +18,14 @@ import {
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Link from "next/link";
+import {toHeaderCase} from 'js-convert-case';
 
 export default function Characteristics({
   data,
+  fetchUser
 }: {
   data?: UserCharacteristics[];
+  fetchUser: () => Promise<void>;
 }) {
   function deleteCharacteristic(id: string) {
     if (confirm("Are you sure you want to delete this characteristic?")) {
@@ -36,7 +39,8 @@ export default function Characteristics({
             })
             .then((res) => {
               if (res.status === 200) {
-                alert("Delete characteristic success");
+                alert("Delete characteristic success"); 
+                fetchUser();
               } else {
                 alert("Delete characteristic failed");
               }
@@ -62,7 +66,9 @@ export default function Characteristics({
       <div className="w-full flex flex-col gap-3">
         <div className="w-full h-auto flex flex-col gap-3">
           <div className="flex flex-row w-full justify-between">
-            <h1 className="text-2xl font-bold text-white">Data Karakteristik tubuh</h1>
+            <h1 className="text-2xl font-bold text-white">
+              Data Karakteristik tubuh
+            </h1>
             <Link href={"/pages/user/calculate"}>
               {data && data[0]?.isDeleted ? (
                 <Button
@@ -94,31 +100,34 @@ export default function Characteristics({
                     )}
                   </div>
                 </AccordionTrigger>
-                <AccordionContent>
+                <AccordionContent className="border rounded-b-lg">
                   <Table>
                     <TableHeader>
-                      <TableRow>
+                      <TableRow className="hover:bg-transparent">
                         <TableHead>Field</TableHead>
                         <TableHead>Value</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {Object.entries(item)
-                        .filter(([key]) => key !== "id")
-                        .map(([key, value]) => (
-                          <TableRow key={key}>
-                            <TableCell>
-                              <span className="font-bold">{key}:</span>
-                            </TableCell>
-                            <TableCell>
-                              <span>{String(value)}</span>
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        .filter(([key]) => key !== "id" && key !== "isDeleted")
+                        .map(
+                          ([key, value]) =>
+                            value !== null && (
+                              <TableRow key={key} className="hover:bg-transparent">
+                                <TableCell>
+                                  <span className="font-bold">{toHeaderCase(key)}:</span>
+                                </TableCell>
+                                <TableCell>
+                                  <span>{String(value)}</span>
+                                </TableCell>
+                              </TableRow>
+                            )
+                        )}
                     </TableBody>
                     {!item?.isDeleted && (
-                      <TableFooter>
-                        <TableRow>
+                      <TableFooter className="bg-transparent hover:bg-transparent">
+                        <TableRow className="hover:bg-transparent">
                           <TableCell>
                             <span className="font-bold">Action:</span>
                           </TableCell>

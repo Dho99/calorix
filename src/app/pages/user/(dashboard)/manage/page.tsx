@@ -48,25 +48,29 @@ export default function Page() {
     }
   };
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get(
-          `/api/handler/user/${session?.data?.user?.email}`
-        );
-        if (res.status === 200) {
-          setUserData({
-            user: res.data.user,
-            characteristics: res.data.characteristics,
-          });
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          alert(error.message);
-        }
-      }
-    };
+  const fetchUser = async () => {
 
+    const searchParams = new URLSearchParams({category: "getUserCharacteristics"});
+
+    try {
+      const res = await axios.get(
+        `/api/handler/user/?${searchParams.toString()}`
+      );
+      if (res.status === 200) {
+        setUserData(null);
+        setUserData({
+          user: res.data.user,
+          characteristics: res.data.user.UserCharacteristic,
+        });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
+  };
+
+  useEffect(() => {
     fetchUser();
   }, [session]);
 
@@ -140,7 +144,7 @@ export default function Page() {
           className="w-full h-auto px-15 pb-15 pt-10 flex flex-col gap-8 border bg-white/2 rounded-lg"
           ref={pageRef}
         >
-          <div className="flex flex-row gap-5 w-full h-auto items-center">
+          <div className="flex lg:flex-row md:flex-row flex-col gap-5 w-full h-auto items-center">
             <div className="w-24 h-24 bg-[#9EC8B9]/20 p-2 rounded-full flex justify-center items-center">
               <UserRound className="w-full h-full text-white" />
             </div>
@@ -274,7 +278,7 @@ export default function Page() {
             )}
           </form>
         </div>
-        <Characteristics data={data?.characteristics}/>
+        <Characteristics data={data?.characteristics} fetchUser={fetchUser}/>
       </div>
     </Dialog>
   );

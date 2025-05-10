@@ -22,7 +22,7 @@ export default function SummaryCalculate({
         </p>
       </div>
 
-      <div className="mt-4 grid lg:grid-cols-2 grid-cols-1 gap-5">
+      <div className="mt-4 grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5">
         {stepsTemplate.map((step, index) => {
           const value = steps?.[step.stateKey as keyof StepValues];
 
