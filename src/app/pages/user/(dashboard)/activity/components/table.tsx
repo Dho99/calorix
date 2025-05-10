@@ -128,7 +128,7 @@ export default function ActivityTable({
                   ? `Meminum sebanyak ${activity?.userHydration?.waterIntake} ml`
                   : activity.category === "SLEEP_TRACKER"
                   ? `Menambah Jam tidur ${activity?.sleepTracker?.duration as number < 60 ? `${parseInt(String(activity?.sleepTracker?.duration))} Menit` : `${(parseFloat(String(activity?.sleepTracker?.duration)) / 60).toFixed(2)} Jam`} `
-                  : `Membakar ${activity?.physicalActivityLog?.caloriesBurned} Kalori`}
+                  : `Membakar ${parseFloat(String(activity?.physicalActivityLog?.caloriesBurned)).toFixed(2)} Kalori`}
               </div>
             </div>
           </DialogTrigger>

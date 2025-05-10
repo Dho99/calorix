@@ -4,8 +4,6 @@ import { useSession } from "next-auth/react";
 import { CogIcon, UserRound } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {
-  MenuIcon,
-  XIcon,
   WrenchIcon,
   CircleHelpIcon,
   NotebookTabsIcon,
@@ -15,7 +13,6 @@ import {
   MoonIcon,
   SunIcon,
 } from "lucide-react";
-import { useSidebar } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,

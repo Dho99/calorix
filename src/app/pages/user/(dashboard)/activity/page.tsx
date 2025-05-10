@@ -122,6 +122,7 @@ export default function Page() {
   }
 
   return (
+    
     <Dialog open={dialogProps !== null}>
       {dialogProps && (
         <DialogContent className="bg-black/50 border backdrop-blur-sm max-h-[90vh] text-white overflow-y-auto overflow-x-hidden">

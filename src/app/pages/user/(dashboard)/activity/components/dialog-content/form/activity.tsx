@@ -65,31 +65,31 @@ export default function ActivityForm({
   }
 
   function handleInputDurationSubmit() {
-    const input = document.getElementById(
-      inputDurationOpen.inputId
-    ) as HTMLInputElement;
+    const input = document.getElementById(inputDurationOpen.inputId) as HTMLInputElement;
+  
     if (input) {
       const duration = parseInt(input.value);
       if (isNaN(duration)) {
         alert("Please enter a valid number");
         return;
       }
-      setActivityInput!((prev) => {
+  
+      setActivityInput?.((prev) => {
         const isExist = prev.some((item) => item.name === query);
+        const newItem = {
+          name: query,
+          duration,
+          calories_per_hour:
+            activityData?.find((item) => item.name === query)?.calories_per_hour || 0,
+        };
+  
         if (isExist) {
           return prev.map((item) =>
-            item.name === query ? { ...item, duration: duration } : item
+            item.name === query ? { ...item, ...newItem } : item
           );
+        } else {
+          return [...prev, newItem];
         }
-        const newActivity = {
-          name: query,
-          duration: duration,
-          calories_per_hour:
-            activityData?.find((item) => item.name === query)
-              ?.calories_per_hour || 0,
-        };
-        setActivityInput?.([newActivity]);
-        return [...prev, newActivity];
       });
     }
   }
@@ -143,7 +143,7 @@ export default function ActivityForm({
               const currentMaxId =
                 prev?.reduce((maxId, item) => Math.max(maxId, item.id), 0) || 0;
               const newDataWithIds = res.data.map(
-                (item: any, index: number) => ({ //eslint-disable-line
+                (item: any, index: number) => ({     //eslint-disable-line
                   ...item,
                   id: currentMaxId + index + 1,
                 })
@@ -162,7 +162,7 @@ export default function ActivityForm({
   }
 
   return (
-    <div className="relative w-full max-w-md flex flex-col gap-5">
+    <div className="relative w-full flex flex-col gap-5 overflow-auto">
       {!data && (
         <>
           <div className="flex flex-col gap-3">
@@ -230,26 +230,33 @@ export default function ActivityForm({
         </>
       )}
 
-      <div className="border p-2 border-white rounded-lg">
-        <Table>
+      <div className="border p-2 border-white rounded-lg w-full">
+        <Table className="w-full">
           <TableHeader>
             <TableRow>
               <TableCell>Nama Aktivitas</TableCell>
               <TableCell>Durasi</TableCell>
-              {data ? <TableCell>MET Value</TableCell> : (null)}
-              {data ? <TableCell>Kalori Terbakar</TableCell> :  <TableCell>MET / Jam</TableCell>}
+              {data ? <TableCell>MET Value</TableCell> : null}
+              {data ? (
+                <TableCell>Kalori Terbakar</TableCell>
+              ) : (
+                <TableCell>MET / Jam</TableCell>
+              )}
             </TableRow>
           </TableHeader>
-          <TableBody className="overflow-auto"> 
+          <TableBody className="overflow-auto">
             {data
               ? data?.physicalActivityLog?.activityType.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell>{item?.name || "Tidak ada"}</TableCell>
                     <TableCell>{item?.duration || "Tidak ada"} menit</TableCell>
-                    <TableCell>{parseFloat(String(item?.metValue)).toFixed(2)}</TableCell>
                     <TableCell>
-                      {parseFloat(parseFloat(String(item?.metValue)).toFixed(2)) * parseInt(String(item?.duration)) ||
-                        "Tidak ada"}{" "}
+                      {parseFloat(String(item?.metValue)).toFixed(2)}
+                    </TableCell>
+                    <TableCell>
+                      {parseFloat(
+                        parseFloat(String(item?.metValue)).toFixed(2)
+                      ) * parseInt(String(item?.duration)) || "Tidak ada"}{" "}
                       KKal
                     </TableCell>
                   </TableRow>
@@ -258,6 +265,7 @@ export default function ActivityForm({
                   <TableRow key={index}>
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.duration} Menit</TableCell>
+                    <TableCell>{item.calories_per_hour} KKal</TableCell>
                   </TableRow>
                 ))}
           </TableBody>
