@@ -2,7 +2,7 @@
 
 export default function Page(){
     return (   
-        <div className="w-full h-[dvh] flex flex-col bg-[#092635] text-white relative py-15 px-20 items-center">
+        <div className="w-full h-[dvh] flex flex-col text-white relative py-15 px-20 items-center">
             <p className="text-4xl font-bold text-center">
                 Cara Kerja Calorix
             </p>

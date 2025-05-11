@@ -68,40 +68,55 @@ export const dropdownLinks = [
 
 export default function AppNavbar() {
   const pathname = usePathname();
-  const { setOpen, setOpenMobile } = useSidebar()
+  const { setOpen, setOpenMobile } = useSidebar();
   const { theme, setTheme } = useTheme();
-
   const isLoginPage = pathname === "/auth/signin";
+  const [hasShadow, setHasShadow] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const [hasShadow, setHasShadow] = useState(false); // State to track shadow
+  // Fix hydration mismatch by ensuring component is mounted
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      setHasShadow(window.scrollY > 60); // Add shadow if scrolled more than 60px
+      setHasShadow(window.scrollY > 60);
     };
 
     const handleResize = () => {
-      if(window.innerWidth > 640){
-        setOpenMobile(false); // Close mobile menu on larger screens
+      if (window.innerWidth > 640) {
+        setOpenMobile(false);
       }
       if (window.innerWidth > 1000) {
-        setOpen(false); // Remove shadow on larger screens
+        setOpen(false);
       }
-    }
+    };
 
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
-    }; // Cleanup event listeners
-  }, []);
+    };
+  }, [setOpen, setOpenMobile]);
 
+  // Prevent hydration mismatch by not rendering theme-dependent content server-side
+  if (!mounted) {
+    return (
+      <div className="flex items-center w-full py-3 lg:px-20 px-10 justify-between fixed top-0 z-2 backdrop-blur">
+        <Link href={"/pages/home"} className="text-2xl font-bold">
+          Calorix
+        </Link>
+        {/* <div className="opacity-0">Loading...</div> */}
+      </div>
+    );
+  }
 
   return (
     <div
-      className={`flex items-center w-full py-3 lg:px-20 px-10 dark:text-white justify-between fixed top-0 z-2 backdrop-blur transition-all transition-duration-300 ${
-        hasShadow ? "shadow-md  bg-[#092635]/10 dark:bg-black/30" : ""
+      className={`flex items-center w-full py-3 lg:px-20 px-10 dark:text-white justify-between fixed top-0 z-2 backdrop-blur transition-all duration-300 ${
+        hasShadow ? "shadow-md bg-[#092635]/10 dark:bg-black/30" : ""
       }`}
     >
       <Link href={"/pages/home"} className="text-2xl font-bold">
@@ -127,7 +142,7 @@ export default function AppNavbar() {
             setTheme(theme === "dark" ? "light" : "dark");
           }}
         >
-          {theme === "dark" ? (<MoonIcon />) : (<SunIcon />)}
+          {theme === "dark" ? <MoonIcon /> : <SunIcon />}
         </button>
       </div>
       <ProtectedNav />
@@ -136,47 +151,47 @@ export default function AppNavbar() {
 }
 
 const ProtectedNav = () => {
-  const session = useSession();
+  const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
-
-  const userSession = session?.data?.user;
-
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const isLoginPage = pathname === "/auth/signin";
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (isLoginPage) return null;
 
-  // if (!userSession)
-  //   return (
-  //     <Link
-  //       href={"/auth/signin"}
-  //       className="border border-black hover:bg-green-200 hover:text-green-700 hover:border-green-200 dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-2 px-3 rounded transition-all transition-duration-300 dark:hover:bg-[#9EC8B9] dark:hover:text-white"
-  //     >
-  //       Sign In
-  //     </Link>
-  //   );
+  const userSession = session?.user;
 
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          {userSession && (
+        {userSession ? (
+          <DropdownMenuTrigger asChild>
             <div className="flex-row items-center gap-1 lg:flex hidden hover:cursor-pointer">
               <div className="border dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-1 px-3 rounded">
                 {userSession?.name}
               </div>
               <UserRound className="w-10 h-10 dark:bg-[#9EC8B9] p-2 border dark:border-0 rounded-full" />
             </div>
-          )}
-        </DropdownMenuTrigger>
+          </DropdownMenuTrigger>
+        ) : (
+          <Link
+            href={"/auth/signin"}
+            className="border border-black hover:bg-green-200 hover:text-green-700 hover:border-green-200 dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-2 px-3 rounded transition-all duration-300 dark:hover:bg-[#9EC8B9] dark:hover:text-white"
+          >
+            Sign In
+          </Link>
+        )}
         <DropdownMenuContent className="w-40 bg-black/20 backdrop-blur-xs text-white">
-          {/* <DropdownMenuGroup> */}
           {dropdownLinks.map((item, index) => {
             return (
               <Link
                 href={`${item.link}`}
                 key={index}
-                className="flex flex-row items-center hover:cursor-pointe hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded"
+                className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded"
               >
                 {item.title}
               </Link>

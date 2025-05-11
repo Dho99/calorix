@@ -6,6 +6,7 @@ import { useRef, useEffect } from "react";
 import { animate, stagger, hover } from "motion";
 import { splitText } from "motion-plus";
 import * as motion from "motion/react-client";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
@@ -54,6 +55,8 @@ export default function Hero() {
     });
   }, []);
 
+  const router = useRouter()
+
   return (
     <div
       className="w-full min-h-dvh h-auto flex lg:flex-row flex-col gap-y-10 dark:text-white relative items-center py-20 justify-center"
@@ -76,6 +79,7 @@ export default function Hero() {
           <button
             className="bg-[#5C8374] py-3 px-10 text-white font-bold rounded-lg  text-xl shadow-xl"
             id="heroBtn"
+            onClick={() => {router.push(`/pages/user/dashboard`)}}
           >
             Get Started
           </button>

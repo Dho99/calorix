@@ -7,10 +7,15 @@ import { dashboardMenu } from "@/app/pages/user/(dashboard)/components/sidemenu"
 import type { Preference } from "@/app/pages/user/(dashboard)/components/sidemenu";
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { signOut } from "next-auth/react";
+import { LogOutIcon } from "lucide-react";
 
 export default function SidenavHead() {
-  const { open, setOpen, setOpenMobile } = useSidebar();
   const { theme, setTheme } = useTheme();
+  const { open, setOpen, setOpenMobile } = useSidebar();
+
+  const [isMounted, setIsMounted] = useState(false);
 
   const navLinks: Preference[] = [...dashboardMenu, ...navigContent];
 
@@ -19,19 +24,25 @@ export default function SidenavHead() {
     setOpenMobile(false);
   }
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <>
       <SidebarHeader className="overflow-hidden">
         <div className="flex flex-row items-center gap-x-3 p-4 w-full">
           <p className="text-3xl font-bold">Calorix</p>
-          <button
-            className="px-4 py-2 rounded dark:hover:bg-gray-700 hover:bg-gray-700/20 ms-auto"
-            onClick={() => {
-              setTheme(theme === "dark" ? "light" : "dark");
-            }}
-          >
-            {theme === "dark" ? (<SunIcon />) : (<MoonIcon />)}
-          </button>
+          {isMounted && (
+            <button
+              className="px-4 py-2 rounded dark:hover:bg-gray-700 hover:bg-gray-700/20 ms-auto"
+              onClick={() => {
+                setTheme(theme === "dark" ? "light" : "dark");
+              }}
+            >
+              {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+            </button>
+          )}
         </div>
       </SidebarHeader>
       <SidebarContent
@@ -78,6 +89,14 @@ export default function SidenavHead() {
             );
           }
         })}
+        <button
+          className="w-full py-3 px-3 rounded-lg shadow-lg flex flex-row items-center gap-x-3 hover:bg-[#9EC8B9] hover:font-bold transition-all duration-200 ease-in-out"
+          onClick={() => {
+            signOut({ redirectTo: "/auth/signin" });
+          }}
+        >
+          <LogOutIcon className="dark:text-white" /> Signout{" "}
+        </button>
       </SidebarContent>
     </>
   );
