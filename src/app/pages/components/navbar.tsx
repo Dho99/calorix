@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useSidebar } from "@/components/ui/sidebar";
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -67,6 +68,7 @@ export const dropdownLinks = [
 
 export default function AppNavbar() {
   const pathname = usePathname();
+  const { setOpen, setOpenMobile } = useSidebar()
   const { theme, setTheme } = useTheme();
 
   const isLoginPage = pathname === "/auth/signin";
@@ -78,8 +80,21 @@ export default function AppNavbar() {
       setHasShadow(window.scrollY > 60); // Add shadow if scrolled more than 60px
     };
 
+    const handleResize = () => {
+      if(window.innerWidth > 640){
+        setOpenMobile(false); // Close mobile menu on larger screens
+      }
+      if (window.innerWidth > 1000) {
+        setOpen(false); // Remove shadow on larger screens
+      }
+    }
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    }; // Cleanup event listeners
   }, []);
 
 
