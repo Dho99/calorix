@@ -36,7 +36,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="max-w-1/6 w-full overflow-hidden h-full flex justify-center py-15 relative lg:block hidden">
         <SideMenu />
       </div>
-      <div className="w-full h-auto px-5 border-s-2 border-[#5D5D5D] my-10">
+      <div className="w-full h-auto px-5 lg:border-s-2 border-0 border-[#5D5D5D] my-10">
         {
           showInfo.show && (
             <div className="my-5">

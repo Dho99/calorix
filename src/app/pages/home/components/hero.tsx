@@ -62,7 +62,7 @@ export default function Hero() {
       <div className="lg:max-w-1/2 flex-col lg:order-1 order-2">
         <h1 className="lg:text-5xl md:text-5xl text-4xl font-bold break-keep leading-14">Atur Kalori, Wujudkan Gaya Hidup Sehat bersama Calorix</h1>
         <p className="lg:text-xl md:text-lg text-md mt-5">
-          Kami siap membantu anda dengan bantuan AI <br />dan para aoohli di bidangnya
+          Kami siap membantu anda dengan bantuan AI <br />dan para ahli di bidangnya
         </p>
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
@@ -79,12 +79,12 @@ export default function Hero() {
           >
             Get Started
           </button>
-          <button
+          {/* <button
             className="bg-[#5C8374] py-3 px-10 text-white font-bold rounded-lg text-xl shadow-xl"
             id="heroBtn"
           >
             See FAQ
-          </button>
+          </button> */}
         </motion.div>
       </div>
       <motion.div

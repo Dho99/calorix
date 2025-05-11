@@ -7,12 +7,17 @@ import {dashboardMenu} from "@/app/pages/user/(dashboard)/components/sidemenu";
 import type { Preference } from "@/app/pages/user/(dashboard)/components/sidemenu";
 
 export default function SidenavHead() {
-  const { open } = useSidebar();
+  const { open, setOpen, setOpenMobile } = useSidebar();
 
   const navLinks: Preference[] = [
     ...dashboardMenu,
     ...navigContent,
   ]
+
+  function handleCloseSidebar(){
+    setOpen(false);
+    setOpenMobile(false);
+  }
 
   return (
     <>
@@ -33,6 +38,7 @@ export default function SidenavHead() {
                     key={index}
                     href={`${child.childLink}`}
                     className="w-full py-3 px-3 rounded-lg shadow-lg flex flex-row items-center gap-x-3 hover:bg-[#9EC8B9] hover:font-bold transition-all duration-200 ease-in-out"
+                    onClick={handleCloseSidebar}
                   >
                     <div>{child.title}</div>
                   </Link>
@@ -47,6 +53,7 @@ export default function SidenavHead() {
               key={index}
               href={`${item.link}`}
               className="w-full py-3 px-3 rounded-lg shadow-lg flex flex-row items-center gap-x-3 hover:bg-[#9EC8B9] hover:font-bold transition-all duration-200 ease-in-out"
+              onClick={handleCloseSidebar}
             >
               <div>
                 <item.icon />

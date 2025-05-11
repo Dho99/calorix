@@ -45,10 +45,10 @@ const Stepper: React.FC<StepperProps> = ({
 
         <div className="absolute top-1/2 left-0 w-full h-2 bg-gray-300 transform -translate-y-1/2 rounded-full flex flex-row items-center bg-slate-600">
           <div
-            className="h-2 bg-white rounded-full transition-all duration-300"
+            className="h-2 bg-green-400 dark:bg-white rounded-full transition-all duration-300"
             style={{ width: `${progressPercentage}%`, maxWidth: "100%" }}
           />
-          <div className="bg-white p-1 w-16 h-10 text-black rounded-full items-center flex justify-center -ms-2">
+          <div className="bg-green-400 dark:bg-white p-1 w-16 h-10 text-black rounded-full items-center flex justify-center -ms-2">
             <p className="">{currentStep} / {steps.length}</p>
           </div>
         </div>

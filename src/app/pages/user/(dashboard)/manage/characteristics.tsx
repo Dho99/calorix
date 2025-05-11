@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Link from "next/link";
+import { PlusCircleIcon } from "lucide-react";
 import {toHeaderCase} from 'js-convert-case';
 
 export default function Characteristics({
@@ -62,20 +63,21 @@ export default function Characteristics({
   }
 
   return (
-    <div className="w-full h-auto px-15 pt-10 pb-15 flex flex-col gap-8 border bg-white/2 rounded-lg">
+    <div className="w-full h-auto lg:px-15 md:px-10 px-5 pt-10 pb-15 flex flex-col gap-8 border dark:bg-white/2 bg-green-200/50 rounded-lg">
       <div className="w-full flex flex-col gap-3">
         <div className="w-full h-auto flex flex-col gap-3">
-          <div className="flex flex-row w-full justify-between">
-            <h1 className="text-2xl font-bold text-white">
+          <div className="flex lg:flex-row md:flex-row flex-col gap-y-4 w-full justify-between">
+            <h1 className="text-2xl font-bold dark:text-white">
               Data Karakteristik tubuh
             </h1>
             <Link href={"/pages/user/calculate"}>
               {data && data[0]?.isDeleted ? (
                 <Button
                   variant="secondary"
-                  className="bg-[#9EC8B9] hover:bg-[#9EC8B9]/80 text-black"
+                  className="bg-green-300/50 hover:bg-[#9EC8B9]/80 w-full text-black flex flex-row items-center"
                   type="button"
                 >
+                  <PlusCircleIcon className="w-5 h-5 me-2" />
                   Add your new characteristic
                 </Button>
               ) : null}
@@ -104,19 +106,19 @@ export default function Characteristics({
                   <Table>
                     <TableHeader>
                       <TableRow className="hover:bg-transparent">
-                        <TableHead>Field</TableHead>
+                        <TableHead>Kategori</TableHead>
                         <TableHead>Value</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {Object.entries(item)
-                        .filter(([key]) => key !== "id" && key !== "isDeleted")
+                        .filter(([key]) => key !== "id" && key !== "isDeleted" && key !== "createdAt")
                         .map(
                           ([key, value]) =>
                             value !== null && (
                               <TableRow key={key} className="hover:bg-transparent">
                                 <TableCell>
-                                  <span className="font-bold">{toHeaderCase(key)}:</span>
+                                  <span className="font-bold">{toHeaderCase(key)} :</span>
                                 </TableCell>
                                 <TableCell>
                                   <span>{String(value)}</span>

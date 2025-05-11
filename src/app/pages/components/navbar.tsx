@@ -67,7 +67,10 @@ export const dropdownLinks = [
 
 export default function AppNavbar() {
   const pathname = usePathname();
+  const { theme, setTheme } = useTheme();
+
   const isLoginPage = pathname === "/auth/signin";
+
   const [hasShadow, setHasShadow] = useState(false); // State to track shadow
 
   useEffect(() => {
@@ -79,10 +82,11 @@ export default function AppNavbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+
   return (
     <div
       className={`flex items-center w-full py-3 lg:px-20 px-10 dark:text-white justify-between fixed top-0 z-2 backdrop-blur transition-all transition-duration-300 ${
-        hasShadow ? "shadow-md  bg-[#092635]/10" : ""
+        hasShadow ? "shadow-md  bg-[#092635]/10 dark:bg-black/30" : ""
       }`}
     >
       <Link href={"/pages/home"} className="text-2xl font-bold">
@@ -102,6 +106,14 @@ export default function AppNavbar() {
                 </Link>
               );
             })}
+        <button
+          className="px-4 py-2 rounded dark:hover:bg-gray-700 hover:bg-gray-700/20"
+          onClick={() => {
+            setTheme(theme === "dark" ? "light" : "dark");
+          }}
+        >
+          {theme === "dark" ? (<MoonIcon />) : (<SunIcon />)}
+        </button>
       </div>
       <ProtectedNav />
     </div>
@@ -119,26 +131,28 @@ const ProtectedNav = () => {
 
   if (isLoginPage) return null;
 
-  if (!userSession)
-    return (
-      <Link
-        href={"/auth/signin"}
-        className="border border-[#9EC8B9] text-[#9EC8B9] py-2 px-3 rounded transition-all transition-duration-300 hover:bg-[#9EC8B9] hover:text-white"
-      >
-        Sign In
-      </Link>
-    );
+  // if (!userSession)
+  //   return (
+  //     <Link
+  //       href={"/auth/signin"}
+  //       className="border border-black hover:bg-green-200 hover:text-green-700 hover:border-green-200 dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-2 px-3 rounded transition-all transition-duration-300 dark:hover:bg-[#9EC8B9] dark:hover:text-white"
+  //     >
+  //       Sign In
+  //     </Link>
+  //   );
 
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex-row items-center gap-1 lg:flex hidden hover:cursor-pointer">
-            <div className="border dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-1 px-3 rounded">
-              {userSession?.name}
+          {userSession && (
+            <div className="flex-row items-center gap-1 lg:flex hidden hover:cursor-pointer">
+              <div className="border dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-1 px-3 rounded">
+                {userSession?.name}
+              </div>
+              <UserRound className="w-10 h-10 dark:bg-[#9EC8B9] p-2 border dark:border-0 rounded-full" />
             </div>
-            <UserRound className="w-10 h-10 dark:bg-[#9EC8B9] p-2 border dark:border-0 rounded-full" />
-          </div>
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-40 bg-black/20 backdrop-blur-xs text-white">
           {/* <DropdownMenuGroup> */}

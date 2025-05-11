@@ -131,17 +131,17 @@ export default function Page() {
       )}
 
       <div className="flex flex-col gap-5 w-full h-auto">
-        <div className="flex-row flex w-full items-center">
-          <div className="flex flex-col gap-3">
-            <h1 className="text-white text-2xl font-semibold">Aktivitas</h1>
-            <p className="text-white">
+        <div className="lg:flex-row md:flex-row flex-col  gap-y-5 flex w-full items-center">
+          <div className="flex flex-col gap-3 w-full me-auto">
+            <h1 className="dark:text-white text-2xl font-semibold">Aktivitas</h1>
+            <p className="dark:text-white">
               Berikut adalah aktivitas yang telah anda lakukan
             </p>
           </div>
           <DialogTrigger asChild>
             <button
               type="button"
-              className="bg-[#9EC8B9]/10 hover:bg-[#9EC8B9]/50 transition-all transition-duration-400 py-2 px-4 border rounded-lg text-white shadow-lg ms-auto flex flex-row gap-4"
+              className="dark:bg-[#9EC8B9]/10 bg-green-300/70 hover:bg-[#9EC8B9]/50 transition-all transition-duration-400 py-2 px-4 border rounded-lg dark:text-white shadow-lg lg:ms-auto md:ms-auto me-auto flex flex-row gap-4 lg:w-58 md:w-64 w-full justify-center"
               onClick={() => {
                 setDialogProps({
                   content: (
@@ -153,24 +153,24 @@ export default function Page() {
                 });
               }}
             >
-              <CopyPlusIcon className="text-white" />
+              <CopyPlusIcon className="dark:text-white" />
               Tambah Data
             </button>
           </DialogTrigger>
         </div>
-        <div className="bg-white/2 border border-white rounded-lg shadow-lg p-5 w-full h-auto flex flex-col gap-5">
-          <div className="flex flex-row w-full justify-between items-center">
+        <div className="bg-green-200 dark:bg-white/2 border border-black dark:border-white rounded-lg shadow-lg p-5 w-full h-auto flex flex-col gap-5">
+          <div className="flex lg:flex-row md:flex-row flex-col gap-y-5 w-full justify-between items-center">
 
-            <form className="flex flex-row max-w-md" onSubmit={handleFilterByName} id="search-form">
-              <Input type="text" className="w-sm border border-white rounded-e-none" name="title" placeholder="Find Activity by Name"></Input>
-              <Button type="submit" variant={"default"} className="rounded-s-none px-5 border border-white bg-white/10 text-white hover:bg-white/40">Cari</Button>
+            <form className="flex flex-row w-full" onSubmit={handleFilterByName} id="search-form">
+              <Input type="text" className="lg:w-sm md:w-sm w-full border border-black dark:border-white rounded-e-none" name="title" placeholder="Find Activity by Name"></Input>
+              <Button type="submit" variant={"default"} className="rounded-s-none px-5 border border-black dark:border-white text-black bg-green-300/70 dark:bg-white/10 dark:text-white hover:bg-white/40">Cari</Button>
             </form>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="bg-white/3 text-white space-x-2"
+                  className="bg-green-300/70 hover:bg-green-300 dark:bg-white/3 dark:text-white space-x-2 me-auto lg:w-fit md:w-fit w-full"
                 >
                   <FunnelIcon />
                   {pageData?.category
@@ -178,7 +178,7 @@ export default function Page() {
                     : "Filter"}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="max-w-56 bg-black/20 backdrop-blur-xs text-white">
+              <DropdownMenuContent className="max-w-56 bg-green-600/20 dark:bg-black/20 backdrop-blur-xs dark:text-white">
                 <DropdownMenuLabel>Filter By Category</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
@@ -189,7 +189,7 @@ export default function Page() {
                         {item.title}
                       </DropdownMenuSubTrigger>
                       <DropdownMenuPortal>
-                        <DropdownMenuSubContent className="bg-black/20 backdrop-blur-xs text-white">
+                        <DropdownMenuSubContent className="bg-green-600/20 dark:bg-black/20 backdrop-blur-xs dark:text-white">
                           {item.child.map((childItem, childIndex) => (
                             <DropdownMenuItem
                               key={childIndex}
@@ -214,7 +214,7 @@ export default function Page() {
                     }}
                   >
                     <SearchIcon />
-                    <span className="text-white">All</span>
+                    <span className="dark:text-white">All</span>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -226,10 +226,11 @@ export default function Page() {
             setDialogProps={setDialogProps}
             fetchActivities={fetchActivities}
           />
-          <div className="w-full flex justify-end">
-            <div className="flex flex-row border border-white/20 rounded-lg bg-white/5 p-2 gap-2">
+          <div className="w-full flex lg:justify-end md:justify-end justify-center">
+            <div className="flex flex-row border border-black dark:border-white/20 rounded-lg bg-white/5 p-2 gap-2">
               <Button
-                variant="default"
+                variant="secondary"
+                className="bg-green-500/50 hover:bg-green-200"
                 disabled={pageData?.page < 2}
                 onClick={prevSlide}
               >
@@ -245,7 +246,8 @@ export default function Page() {
                 </div>
               </div>
               <Button
-                variant="default"
+              className="bg-green-500/50 hover:bg-green-200"
+                variant="secondary"
                 onClick={nextSlide}
                 disabled={
                   !(

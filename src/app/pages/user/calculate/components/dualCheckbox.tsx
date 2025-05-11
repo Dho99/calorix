@@ -44,8 +44,8 @@ export default function DualCheckbox({
 
   return (
     <div className="flex flex-col gap-2 w-full" ref={componentRef}>
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-col gap-2 w-full p-10 border border-white rounded-lg shadow-lg bg-white/5">
+      <div className="flex lg:flex-row md:flex-row flex-col gap-3">
+        <div className="flex flex-col gap-2 w-full p-10 border border-white rounded-lg shadow-lg bg-white/5 lg:order-1 md:order-1 order-2">
           {stepsData.opts?.map((opt, index) => (
             <div
               className="items-center flex space-x-5 text-black bg-white/70 py-3 px-5 rounded shadow-lg"
@@ -110,15 +110,10 @@ export default function DualCheckbox({
           ))}
         </div>
 
-        {/* <div className="flex flex-col gap-4"> */}
-          {/* <div>Step value:{JSON.stringify(stepsValue)}</div> */}
-          {/* <div>input value:{JSON.stringify(inputValue)}</div> */}
-        {/* </div> */}
-
         <div
           className={`flex flex-col gap-y-3 items-center h-full p-5 w-full ${
             isInputShown?.open && "border shadow-lg  bg-white/5"
-          } border-white rounded-lg relative`}
+          } border-white rounded-lg relative lg:order-2 md:order-2 order-1`}
         >
           {isInputShown?.open && (
             <>

@@ -18,7 +18,7 @@ export default function Page(): React.ReactNode {
     <div className={`w-full h-full flex-col items-center justify-center ${!isLogin ? 'lg:py-20 py-0' : ''}`}>
       <div className="flex flex-col items-center m-auto w-full">
         <h1 className={"text-2xl font-bold text-center"}>Calorix</h1>
-        <h1 className="text-2xl text-white">{isLogin ? "Sign In" : "Register"}</h1>
+        <h1 className="text-2xl dark:text-white">{isLogin ? "Sign In" : "Register"}</h1>
         <p className="text-sm text-gray-400">Please {isLogin ? "Sign In" : "Register"} to continue</p>
         <div
           className={
@@ -33,7 +33,7 @@ export default function Page(): React.ReactNode {
         </div>
       </div>
 
-      <p className="text-md text-white my-4 text-center ">Atau Masuk dengan Cara Lain</p>
+      <p className="text-md dark:text-white my-4 text-center ">Atau Masuk dengan Cara Lain</p>
       <button
         type="button"
         onClick={() => signIn("google", {redirectTo: "/pages/user/dashboard"})}

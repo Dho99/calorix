@@ -62,8 +62,8 @@ export default function Page() {
             buttons: (
               <>
                 <Button
-                  variant="outline"
-                  className="bg-[#092635] text-white hover:bg-[#092635] border-none"
+                  variant="ghost"
+                  className="bg-green-200/70 text-white border-none"
                   onClick={() => {
                     router.push("/pages/user/calculate");
                   }}
