@@ -153,7 +153,7 @@ export default function AppNavbar() {
 const ProtectedNav = () => {
   const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false); //eslint-disable-line
   const pathname = usePathname();
   const isLoginPage = pathname === "/auth/signin";
   
