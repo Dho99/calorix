@@ -141,21 +141,21 @@ export default function Page() {
       </DialogContent>
       <div className="w-full flex flex-col gap-3">
         <div
-          className="w-full h-auto px-15 pb-15 pt-10 flex flex-col gap-8 border bg-white/2 rounded-lg"
+          className="w-full h-auto px-15 pb-15 pt-10 flex flex-col gap-8 border dark:bg-white/2 bg-green-200/40 rounded-lg"
           ref={pageRef}
         >
           <div className="flex lg:flex-row md:flex-row flex-col gap-5 w-full h-auto items-center">
-            <div className="w-24 h-24 bg-[#9EC8B9]/20 p-2 rounded-full flex justify-center items-center">
-              <UserRound className="w-full h-full text-white" />
+            <div className="w-24 h-24 bg-green-300/50 dark:bg-[#9EC8B9]/20 p-2 rounded-full flex justify-center items-center">
+              <UserRound className="w-full h-full dark:text-white" />
             </div>
             <div className="flex flex-col gap-3">
-              <h1 className="text-xl font-bold text-white">
+              <h1 className="text-xl font-bold dark:text-white">
                 {data?.user?.name}
               </h1>
               {isEdit ? (
                 <DialogTrigger asChild>
                   <button
-                    className="py-1 w-fit px-4 border border-[#9EC8B9] rounded-lg text-[#9EC8B9] hover:cursor-pointer hover:bg-[#9EC8B9] hover:text-white hover:font-bold hover:shadow-lg transition-all transition-duration-400"
+                    className="py-1 w-full px-4 dark:border bg-green-300/50 dark:border-[#9EC8B9]/70  rounded-lg dark:text-[#9EC8B9] hover:cursor-pointer hover:bg-green-300/70 hover:text-white hover:font-bold hover:shadow-lg transition-all transition-duration-400"
                     type="button"
                   >
                     Batal Edit Profile
@@ -163,7 +163,7 @@ export default function Page() {
                 </DialogTrigger>
               ) : (
                 <button
-                  className="py-1 w-fit px-4 border border-[#9EC8B9] rounded-lg text-[#9EC8B9] hover:cursor-pointer hover:bg-[#9EC8B9] hover:text-white hover:font-bold hover:shadow-lg transition-all transition-duration-400"
+                 className="py-1 w-full px-4 dark:border bg-green-300/50 dark:bg-transparent dark:border-[#9EC8B9] rounded-lg dark:text-[#9EC8B9] hover:cursor-pointer hover:bg-green-300/70 hover:text-white hover:font-bold hover:shadow-lg transition-all transition-duration-400" 
                   type="button"
                   onClick={() => {
                     setEdit(true);
@@ -191,7 +191,7 @@ export default function Page() {
           )}
           <form
             onSubmit={submitFormInput}
-            className="flex flex-col gap-y-5 w-full text-white lg:items-start items-center"
+            className="flex flex-col gap-y-5 w-full dark:text-white lg:items-start items-center"
           >
             <div className="grid w-full w-full items-center gap-3">
               <Label htmlFor="email">Email</Label>
@@ -202,7 +202,7 @@ export default function Page() {
                 placeholder="Email"
                 readOnly
                 defaultValue={data?.user?.email as string}
-                className={`${"bg-[#D9D9D9] text-white"} ${
+                className={`${"dark:bg-[#D9D9D9]/20 bg-black/10 dark:text-white"} ${
                   isEdit ? "" : `hover:cursor-not-allowed`
                 }`}
               />{" "}
@@ -217,7 +217,7 @@ export default function Page() {
                 name="username"
                 readOnly={!isEdit}
                 defaultValue={data?.user?.username as string}
-                className={`${"bg-[#D9D9D9] text-white"} ${
+                className={`${"dark:bg-[#D9D9D9]/20 bg-black/10 dark:text-white"} ${
                   isEdit ? "" : `hover:cursor-not-allowed`
                 }`}
               />
@@ -231,7 +231,7 @@ export default function Page() {
                 name="name"
                 readOnly={!isEdit}
                 defaultValue={data?.user?.name as string}
-                className={`${"bg-[#D9D9D9] text-white"} ${
+                className={`${"dark:bg-[#D9D9D9]/20 bg-black/10 dark:text-white"} ${
                   isEdit ? "" : `hover:cursor-not-allowed`
                 }`}
               />
@@ -245,7 +245,7 @@ export default function Page() {
                     id="password"
                     name="password"
                     placeholder="New Password"
-                    className="bg-[#D9D9D9] text-white"
+                    className="dark:bg-[#D9D9D9]/20 bg-black/10 dark:text-white"
                     required
                   />
                 </div>
@@ -256,7 +256,7 @@ export default function Page() {
                     id="validatePass"
                     name="validatePass"
                     placeholder="Validate New Password"
-                    className="bg-[#D9D9D9] text-white"
+                    className="dark:bg-[#D9D9D9]/20 bg-black/10 dark:text-white"
                     required
                   />
                 </div>

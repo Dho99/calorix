@@ -62,8 +62,8 @@ export default function Page() {
             buttons: (
               <>
                 <Button
-                  variant="outline"
-                  className="bg-[#092635] text-white hover:bg-[#092635] border-none"
+                  variant="ghost"
+                  className="bg-green-200/70 text-white border-none"
                   onClick={() => {
                     router.push("/pages/user/calculate");
                   }}
@@ -142,17 +142,17 @@ export default function Page() {
           buttons={dialog.buttons}
         />
       )}
-      <div className="w-full h-dvh lg:flex lg:flex-row grid grid-cols-1 gap-2 gap-y-10">
+      <div className="w-full lg:flex lg:flex-row grid grid-cols-1 gap-2 gap-y-10 pb-5 dark:text-white">
         <div className="w-full h-full flex flex-col gap-2">
-          <h1 className="text-4xl font-bold text-white mb-3">Overview</h1>
+          <h1 className="text-4xl font-bold dark:text-white mb-3">Overview</h1>
           <Overview pageData={overviewData}/>
           <Activities pageData={activitiesData}/>
         </div>
 
         <div className="w-full h-full flex flex-col gap-2">
           <div className="flex lg:flex-row md:flex-row flex-col gap-x-2 w-full items-baseline mb-3">
-            <h1 className="text-white text-4xl font-bold">Statistic</h1>
-            <p className="text-white">This Month</p>
+            <h1 className="dark:text-white text-4xl font-bold">Statistic</h1>
+            <p className="dark:text-white">This Month</p>
           </div>
           <Stats pageData={statsData}/>
         </div>

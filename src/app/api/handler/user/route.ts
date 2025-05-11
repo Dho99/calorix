@@ -151,7 +151,6 @@ export async function GET(req: NextRequest) {
         UserCharacteristic: {
           omit: {
             userId: true,
-            createdAt: true,
             updatedAt: true,
           },
           orderBy: {

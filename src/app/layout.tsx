@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-      className={`${geist.className} anti-antialiased w-dvw h-dvh overflow-x-hidden overflow-y-auto dark:bg-[#092635] bg-slate-300`}
+      className={`${geist.className} anti-antialiased overflow-auto dark:bg-[#092635] bg-gradient-to-r to-green-300/70`}
       >
       <SessionProvider>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>

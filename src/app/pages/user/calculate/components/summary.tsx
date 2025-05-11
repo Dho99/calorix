@@ -12,17 +12,17 @@ export default function SummaryCalculate({
   const stepsTemplate: Step[] = stepsJson;
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full text-white">
+    <div className="flex flex-col items-center justify-center h-full w-full dark:text-white">
       <div className="flex flex-col max-w-2xl text-center mb-5">
         <h1 className="text-2xl font-bold">Rangkuman Pendataan Diri Anda</h1>
-        <p className="mt-2 text-lg text-white/60">
+        <p className="mt-2 text-lg dark:text-white/60">
           Data ini akan disimpan di database dan akan menjadi acuan untuk target
           anda selanjutnya. Anda bisa mengakses “Riwayat” dan menghapus
           preferensi akun anda
         </p>
       </div>
 
-      <div className="mt-4 grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5">
+      <div className="mt-4 grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-10">
         {stepsTemplate.map((step, index) => {
           const value = steps?.[step.stateKey as keyof StepValues];
 
@@ -31,12 +31,12 @@ export default function SummaryCalculate({
               <h3 className="text-xl font-bold">{step.question}</h3>
 
               {step.type === "number" ? (
-                <div className="w-full h-full flex flex-row items-center gap-x-3 px-5 bg-white/70 rounded-lg">
+                <div className="w-full h-full flex flex-row items-center gap-x-3 px-5 bg-slate-200/70 dark:bg-white/70 rounded-lg">
                   <input
                     id={step.stateKey}
                     type="number"
                     placeholder={step.placeholder as string}
-                    className="w-full h-full px-10 py-5 shadow-lg text-black rounded-lg text-2xl font-bold"
+                    className="w-full h-full px-10 py-5 text-black rounded-lg text-2xl font-bold bg-transparent"  
                     defaultValue={value as string}
                     readOnly
                   />
@@ -55,7 +55,7 @@ export default function SummaryCalculate({
                       <button
                         key={i}
                         type="button"
-                        className="transition-all w-full h-full p-4 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 bg-white/70"
+                        className="transition-all w-full h-full p-4 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 bg-slate-200/80  "
                         disabled
                       >
                         {opt.icon && (
@@ -77,7 +77,7 @@ export default function SummaryCalculate({
                   {value.map((opt: any, i: number) => ( //eslint-disable-line
                     <div
                       key={i}
-                      className="transition-all w-full h-full p-4 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 bg-white/70"
+                      className="transition-all w-full h-full p-4 shadow-lg text-black rounded-lg text-2xl font-bold flex flex-col items-center justify-center gap-5 bg-slate-200/80"
                     >
                       {opt.icon && (
                         <Image

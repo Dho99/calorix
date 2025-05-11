@@ -89,7 +89,7 @@ export default function ActivityTable({
         activitiesProps.map((activity, key) => (
           <DialogTrigger asChild key={key}>
             <div
-              className="w-full flex flex-row gap-2 border border-white bg-white/2 rounded-lg py-2 px-4 text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center"
+              className="w-full flex flex-row gap-2 border border-black dark:border-white bg-white/2 rounded-lg py-2 px-4 dark:text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center"
               onClick={() =>
                 setDialogProps({
                   content: (
@@ -104,24 +104,24 @@ export default function ActivityTable({
             >
               <div>
                 {activity.category === "FOOD_LOG" ? (
-                  <UtensilsCrossedIcon className="text-white w-10 h-10" />
+                  <UtensilsCrossedIcon className="dark:text-white w-10 h-10" />
                 ) : activity.category === "USER_HYDRATION" ? (
-                  <BeerIcon className="text-white w-10 h-10" />
+                  <BeerIcon className="dark:text-white w-10 h-10" />
                 ) : activity.category === "SLEEP_TRACKER" ? (
-                  <BedIcon className="text-white w-10 h-10" />
+                  <BedIcon className="dark:text-white w-10 h-10" />
                 ) : (
-                  <BicepsFlexedIcon className="text-white w-10 h-10" />
+                  <BicepsFlexedIcon className="dark:text-white w-10 h-10" />
                 )}
               </div>
               <div>
-                <h1 className="text-white text-2xl font-semibold">
+                <h1 className="dark:text-white text-2xl font-semibold">
                   {activity?.title}
                 </h1>
-                <p className="text-white/50 text-sm">
+                <p className="text-black/50 dark:text-white/50 text-sm">
                   {formatDate(activity.createdAt)}
                 </p>
               </div>
-              <div>
+              <div className="lg:block md:block hidden">
                 {activity.category === "FOOD_LOG"
                   ? `Menambah ${activity?.foodLog?.calories} Kalori `
                   : activity.category === "USER_HYDRATION"
@@ -133,9 +133,9 @@ export default function ActivityTable({
             </div>
           </DialogTrigger>
         )) : (
-          <div className="w-full flex flex-row gap-2 border border-white bg-white/2 rounded-lg py-2 px-4 text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center">
-            <p className="text-white text-2xl font-semibold">Tidak ada data</p>
-            <p className="text-white/50 text-sm">Silahkan tambahkan data</p>  
+          <div className="w-full flex flex-row gap-2 border border-white bg-white/2 rounded-lg py-2 px-4 dark:text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center">
+            <p className="dark:text-white text-2xl font-semibold">Tidak ada data</p>
+            <p className="dark:text-white/50 text-sm">Silahkan tambahkan data</p>  
           </div>
         )}
     </div>

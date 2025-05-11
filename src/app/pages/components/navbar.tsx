@@ -22,31 +22,32 @@ import { useTheme } from "next-themes";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export const navigContent = [
   {
     title: "Tentang",
-    link: "#about",
+    link: "/home#about",
     icon: InfoIcon,
   },
   {
     title: "Fitur",
-    link: "#features",
+    link: "/home#features",
     icon: WrenchIcon,
   },
   {
     title: "Konsultasi",
-    link: "/pages/user/consultation",
+    link: "/user/consultation",
     icon: BotIcon,
   },
   {
     title: "How It Works",
-    link: "/how-it-works",
+    link: "/home/how-it-works",
     icon: NotebookTabsIcon,
   },
   {
     title: "FAQ",
-    link: "#faq",
+    link: "/home#faq",
     icon: CircleHelpIcon,
   },
 ];
@@ -66,10 +67,28 @@ export const dropdownLinks = [
 
 export default function AppNavbar() {
   const pathname = usePathname();
+  const { theme, setTheme } = useTheme();
+
   const isLoginPage = pathname === "/auth/signin";
 
+  const [hasShadow, setHasShadow] = useState(false); // State to track shadow
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setHasShadow(window.scrollY > 60); // Add shadow if scrolled more than 60px
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+
   return (
-    <div className="flex items-center w-full py-3 lg:px-20 px-10 bg-[#092635]/70 text-white justify-between fixed top-0 z-2 backdrop-blur-xs shadow-md">
+    <div
+      className={`flex items-center w-full py-3 lg:px-20 px-10 dark:text-white justify-between fixed top-0 z-2 backdrop-blur transition-all transition-duration-300 ${
+        hasShadow ? "shadow-md  bg-[#092635]/10 dark:bg-black/30" : ""
+      }`}
+    >
       <Link href={"/pages/home"} className="text-2xl font-bold">
         Calorix
       </Link>
@@ -80,13 +99,21 @@ export default function AppNavbar() {
               return (
                 <Link
                   key={index}
-                  href={`/pages/home${item.link}`}
-                  className="px-4 py-2 rounded hover:bg-gray-700"
+                  href={`/pages${item.link}`}
+                  className="px-4 py-2 rounded dark:hover:bg-gray-700 hover:bg-gray-700/20"
                 >
                   {item.title}
                 </Link>
               );
             })}
+        <button
+          className="px-4 py-2 rounded dark:hover:bg-gray-700 hover:bg-gray-700/20"
+          onClick={() => {
+            setTheme(theme === "dark" ? "light" : "dark");
+          }}
+        >
+          {theme === "dark" ? (<MoonIcon />) : (<SunIcon />)}
+        </button>
       </div>
       <ProtectedNav />
     </div>
@@ -94,7 +121,6 @@ export default function AppNavbar() {
 }
 
 const ProtectedNav = () => {
-
   const session = useSession();
   const { theme, setTheme } = useTheme();
 
@@ -105,27 +131,28 @@ const ProtectedNav = () => {
 
   if (isLoginPage) return null;
 
-
-  if (!userSession)
-    return (
-      <Link
-        href={"/auth/signin"}
-        className="border border-[#9EC8B9] text-[#9EC8B9] py-2 px-3 rounded transition-all transition-duration-300 hover:bg-[#9EC8B9] hover:text-white"
-      >
-        Sign In
-      </Link>
-    );
+  // if (!userSession)
+  //   return (
+  //     <Link
+  //       href={"/auth/signin"}
+  //       className="border border-black hover:bg-green-200 hover:text-green-700 hover:border-green-200 dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-2 px-3 rounded transition-all transition-duration-300 dark:hover:bg-[#9EC8B9] dark:hover:text-white"
+  //     >
+  //       Sign In
+  //     </Link>
+  //   );
 
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex-row items-center gap-1 lg:flex hidden hover:cursor-pointer">
-            <div className="border border-[#9EC8B9] text-[#9EC8B9] py-1 px-3 rounded">
-              {userSession?.name}
+          {userSession && (
+            <div className="flex-row items-center gap-1 lg:flex hidden hover:cursor-pointer">
+              <div className="border dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-1 px-3 rounded">
+                {userSession?.name}
+              </div>
+              <UserRound className="w-10 h-10 dark:bg-[#9EC8B9] p-2 border dark:border-0 rounded-full" />
             </div>
-            <UserRound className="w-10 h-10 bg-[#9EC8B9] p-2 rounded-full" />
-          </div>
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-40 bg-black/20 backdrop-blur-xs text-white">
           {/* <DropdownMenuGroup> */}
@@ -134,18 +161,24 @@ const ProtectedNav = () => {
               <Link
                 href={`${item.link}`}
                 key={index}
-                className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded"
+                className="flex flex-row items-center hover:cursor-pointe hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded"
               >
                 {item.title}
               </Link>
             );
           })}
-          <button className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded justify-between" onClick={() => {setTheme(theme === "dark" ? "light" : "dark")}}>
-            {theme === "dark" ? (<MoonIcon /> ) : (<SunIcon />)} {theme === "dark" ? "Dark" : "Light"} Mode
+          <button
+            className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded justify-between"
+            onClick={() => {
+              setTheme(theme === "dark" ? "light" : "dark");
+            }}
+          >
+            {theme === "dark" ? <MoonIcon /> : <SunIcon />}{" "}
+            {theme === "dark" ? "Dark" : "Light"} Mode
           </button>
         </DropdownMenuContent>
       </DropdownMenu>
-      <SidebarTrigger className="lg:hidden flex bg-black/10 w-auto h-auto rounded-lg p-1"/>  
+      <SidebarTrigger className="lg:hidden flex dark:bg-black/10 border w-auto h-auto rounded-lg p-1" />
     </>
   );
 };

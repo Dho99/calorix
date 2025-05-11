@@ -67,9 +67,9 @@ export default function SideMenu() {
         <div className="flex flex-col gap-2">
           {dashboardMenu.map((item, index) => {
             return item.collapsible ? (
-              <Accordion key={index} type="single" collapsible className="text-white">
+              <Accordion key={index} type="single" collapsible className="dark:text-white">
                 <AccordionItem value={item.title}>
-                  <AccordionTrigger className="text-white text-base transition-all transition-duration-400  py-2 px-4 rounded-lg hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold flex flex-row gap-2 items-center hover:no-underline">
+                  <AccordionTrigger className="dark:text-white text-base transition-all transition-duration-400  py-2 px-4 rounded-lg hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold flex flex-row gap-2 items-center hover:no-underline">
                     <item.icon className="text-white" />
                     <p className="me-auto">{item.title}</p>
                   </AccordionTrigger>
@@ -102,22 +102,22 @@ export default function SideMenu() {
                 href={`${item.link}`}
                 className={`${
                   pathname !== item.link
-                    ? "hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold "
-                    : "bg-slate-200/30 shadow-lg font-semibold "
-                } text-white text-base transition-all transition-duration-400  py-2 px-4 rounded-lg flex flex-row gap-2 items-center`}
+                    ? "hover:bg-green-200 dark:hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold "
+                    : "bg-green-200 dark:bg-slate-200/30 shadow-lg font-semibold "
+                } dark:text-white text-base transition-all transition-duration-400 py-2 px-4 rounded-lg flex flex-row gap-2 items-center`}
               >
-                <item.icon className="text-white" />
+                <item.icon className="dark:text-white" />
                 {item.title}
               </Link>
             );
           })}
           <button
-            className="text-white text-base text-start transition-all transition-duration-400  py-2 px-4 rounded-lg hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold flex flex-row gap-2 items-center"
+            className="dark:text-white text-base text-start transition-all transition-duration-400  py-2 px-4 rounded-lg hover:bg-green-200 dark:hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold flex flex-row gap-2 items-center"
             onClick={() => {
               signOut({ redirectTo: "/auth/signin" });
             }}
           >
-            <LogOutIcon className="text-white" /> Signout{" "}
+            <LogOutIcon className="dark:text-white" /> Signout{" "}
           </button>
         </div>
       </div>
