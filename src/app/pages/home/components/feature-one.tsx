@@ -23,7 +23,7 @@ export default function FeatureOne() {
 
   return (
     <div
-      className="w-full h-[dvh] flex flex-row bg-[#092635] text-white relative py-15 items-center justify-center"
+      className="w-full h-[dvh] flex flex-row dark:text-white relative py-15 items-center justify-center"
       id="features"
     >
       <div className="flex flex-col">

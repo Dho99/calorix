@@ -13,7 +13,7 @@ export default async function Layout({
       <div className="flex flex-col w-full h-full relative">
         <AppSidebar />
         <AppNavbar />
-        <div className="w-full h-full relative overflow-auto">{children}</div>
+        <div className="w-full h-full relative overflow-auto px-5">{children}</div>
         {/* <ChatBox /> */}
       </div>
     </SidebarProvider>
