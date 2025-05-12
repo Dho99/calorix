@@ -51,6 +51,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
+
   if (reqType === "filterActivities") {
     const findByName = searchParams.get("title");
 
@@ -227,6 +228,7 @@ export async function POST(request: NextRequest) {
       const pyhsicalActivityData = {
         caloriesBurned: 0,
         duration: 0,
+        stepsCount: 0,
       };
 
       const aggregateTodayActivity = await prisma.physicalActivityLog.aggregate(
@@ -255,14 +257,24 @@ export async function POST(request: NextRequest) {
       });
 
       if (aggregateTodayActivity._sum.caloriesBurned) {
-        const caloriesBurned = parseFloat(String(aggregateTodayActivity._sum.caloriesBurned)).toFixed(2) || 0
-        const isDecreasing: boolean = caloriesBurned > userTarget!.deficitPerDay
+        const caloriesBurned =
+          parseFloat(
+            String(aggregateTodayActivity._sum.caloriesBurned)
+          ).toFixed(2) || 0;
+        const isDecreasing: boolean =
+          caloriesBurned > userTarget!.deficitPerDay;
 
         let changeDailyCalories: number;
         if (isDecreasing) {
-          changeDailyCalories = (parseFloat(String(caloriesBurned)) - parseFloat(String(userTarget!.deficitPerDay)) / parseFloat(String(userTarget!.targetTime)));
-        } else{ 
-          changeDailyCalories = (parseFloat(String(caloriesBurned)) + parseFloat(String(userTarget!.deficitPerDay)) / parseFloat(String(userTarget!.targetTime)));
+          changeDailyCalories =
+            parseFloat(String(caloriesBurned)) -
+            parseFloat(String(userTarget!.deficitPerDay)) /
+              parseFloat(String(userTarget!.targetTime));
+        } else {
+          changeDailyCalories =
+            parseFloat(String(caloriesBurned)) +
+            parseFloat(String(userTarget!.deficitPerDay)) /
+              parseFloat(String(userTarget!.targetTime));
         }
 
         await prisma.userGoal.update({
@@ -273,8 +285,22 @@ export async function POST(request: NextRequest) {
             deficitPerDay: changeDailyCalories.toString(),
           },
         });
-        
       }
+
+      const userCharacteristics = await prisma.userCharacteristics.findFirst({
+        where: {
+          userId: session?.user?.id as string,
+        },
+        select: {
+          id: true,
+          currentWeight: true,
+          height: true,
+          age: true,
+          gender: true,
+        },
+      });
+      
+      const calculateUserStepsLength = parseFloat(String(userCharacteristics?.height)) * (userCharacteristics?.gender === "male" ? 0.415 : 0.413);
 
       data?.activityData?.map((item: ActivityType) => {
         const duration = parseInt(String(item?.duration));
@@ -282,8 +308,38 @@ export async function POST(request: NextRequest) {
           String((item?.calories_per_hour as number) / 60)
         );
 
+        if (item?.name.toLowerCase()?.includes("running")) {
+            const speedMatch = item?.name?.match(/(\d+(\.\d+)?)\s*mph/);
+            if (speedMatch) {
+              const speed = speedMatch ? parseFloat(speedMatch[1]) : 0;
+              const durationInHours = duration / 60; // Convert duration to hours
+              const distance = speed * durationInHours;
+              const countSteps = (distance * 160934) / calculateUserStepsLength;
+              pyhsicalActivityData.stepsCount += countSteps;
+            }
+        }
+
+        if (item?.name.toLowerCase()?.includes("walking")) {
+            const averageWalkingSpeed = 3; // Assuming average walking speed is 3 mph
+            const durationInHours = duration / 60; // Convert duration to hours
+            const distance = averageWalkingSpeed * durationInHours;
+            const countSteps = (distance * 160934) / calculateUserStepsLength;
+            pyhsicalActivityData.stepsCount += countSteps;
+        }
+
         pyhsicalActivityData.caloriesBurned += caloriesPerHour * duration;
         pyhsicalActivityData.duration += duration;
+      });
+
+      const calculateWithCalories = Number(((Number(String(userCharacteristics?.currentWeight)) * 7700) - Number(String(pyhsicalActivityData?.caloriesBurned)))) / 7700;
+
+      await prisma.userCharacteristics.update({
+        where: {
+          id: userCharacteristics?.id as string,
+        },
+        data: {
+          currentWeight: calculateWithCalories.toString(),
+        },
       });
 
       const physicalActivityLog = await prisma.physicalActivityLog.create({
@@ -291,6 +347,7 @@ export async function POST(request: NextRequest) {
           userId: session?.user?.id as string,
           duration: pyhsicalActivityData.duration,
           caloriesBurned: pyhsicalActivityData.caloriesBurned,
+          stepsCount: pyhsicalActivityData.stepsCount,
         },
       });
 
@@ -302,6 +359,7 @@ export async function POST(request: NextRequest) {
           physicalActivityId: physicalActivityLog.id,
         })),
       });
+
 
       childData = {
         physicalActivityLogId: physicalActivityLog.id,

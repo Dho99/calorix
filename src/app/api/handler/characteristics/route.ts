@@ -45,7 +45,8 @@ export async function POST(request: NextRequest) {
       hydrationNeeds,
       workoutsPerWeek,
       totalDeficit,
-      stepNeeds
+      stepNeeds,
+      maxDailyCalories
     } = payload;
 
     await prisma.$transaction([
@@ -65,6 +66,7 @@ export async function POST(request: NextRequest) {
           bmr: bmr,
           bodyFatPercentage: bodyFatPercentage,
           userId: userId,
+          registeredWeight: currentWeight,
         },
       }),
       prisma.userGoal.create({
@@ -77,6 +79,7 @@ export async function POST(request: NextRequest) {
           hydrationNeeds: hydrationNeeds,
           totalDeficit: totalDeficit,
           stepNeeds: stepNeeds,
+          maxDailyCalories: maxDailyCalories,
         },
       }),
       

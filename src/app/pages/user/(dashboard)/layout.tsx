@@ -42,10 +42,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="my-5">
               <Alert
                 variant={"default"}
-                className="bg-red-700/40 flex flex-row items-center h-full w-full"
+                className="bg-red-700/80 flex flex-row items-center h-full w-full"
               >
                 <div className="flex flex-col">
-                  <AlertTitle className="text-xl font-bold">Heads up!</AlertTitle>
+                  <AlertTitle className="text-white text-xl font-bold">Heads up!</AlertTitle>
                   <AlertDescription className="text-base text-white">
                     {showInfo.msgInfo}
                   </AlertDescription>

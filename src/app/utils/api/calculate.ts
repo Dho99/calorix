@@ -26,7 +26,7 @@ export const calculateUserData = async (data: StepValues) => {
     deficitPerDay = await calculateDeficitCalories(TDEE, parseInt(String(currentWeight)), parseInt(String(targetWeight)), parseInt(String(targetTime)));
   }
 
-  const stepNeeds = await calculateStepNeeds(currentWeight as string, activityFactor as string, deficitPerDay.deficitPerDay as string);
+  const stepNeeds = await calculateStepNeeds(deficitPerDay.totalDeficit ?? 0, deficitPerDay.daysLeft ?? 0);
 
   const calculateUserMET = userMET && Array.isArray(userMET) 
     ? await calculateMET(userMET as { label: string; value: string; duration: string; }[], currentWeight as string) 
@@ -39,8 +39,8 @@ export const calculateUserData = async (data: StepValues) => {
     bodyFatPercentage: bodyFat.toString(),
     hydrationNeeds: waterNeeds.toString(),
     ...deficitPerDay,
-    stepNeeds: stepNeeds, //estimated daily steps needed to reach the goal
-    userMETValue: calculateUserMET
+    stepNeeds: stepNeeds.toString(), //estimated daily steps needed to reach the goal
+    userMETValue: calculateUserMET,
   }
 } 
 
@@ -75,7 +75,7 @@ const calculateDeficitCalories = async (tdee: number, currentWeight: number, tar
     deficitPerDay: string | null;
     daysLeft: string | null;
     totalDeficit: string | null;
-    // maxDailyCalories: string | null;
+    maxDailyCalories: string | null;
   }
 
   const target: Target = {
@@ -83,7 +83,7 @@ const calculateDeficitCalories = async (tdee: number, currentWeight: number, tar
     deficitPerDay: null,
     daysLeft: null,
     totalDeficit: null,
-    // maxDailyCalories: null
+    maxDailyCalories: null
   };
   
   const currentDate = new Date();
@@ -104,7 +104,7 @@ const calculateDeficitCalories = async (tdee: number, currentWeight: number, tar
     target.deficitPerDay = tdee.toString();
   }
 
-  // target.maxDailyCalories = (tdee - Math.abs(parseFloat(target.deficitPerDay))).toString();
+  target.maxDailyCalories = (tdee - Math.abs(parseFloat(target.deficitPerDay))).toString();
 
   return target
 }
@@ -129,18 +129,12 @@ const calculateMET = async(userMET: {label: string, value: string, duration: str
   return caloriesBurned.toString();
 }
 
-export const calculateStepNeeds = async (currentWeight: string, activityFactor: string, deficitPerDay: string) => {
-  const weight = parseFloat(currentWeight);
-  const activity = parseFloat(activityFactor);
-  const deficit = parseFloat(deficitPerDay);
+export const calculateStepNeeds = async (totalDeficit: string|number, daysLeft: number|string) => {
 
-  if (isNaN(weight) || isNaN(activity) || isNaN(deficit) || weight <= 0 || activity <= 0) {
-    throw new Error("Invalid input values for calculateStepNeeds");
-  }
-  
+  const stepsNeeded = Number(totalDeficit) / 0.045; //use for walk only
 
-  const caloriesPerStep = (activity * weight * 3.5) / 200; // Corrected MET value for walking
-  return (Math.abs(deficit) / caloriesPerStep).toFixed(2); // Rounded to 2 decimal places
+  return Math.round(stepsNeeded / Number(daysLeft));
+
 }
 
 // const calculateMaxDailyCalories = async (tdee: number, deficitPerDay: string | null) => {
