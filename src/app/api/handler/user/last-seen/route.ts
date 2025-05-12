@@ -11,19 +11,19 @@ export async function POST() {
     }
 
     try {
-        const findLastSeen = await prisma.user.findUnique({
+        const findLastSeen = await prisma.physicalActivityLog.findFirst({
             where: {
-                id: session?.user?.id,
+                userId: session?.user?.id,
             },
-            select: {
-                lastSeen: true,
+            orderBy: {
+                createdAt: "desc",
             },
         });
         
 
-        const calculateDifferentDays = Math.floor((new Date().getTime() - new Date(findLastSeen?.lastSeen as Date).getTime()) / (1000 * 60 * 60 * 24));
+        const calculateDifferentDays = Math.floor((new Date().getTime() - new Date(findLastSeen?.createdAt as Date).getTime()) / (1000 * 60 * 60 * 24));
 
-        if (calculateDifferentDays > 0 && findLastSeen?.lastSeen) {
+        if (calculateDifferentDays > 0 && findLastSeen?.createdAt) {
             const getUserGoal = await prisma.userGoal.findUnique({
                 where: {
                     userId: session?.user?.id,
@@ -47,14 +47,14 @@ export async function POST() {
 
         }
 
-        await prisma.user.update({
-            where: {
-                id: session?.user?.id,
-            },
-            data: {
-                lastSeen: new Date().toISOString(),
-            },
-        });
+        // await prisma.user.update({
+        //     where: {
+        //         id: session?.user?.id,
+        //     },
+        //     data: {
+        //         lastSeen: new Date().toISOString(),
+        //     },
+        // });
 
 
        return NextResponse.json({

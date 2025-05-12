@@ -96,6 +96,7 @@ model UserCharacteristics {
   gender                  String
   age                     String
   height                  String
+  registeredWeight        String?
   currentWeight           String
   activityFactor          String
   mealsPerDay             String
@@ -124,6 +125,7 @@ model UserGoal {
   targetWeight   String
   totalDeficit   String
   stepNeeds      String
+  maxDailyCalories    String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
@@ -135,6 +137,7 @@ model PhysicalActivityLog {
   userId         String
   user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   activityType   ActivityType[]
+  stepsCount     Float?
   duration       Int // dalam menit
   caloriesBurned Float
   createdAt      DateTime       @default(now())
@@ -193,7 +196,6 @@ model UserActivites {
   userId                String
   category              ACTIVITY_TYPE
   title                 String
-  stepsCount            Float?
   effectToBody          String?
   sleepTrackerId        String?  @unique
   userHydrationId       String?  @unique

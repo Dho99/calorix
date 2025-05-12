@@ -115,7 +115,7 @@ export default function AppNavbar() {
 
   return (
     <div
-      className={`flex items-center w-full py-3 lg:px-20 px-10 dark:text-white justify-between fixed top-0 z-2 backdrop-blur transition-all duration-300 ${
+      className={`flex items-center w-full py-3 lg:px-20 px-5 dark:text-white justify-between fixed top-0 z-2 backdrop-blur transition-all duration-300 ${
         hasShadow ? "shadow-md bg-[#092635]/10 dark:bg-black/30" : ""
       }`}
     >
@@ -180,7 +180,7 @@ const ProtectedNav = () => {
         ) : (
           <Link
             href={"/auth/signin"}
-            className="border border-black hover:bg-green-200 hover:text-green-700 hover:border-green-200 dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-2 px-3 rounded transition-all duration-300 dark:hover:bg-[#9EC8B9] dark:hover:text-white"
+            className="border border-black hover:bg-green-200 hover:text-green-700 hover:border-green-200 dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-2 px-3 rounded transition-all duration-300 dark:hover:bg-[#9EC8B9] dark:hover:text-white lg:flex hidden "
           >
             Sign In
           </Link>

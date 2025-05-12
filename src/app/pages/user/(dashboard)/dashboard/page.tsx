@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import type { ActivitiesProps } from "./components/activities";
 import type { StatsProps } from "./components/stats";
 import type { PhysicalActivityLog } from "@/app/utils/lib/types/user";
+import { FlameIcon, FootprintsIcon, BeerIcon, BedIcon, BeefIcon } from "lucide-react";
 
 export type DashboardComponentPageProps = {
   open: boolean;
@@ -32,7 +33,7 @@ export default function Page() {
     tdeeData: number;
     hydrationNeeds: number;
     sleepTracker: number;
-    foodLog: number;
+    caloriesConsumed: number;
     userCharacteristics: {
       currentWeight?: number;
       bmi?: number;
@@ -45,8 +46,10 @@ export default function Page() {
       deficitPerDay: number;
       targetTime: number;
       targetWeight: number;
+      maxDailyCalories: number;
     };
     activityData: PhysicalActivityLog["duration"][]
+    weightDiffPercent: number;
   } | null>(null);
 
   useEffect(() => {
@@ -95,6 +98,7 @@ export default function Page() {
       targetWeight: pageData?.goal.targetWeight,
       bmi: pageData?.userCharacteristics.bmi,
       bodyFatPercentage: pageData?.userCharacteristics.bodyFatPercentage,
+      weightDiffPercent: parseFloat(String(pageData?.weightDiffPercent)).toFixed(2),
   };
 
   const activitiesData: ActivitiesProps[] = [
@@ -103,26 +107,37 @@ export default function Page() {
       value: parseFloat(String(pageData?.caloriesBurned)).toFixed(2),
       target: parseFloat(String(pageData?.goal.deficitPerDay)).toFixed(2),
       parameter: "Kkal",
+      icon: FlameIcon
     },
     {
       title: "Steps",
-      value: pageData?.stepsCount,
+      value: Number(pageData?.stepsCount),
       target: pageData?.goal.stepNeeds,
       parameter: "Langkah",
+      icon: FootprintsIcon
     },
     {
       title: "Hydration",
       value: pageData?.hydrationNeeds,
       target: parseFloat(String(pageData?.goal.hydrationNeeds)).toFixed(2),
       parameter: "Liter",
-      unit: "ml"
+      unit: "ml",
+      icon: BeerIcon
     },
     {
       title: "Sleep",
       value: pageData?.sleepTracker,
       target: 8,
       parameter: "Jam",
+      icon: BedIcon
     },
+    {
+      title: "Kalori Masuk",
+      value: pageData?.caloriesConsumed,
+      target: Number(pageData?.goal?.maxDailyCalories).toFixed(2),
+      parameter: "Makanan",
+      icon: BeefIcon
+    }
   ];
 
   const statsData: StatsProps = {
@@ -142,7 +157,7 @@ export default function Page() {
           buttons={dialog.buttons}
         />
       )}
-      <div className="w-full lg:flex lg:flex-row grid grid-cols-1 gap-2 gap-y-10 pb-5 dark:text-white">
+      <div className="w-full h-3/4 lg:flex lg:flex-row grid grid-cols-1 gap-2 gap-y-10 pb-5 dark:text-white">
         <div className="w-full h-full flex flex-col gap-2">
           <h1 className="text-4xl font-bold dark:text-white mb-3">Overview</h1>
           <Overview pageData={overviewData}/>

@@ -66,14 +66,13 @@ export default function AddActivityContent({
       category: category as string,
       type: "create",
     });
+    setDialogProps(null);
     axios
       .post(`/api/handler/activities/user?${urlParams.toString()}`, {
         data: JSON.stringify(data),
       })
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data);
-          setDialogProps(null);
           fetchActivities();
         } else {
           console.log("failed");
@@ -94,7 +93,6 @@ export default function AddActivityContent({
 
 
   function changeInputCategory(value: string) {
-    console.log("value", value);
     if (value === "") {
       setCategory(null);
     }

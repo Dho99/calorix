@@ -96,7 +96,6 @@ export default function ActivityForm({
 
   function initActivityData() {
     setActivityData([
-      { id: 1, name: "Running", calories_per_hour: 600 },
       { id: 2, name: "Cycling", calories_per_hour: 500 },
       { id: 3, name: "Swimming", calories_per_hour: 700 },
       { id: 4, name: "Walking", calories_per_hour: 300 },
@@ -182,7 +181,7 @@ export default function ActivityForm({
             />
 
             {isOpen && (
-              <div className="absolute z-10 mt-1 w-full max-h-64 overflow-auto rounded-md bg-[#1E1E2F]/70 backdrop-blur border shadow-lg">
+              <div className="absolute z-10 mt-1 w-full rounded-md bg-[#1E1E2F]/70 backdrop-blur border shadow-lg">
                 {activityData?.length === 0 ? (
                   <div className="p-2 text-sm text-gray-400">No results</div>
                 ) : (

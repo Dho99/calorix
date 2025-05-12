@@ -63,9 +63,10 @@ export async function GET() {
           deficitPerDay: true,
           targetTime: true,
           targetWeight: true,
+          maxDailyCalories: true,
         },
       }),
-      prisma.userActivites.aggregate({
+      prisma.physicalActivityLog.aggregate({
         _sum: { stepsCount: true },
         where: { userId },
       }),
@@ -103,7 +104,7 @@ export async function GET() {
       prisma.userCharacteristics.findFirst({
         where: { userId, isDeleted: false },
         omit: {
-            userId: true
+            userId: true,
         }
       }),
       prisma.physicalActivityLog.findMany({
@@ -136,21 +137,43 @@ export async function GET() {
       0
     );
     // Calculate sleep time
+
+    const calculateWeightDiffPercent = () => {
+      const current = parseFloat(String(userCharacteristics?.currentWeight));
+      const registered = parseFloat(String(userCharacteristics?.registeredWeight));
+    
+      if (!current || !registered) return 0;
+  
+    
+      if (stepsGoal?.goal === "deficit") {
+        // progress positif jika berat badan menurun
+        return ((registered - current) / registered) * 100;
+      } else if (stepsGoal?.goal === "surplus") {
+        // progress positif jika berat badan meningkat
+        return ((current - registered) / registered) * 100;
+      } else {
+        // goal maintain → progress berdasarkan seberapa dekat dengan target
+        const diff = Math.abs(current - registered);
+        return (diff / registered) * 100;
+      }
+    };
+    
     
 
     // Prepare response data
     const responseData = {
       caloriesBurned: caloriesBurnedData._sum.caloriesBurned && caloriesBurnedData._sum.caloriesBurned || 0,
       stepsGoal: stepsGoal?.stepNeeds || 0,
-      stepsCount: stepsData._sum.stepsCount || 0,
+      stepsCount: parseFloat(String(stepsData._sum.stepsCount)).toFixed(2) || 0,
       tdee: tdeeData?.tdee || 0,
       hydrationNeeds: sumHydration,
       sleepTracker: sleepTracker?._sum.duration && (parseFloat(String(sleepTracker._sum.duration)) / 60).toFixed(2) || 0,
-      caloriesConsumed: foodLog._sum.calories || 0,
+      caloriesConsumed: Number(foodLog._sum.calories) || 0,
       goal: stepsGoal,
       userCharacteristics: userCharacteristics,
       activitiesData: activitiesData,
-      caloriesBurnedByMonth: caloriesBurnedByMonth._sum.caloriesBurned || 0
+      caloriesBurnedByMonth: caloriesBurnedByMonth._sum.caloriesBurned || 0,
+      weightDiffPercent: calculateWeightDiffPercent(),
     };
 
 

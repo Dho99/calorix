@@ -29,6 +29,7 @@ export async function GET(
         height: true,
         bmi: true,
         bodyFatPercentage: true,
+        registeredWeight: true,
       },
     });
 
