@@ -225,26 +225,12 @@ export async function POST(request: NextRequest) {
         foodLogId: foodLog.id,
       };
     } else if (category === "PHYSICAL_ACTIVITY") {
-      const pyhsicalActivityData = {
+      const physicalActivityData = {
         caloriesBurned: 0,
         duration: 0,
         stepsCount: 0,
       };
 
-      const aggregateTodayActivity = await prisma.physicalActivityLog.aggregate(
-        {
-          _sum: {
-            caloriesBurned: true,
-            duration: true,
-          },
-          where: {
-            userId: session?.user?.id as string,
-            createdAt: {
-              gte: new Date(new Date().setHours(0, 0, 0, 0)),
-            },
-          },
-        }
-      );
 
       const userTarget = await prisma.userGoal.findFirst({
         where: {
@@ -255,37 +241,6 @@ export async function POST(request: NextRequest) {
           targetTime: true,
         },
       });
-
-      if (aggregateTodayActivity._sum.caloriesBurned) {
-        const caloriesBurned =
-          parseFloat(
-            String(aggregateTodayActivity._sum.caloriesBurned)
-          ).toFixed(2) || 0;
-        const isDecreasing: boolean =
-          caloriesBurned > userTarget!.deficitPerDay;
-
-        let changeDailyCalories: number;
-        if (isDecreasing) {
-          changeDailyCalories =
-            parseFloat(String(caloriesBurned)) -
-            parseFloat(String(userTarget!.deficitPerDay)) /
-              parseFloat(String(userTarget!.targetTime));
-        } else {
-          changeDailyCalories =
-            parseFloat(String(caloriesBurned)) +
-            parseFloat(String(userTarget!.deficitPerDay)) /
-              parseFloat(String(userTarget!.targetTime));
-        }
-
-        await prisma.userGoal.update({
-          where: {
-            userId: session?.user?.id as string,
-          },
-          data: {
-            deficitPerDay: changeDailyCalories.toString(),
-          },
-        });
-      }
 
       const userCharacteristics = await prisma.userCharacteristics.findFirst({
         where: {
@@ -299,7 +254,7 @@ export async function POST(request: NextRequest) {
           gender: true,
         },
       });
-      
+
       const calculateUserStepsLength = parseFloat(String(userCharacteristics?.height)) * (userCharacteristics?.gender === "male" ? 0.415 : 0.413);
 
       data?.activityData?.map((item: ActivityType) => {
@@ -309,29 +264,29 @@ export async function POST(request: NextRequest) {
         );
 
         if (item?.name.toLowerCase()?.includes("running")) {
-            const speedMatch = item?.name?.match(/(\d+(\.\d+)?)\s*mph/);
-            if (speedMatch) {
-              const speed = speedMatch ? parseFloat(speedMatch[1]) : 0;
-              const durationInHours = duration / 60; // Convert duration to hours
-              const distance = speed * durationInHours;
-              const countSteps = (distance * 160934) / calculateUserStepsLength;
-              pyhsicalActivityData.stepsCount += countSteps;
-            }
+          const speedMatch = item?.name?.match(/(\d+(\.\d+)?)\s*mph/);
+          if (speedMatch) {
+            const speed = speedMatch ? parseFloat(speedMatch[1]) : 0;
+            const durationInHours = duration / 60; // Convert duration to hours
+            const distance = speed * durationInHours;
+            const countSteps = (distance * 160934) / calculateUserStepsLength;
+            physicalActivityData.stepsCount += countSteps;
+          }
         }
 
         if (item?.name.toLowerCase()?.includes("walking")) {
-            const averageWalkingSpeed = 3; // Assuming average walking speed is 3 mph
-            const durationInHours = duration / 60; // Convert duration to hours
-            const distance = averageWalkingSpeed * durationInHours;
-            const countSteps = (distance * 160934) / calculateUserStepsLength;
-            pyhsicalActivityData.stepsCount += countSteps;
+          const averageWalkingSpeed = 3; // Assuming average walking speed is 3 mph
+          const durationInHours = duration / 60; // Convert duration to hours
+          const distance = averageWalkingSpeed * durationInHours;
+          const countSteps = (distance * 160934) / calculateUserStepsLength;
+          physicalActivityData.stepsCount += countSteps;
         }
 
-        pyhsicalActivityData.caloriesBurned += caloriesPerHour * duration;
-        pyhsicalActivityData.duration += duration;
+        physicalActivityData.caloriesBurned += caloriesPerHour * duration;
+        physicalActivityData.duration += duration;
       });
 
-      const calculateWithCalories = Number(((Number(String(userCharacteristics?.currentWeight)) * 7700) - Number(String(pyhsicalActivityData?.caloriesBurned)))) / 7700;
+      const calculateWithCalories = Number(((Number(String(userCharacteristics?.currentWeight)) * 7700) - Number(String(physicalActivityData?.caloriesBurned)))) / 7700;
 
       await prisma.userCharacteristics.update({
         where: {
@@ -345,9 +300,9 @@ export async function POST(request: NextRequest) {
       const physicalActivityLog = await prisma.physicalActivityLog.create({
         data: {
           userId: session?.user?.id as string,
-          duration: pyhsicalActivityData.duration,
-          caloriesBurned: pyhsicalActivityData.caloriesBurned,
-          stepsCount: pyhsicalActivityData.stepsCount,
+          duration: physicalActivityData.duration,
+          caloriesBurned: physicalActivityData.caloriesBurned,
+          stepsCount: physicalActivityData.stepsCount,
         },
       });
 

@@ -48,8 +48,12 @@ export default function Page() {
       targetWeight: number;
       maxDailyCalories: number;
     };
-    activityData: PhysicalActivityLog["duration"][]
+    activityData: PhysicalActivityLog[]
     weightDiffPercent: number;
+    groupedActivities: StatsProps["groupedActivity"];
+    groupedSteps: StatsProps["groupedSteps"];
+    totalActivityTime: number;
+    totalActivityCount: number;
   } | null>(null);
 
   useEffect(() => {
@@ -99,6 +103,7 @@ export default function Page() {
       bmi: pageData?.userCharacteristics.bmi,
       bodyFatPercentage: pageData?.userCharacteristics.bodyFatPercentage,
       weightDiffPercent: parseFloat(String(pageData?.weightDiffPercent)).toFixed(2),
+      goal: pageData?.goal.goal,
   };
 
   const activitiesData: ActivitiesProps[] = [
@@ -135,9 +140,9 @@ export default function Page() {
       title: "Kalori Masuk",
       value: pageData?.caloriesConsumed,
       target: Number(pageData?.goal?.maxDailyCalories).toFixed(2),
-      parameter: "Makanan",
+      parameter: "Kalori",
       icon: BeefIcon
-    }
+    },
   ];
 
   const statsData: StatsProps = {
@@ -145,7 +150,12 @@ export default function Page() {
       stepsCount: pageData?.stepsCount,
       stepsGoal: pageData?.goal?.stepNeeds
     },
-    activityData: pageData?.activityData
+    activityData: pageData?.activityData,
+    groupedActivity: pageData?.groupedActivities || [],
+    targetTime: pageData?.goal?.targetTime,
+    groupedSteps: pageData?.groupedSteps || [],
+    totalActivityTime: pageData?.totalActivityTime,
+    totalActivityCount: pageData?.activityData.length || 0,
   } 
 
   return (
@@ -157,7 +167,7 @@ export default function Page() {
           buttons={dialog.buttons}
         />
       )}
-      <div className="w-full h-3/4 lg:flex lg:flex-row grid grid-cols-1 gap-2 gap-y-10 pb-5 dark:text-white">
+      <div className="w-full lg:flex lg:flex-row grid grid-cols-1 gap-2 gap-y-10 pb-5 dark:text-white">
         <div className="w-full h-full flex flex-col gap-2">
           <h1 className="text-4xl font-bold dark:text-white mb-3">Overview</h1>
           <Overview pageData={overviewData}/>

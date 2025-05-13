@@ -1,6 +1,7 @@
 import { prisma } from "@/app/utils/lib/prisma/prisma";
 import { NextResponse} from "next/server";
 import { auth } from "../auth";
+import { getDateAndMonthOnly, getMonthName } from "@/app/utils/api/date";
 
 export async function GET() {
   const session = await auth();
@@ -111,12 +112,9 @@ export async function GET() {
         where: {
           userId,
           createdAt: {
-            gte: monthAgo.toISOString(),
+            gte: weekAgo.toISOString(),
           },
         },
-        select: {
-            duration: true
-        }
       }),
     ]);
 
@@ -130,14 +128,24 @@ export async function GET() {
       }
     });
 
+    const stepsCountByMonth = await prisma.physicalActivityLog.findMany({
+      where: {
+        userId: session?.user?.id,
+        createdAt: {
+          gte: startOfMonth
+        }
+      },
+      select: {
+        stepsCount: true,
+        createdAt: true
+      }
+    });
+    
 
-    // Calculate hydration sum
     const sumHydration = hydrationNeeds.reduce(
       (acc: number, curr: {waterIntake: string}) => acc + parseFloat(curr.waterIntake),
       0
     );
-    // Calculate sleep time
-
     const calculateWeightDiffPercent = () => {
       const current = parseFloat(String(userCharacteristics?.currentWeight));
       const registered = parseFloat(String(userCharacteristics?.registeredWeight));
@@ -157,10 +165,37 @@ export async function GET() {
         return (diff / registered) * 100;
       }
     };
-    
-    
 
-    // Prepare response data
+    let totalActivityTime = 0
+
+    const groupedActivitiesByWeek = Object.entries(
+      activitiesData.reduce((acc: any, activity) => {
+      const activityDate = new Date(activity.createdAt);
+      const startOfMonth = new Date(activityDate.getFullYear(), activityDate.getMonth(), 1);
+      const weekNumber = Math.ceil((activityDate.getDate() + startOfMonth.getDay()) / 7);
+      const key = `Week ${weekNumber}`;
+      if (!acc[key]) {
+        acc[key] = 0;
+      }
+      acc[key] += activity.caloriesBurned;
+      totalActivityTime += activity.duration;
+      return acc;
+      }, {})
+    ).map(([date, data]) => ({ date, data }));
+
+    const groupedStepsByMonth = Object.entries(
+      stepsCountByMonth.reduce((acc: any, curr) => {
+      const activityDate = new Date(curr.createdAt);
+      const startOfMonth = new Date(activityDate.getFullYear(), activityDate.getMonth(), 1);
+      const weekNumber = `Week ${Math.ceil((activityDate.getDate() + startOfMonth.getDay()) / 7)}`;
+      if (!acc[weekNumber]) {
+        acc[weekNumber] = 0;
+      }
+      acc[weekNumber] += parseFloat(String(curr.stepsCount));
+      return acc;
+      }, {})
+    ).map(([date, data]) => ({ date, data }));
+
     const responseData = {
       caloriesBurned: caloriesBurnedData._sum.caloriesBurned && caloriesBurnedData._sum.caloriesBurned || 0,
       stepsGoal: stepsGoal?.stepNeeds || 0,
@@ -171,11 +206,13 @@ export async function GET() {
       caloriesConsumed: Number(foodLog._sum.calories) || 0,
       goal: stepsGoal,
       userCharacteristics: userCharacteristics,
-      activitiesData: activitiesData,
+      activityData: activitiesData,
       caloriesBurnedByMonth: caloriesBurnedByMonth._sum.caloriesBurned || 0,
       weightDiffPercent: calculateWeightDiffPercent(),
+      groupedActivities: groupedActivitiesByWeek,
+      groupedSteps: groupedStepsByMonth,
+      totalActivityTime: totalActivityTime / activitiesData.length || 0,
     };
-
 
     return NextResponse.json({
       success: true,
