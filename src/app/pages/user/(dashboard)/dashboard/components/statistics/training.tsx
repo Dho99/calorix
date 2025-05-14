@@ -1,5 +1,3 @@
-import type { PhysicalActivityLog } from "@/app/utils/lib/types/user";
-
 export default function Training({
   activityTime,
   activityCount,

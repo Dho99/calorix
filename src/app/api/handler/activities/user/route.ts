@@ -231,17 +231,6 @@ export async function POST(request: NextRequest) {
         stepsCount: 0,
       };
 
-
-      const userTarget = await prisma.userGoal.findFirst({
-        where: {
-          userId: session?.user?.id as string,
-        },
-        select: {
-          deficitPerDay: true,
-          targetTime: true,
-        },
-      });
-
       const userCharacteristics = await prisma.userCharacteristics.findFirst({
         where: {
           userId: session?.user?.id as string,

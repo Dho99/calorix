@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { CogIcon, UserRound } from "lucide-react";
+import { UserRound } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {
   WrenchIcon,
@@ -9,7 +9,6 @@ import {
   NotebookTabsIcon,
   InfoIcon,
   HomeIcon,
-  BotIcon,
   MoonIcon,
   SunIcon,
 } from "lucide-react";
@@ -21,6 +20,8 @@ import {
 import { useTheme } from "next-themes";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
+import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -37,20 +38,15 @@ export const navigContent = [
     icon: WrenchIcon,
   },
   {
-    title: "Konsultasi",
-    link: "/user/consultation",
-    icon: BotIcon,
-  },
-  {
-    title: "How It Works",
-    link: "/home/how-it-works",
+    title: "User Guide",
+    link: "#",
     icon: NotebookTabsIcon,
   },
   {
     title: "FAQ",
     link: "/home#faq",
     icon: CircleHelpIcon,
-  },
+  }
 ];
 
 export const dropdownLinks = [
@@ -59,11 +55,7 @@ export const dropdownLinks = [
     link: "/pages/user/dashboard",
     icon: HomeIcon,
   },
-  {
-    title: "Preferensi",
-    link: "/pages/user/manage",
-    icon: CogIcon,
-  },
+  
 ];
 
 export default function AppNavbar() {
@@ -73,6 +65,7 @@ export default function AppNavbar() {
   const isLoginPage = pathname === "/auth/signin";
   const [hasShadow, setHasShadow] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const {data: session} = useSession();
 
   // Fix hydration mismatch by ensuring component is mounted
   useEffect(() => {
@@ -119,9 +112,12 @@ export default function AppNavbar() {
         hasShadow ? "shadow-md bg-[#092635]/10 dark:bg-black/30" : ""
       }`}
     >
+      <div className="flex flex-row items-center">
+        <Image src={'/assets/static/images/calorix-logo.png'} width={35} height={35} quality={100} alt="Calorix Logo"></Image>
       <Link href={"/pages/home"} className="text-2xl font-bold">
         Calorix
       </Link>
+      </div>
       <div className="w-auto lg:flex flex-row hidden items-center">
         {isLoginPage
           ? null
@@ -130,14 +126,23 @@ export default function AppNavbar() {
                 <Link
                   key={index}
                   href={`/pages${item.link}`}
-                  className="px-4 py-2 rounded dark:hover:bg-gray-700 hover:bg-gray-700/20"
+                  className="px-4 py-2 rounded dark:hover:bg-green-300/60 hover:bg-green-500/60"
                 >
                   {item.title}
                 </Link>
               );
+             
             })}
+        {session?.user?.id && (
+            <Link
+              href={`/pages/user/consultation`}
+              className="px-4 py-2 rounded dark:hover:bg-green-300/60 hover:bg-green-500/60"
+            >
+              Konsultasi
+            </Link>
+        )}
         <button
-          className="px-4 py-2 rounded dark:hover:bg-gray-700 hover:bg-gray-700/20"
+          className="px-4 py-2 rounded dark:hover:bg-green-300/60 hover:bg-green-500/60"
           onClick={() => {
             setTheme(theme === "dark" ? "light" : "dark");
           }}
@@ -152,7 +157,6 @@ export default function AppNavbar() {
 
 const ProtectedNav = () => {
   const { data: session } = useSession();
-  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false); //eslint-disable-line
   const pathname = usePathname();
   const isLoginPage = pathname === "/auth/signin";
@@ -180,7 +184,7 @@ const ProtectedNav = () => {
         ) : (
           <Link
             href={"/auth/signin"}
-            className="border border-black hover:bg-green-200 hover:text-green-700 hover:border-green-200 dark:border-[#9EC8B9] dark:text-[#9EC8B9] py-2 px-3 rounded transition-all duration-300 dark:hover:bg-[#9EC8B9] dark:hover:text-white lg:flex hidden "
+            className="border border-black hover:bg-black hover:text-white hover:border-black dark:border-white dark:text-white py-2 px-3 rounded transition-all duration-300 dark:hover:bg-white dark:hover:text-black lg:flex hidden "
           >
             Sign In
           </Link>
@@ -197,7 +201,7 @@ const ProtectedNav = () => {
               </Link>
             );
           })}
-          <button
+          {/* <button
             className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded justify-between"
             onClick={() => {
               setTheme(theme === "dark" ? "light" : "dark");
@@ -205,7 +209,13 @@ const ProtectedNav = () => {
           >
             {theme === "dark" ? <MoonIcon /> : <SunIcon />}{" "}
             {theme === "dark" ? "Dark" : "Light"} Mode
-          </button>
+          </button> */}
+          <button
+            className="flex flex-row items-center hover:cursor-pointer hover:bg-[#9EC8B9]/20 w-full py-2 px-4 rounded"
+            onClick={() => {
+              signOut({redirectTo: "/pages/home"});
+            }}
+          >Sign Out</button>
         </DropdownMenuContent>
       </DropdownMenu>
       <SidebarTrigger className="lg:hidden flex dark:bg-black/10 border w-auto h-auto rounded-lg p-1" />

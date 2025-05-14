@@ -1,7 +1,6 @@
 import { prisma } from "@/app/utils/lib/prisma/prisma";
 import { NextResponse} from "next/server";
 import { auth } from "../auth";
-import { getDateAndMonthOnly, getMonthName } from "@/app/utils/api/date";
 
 export async function GET() {
   const session = await auth();
@@ -169,22 +168,22 @@ export async function GET() {
     let totalActivityTime = 0
 
     const groupedActivitiesByWeek = Object.entries(
-      activitiesData.reduce((acc: any, activity) => {
-      const activityDate = new Date(activity.createdAt);
-      const startOfMonth = new Date(activityDate.getFullYear(), activityDate.getMonth(), 1);
-      const weekNumber = Math.ceil((activityDate.getDate() + startOfMonth.getDay()) / 7);
-      const key = `Week ${weekNumber}`;
-      if (!acc[key]) {
-        acc[key] = 0;
-      }
-      acc[key] += activity.caloriesBurned;
-      totalActivityTime += activity.duration;
-      return acc;
+      activitiesData.reduce((acc: Record<string, number>, activity) => {
+        const activityDate = new Date(activity.createdAt);
+        const startOfMonth = new Date(activityDate.getFullYear(), activityDate.getMonth(), 1);
+        const weekNumber = Math.ceil((activityDate.getDate() + startOfMonth.getDay()) / 7);
+        const key = `Week ${weekNumber}`;
+        if (!acc[key]) {
+          acc[key] = 0;
+        }
+        acc[key] += activity.caloriesBurned;
+        totalActivityTime += activity.duration;
+        return acc;
       }, {})
     ).map(([date, data]) => ({ date, data }));
 
     const groupedStepsByMonth = Object.entries(
-      stepsCountByMonth.reduce((acc: any, curr) => {
+      stepsCountByMonth.reduce((acc: Record<string, number>, curr) => {
       const activityDate = new Date(curr.createdAt);
       const startOfMonth = new Date(activityDate.getFullYear(), activityDate.getMonth(), 1);
       const weekNumber = `Week ${Math.ceil((activityDate.getDate() + startOfMonth.getDay()) / 7)}`;
@@ -194,6 +193,7 @@ export async function GET() {
       acc[weekNumber] += parseFloat(String(curr.stepsCount));
       return acc;
       }, {})
+
     ).map(([date, data]) => ({ date, data }));
 
     const responseData = {
