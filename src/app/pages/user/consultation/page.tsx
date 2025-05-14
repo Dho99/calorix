@@ -13,7 +13,7 @@ type ChatProps = {
 };
 
 export default function Page() {
-  const session = useSession();
+  const {data: session} = useSession();
 
   const [chatState, setChatState] = useState<ChatProps[]>([
     {
@@ -53,7 +53,7 @@ export default function Page() {
           setChatState(() => [
             {
               id: 1,
-              response: `Hello, ${session?.data?.user?.name} how can I assist you today?`,
+              response: `Hello, ${session?.user?.name} how can I assist you today?`,
               userQuery: "",
             },
             ...chats.map((chat: any, key: number) => ({ //eslint-disable-line
@@ -71,18 +71,18 @@ export default function Page() {
 
   useEffect(() => {
     initFetchChats();
-  }, []); //eslint-disable-line
+  }, [session]); //eslint-disable-line
 
   return (
-    <div className="h-dvh w-full relative w-full relative ">
-      {session?.data?.user ? (
-        <div className="absolute bottom-0 left-0 pb-5 w-full text-white h-full">
-          <div className="w-full flex flex-col gap-y-2 mb-7 h-full overflow-auto pt-15 pb-5 px-30">
+    <div className="h-dvh overflow-auto w-full relative ">
+      {session?.user ? (
+        <div className="absolute bottom-0 left-0 w-full text-white h-full">
+          <div className="w-full flex flex-col gap-y-2 mb-7 h-full overflow-auto pt-15 pb-5 lg:px-30 md:px-15 px-5 relative">
 
             <div className="flex w-full py-2 my-5 bg-white/10 gap-x-4 items-center justify-center shaodow-lg">
-              <div className="max-w-3/4 flex flex-row justify-start items-center gap-x-4">
+              <div className=" w-full flex lg:flex-row md:flex-row flex-col justify-center items-center gap-x-4">
                 <BotIcon className="text-white w-8 h-8" />
-                <h1 className="text-xl font-semibold text-white">
+                <h1 className="text-xl font-semibold text-white text-center">
                   Anda sedang Berkonsultasi dengan AI
                 </h1>
               </div>
@@ -105,7 +105,7 @@ export default function Page() {
               );
             })}
 
-            <div className="flex flex-row gap-x-1 mt-4">
+            <div className="flex lg:flex-row md:flex-row flex-col gap-1 mt-4 sticky bottom-0 bg-black/50 backdrop-blur-md p-3 rounded-lg shadow-lg">
               <input
                 type="text"
                 placeholder="Ask me anything..."

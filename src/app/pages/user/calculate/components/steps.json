@@ -72,7 +72,7 @@
     {
       "number": 7,
       "question": "Pilih Tingkat keseringan anda beraktivitas sehari hari",
-      "placeholder": "Pilih tingkat aktivitas harian",
+      "placeholder": "Pilih tingkat aktivitas mingguan",
       "stateKey": "activityFactor",
       "type": "radio",
       "required": true,

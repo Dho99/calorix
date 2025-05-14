@@ -43,9 +43,6 @@ export default function Activities({
             </p>
             <p className="text-xl flex flex-wrap items-baseline">/ <span className="text-2xl me-1">{Number(item?.target) || 0}</span>{item.parameter}</p>
           </div>
-          {/* <div className="flex flex-wrap gap-2 items-baseline">
-       
-          </div> */}
         </div>
       ))}
     </div>

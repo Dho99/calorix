@@ -14,8 +14,8 @@ CREATE TABLE "User" (
     "password" TEXT,
     "username" TEXT,
     "lastSeen" TIMESTAMP(3),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -33,8 +33,8 @@ CREATE TABLE "Account" (
     "scope" TEXT,
     "id_token" TEXT,
     "session_state" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "Account_pkey" PRIMARY KEY ("provider","providerAccountId")
 );
@@ -44,8 +44,8 @@ CREATE TABLE "Session" (
     "sessionToken" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL
 );
 
 -- CreateTable
@@ -78,6 +78,7 @@ CREATE TABLE "UserCharacteristics" (
     "gender" TEXT NOT NULL,
     "age" TEXT NOT NULL,
     "height" TEXT NOT NULL,
+    "registeredWeight" TEXT,
     "currentWeight" TEXT NOT NULL,
     "activityFactor" TEXT NOT NULL,
     "mealsPerDay" TEXT NOT NULL,
@@ -89,8 +90,8 @@ CREATE TABLE "UserCharacteristics" (
     "bmr" TEXT,
     "bodyFatPercentage" TEXT,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "UserCharacteristics_pkey" PRIMARY KEY ("id")
 );
@@ -106,8 +107,9 @@ CREATE TABLE "UserGoal" (
     "targetWeight" TEXT NOT NULL,
     "totalDeficit" TEXT NOT NULL,
     "stepNeeds" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "maxDailyCalories" TEXT,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "UserGoal_pkey" PRIMARY KEY ("id")
 );
@@ -116,6 +118,7 @@ CREATE TABLE "UserGoal" (
 CREATE TABLE "PhysicalActivityLog" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "stepsCount" DOUBLE PRECISION,
     "duration" INTEGER NOT NULL,
     "caloriesBurned" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -130,8 +133,8 @@ CREATE TABLE "ActivityType" (
     "duration" INTEGER NOT NULL,
     "metValue" DOUBLE PRECISION NOT NULL,
     "physicalActivityId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "ActivityType_pkey" PRIMARY KEY ("id")
 );
@@ -143,8 +146,8 @@ CREATE TABLE "FoodLog" (
     "foodName" TEXT NOT NULL,
     "calories" DOUBLE PRECISION NOT NULL,
     "mealType" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "FoodLog_pkey" PRIMARY KEY ("id")
 );
@@ -155,7 +158,7 @@ CREATE TABLE "UserHydration" (
     "userId" TEXT NOT NULL,
     "waterIntake" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "UserHydration_pkey" PRIMARY KEY ("id")
 );
@@ -165,8 +168,8 @@ CREATE TABLE "SleepTracker" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "duration" DOUBLE PRECISION NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "SleepTracker_pkey" PRIMARY KEY ("id")
 );
@@ -177,7 +180,6 @@ CREATE TABLE "UserActivites" (
     "userId" TEXT NOT NULL,
     "category" "ACTIVITY_TYPE" NOT NULL,
     "title" TEXT NOT NULL,
-    "stepsCount" DOUBLE PRECISION,
     "effectToBody" TEXT,
     "sleepTrackerId" TEXT,
     "userHydrationId" TEXT,
@@ -185,7 +187,7 @@ CREATE TABLE "UserActivites" (
     "foodLogId" TEXT,
     "physicalActivityLogId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "UserActivites_pkey" PRIMARY KEY ("id")
 );
@@ -196,8 +198,8 @@ CREATE TABLE "Chatbot" (
     "userId" TEXT NOT NULL,
     "payload" TEXT,
     "sender" "SENDER" NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "Chatbot_pkey" PRIMARY KEY ("id")
 );

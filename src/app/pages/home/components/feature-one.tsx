@@ -1,20 +1,33 @@
 "use client";
+
+import Image from "next/image";
+import Link from "next/link";
+
 export default function FeatureOne() {
   const features = [
     {
-      link: "#",
-      title: "Feature 1",
-      description: "Description of feature 1",
+      link: "/pages/user/dashboard",
+      title: "Dashboard Monitoring",
+      description: "Fitur untuk memantau aktivitas harian anda dalam satu halaman",
+      imgName: "dashboard-page.png",
     },
     {
-      link: "#",
-      title: "Feature 2",
-      description: "Description of feature 1",
+      link: "/pages/user/activity",
+      title: "Daftar Aktivitas",
+      description: "Fitur untuk melihat daftar aktivitas yang telah anda buat",
+      imgName: "create-activity.png",
     },
     {
-      link: "#",
-      title: "Feature 3",
-      description: "Description of feature 1",
+      link: "/pages/user/consultation",
+      title: "Calorix Assist",
+      description: "Fitur untuk konsultasi kesehatan dengan Calorix ChatBot Assistant",
+      imgName: "consultation-page.png",
+    },
+    {
+      link: "/pages/user/manage",
+      title: "Akun dan Karakteristik",
+      description: "Fitur untuk mengelola akun dan karakteristik tubuh anda",
+      imgName: "account-management.png",
     },
   ];
 
@@ -25,19 +38,34 @@ export default function FeatureOne() {
     >
       <div className="flex flex-col">
         <p className="text-4xl font-bold text-center">
-          Beberapa Fitur Menarik yang Bisa Anda Coba{" "}
+          Fitur - Fitur Calorix
         </p>
-        <div className="flex lg:flex-row flex-col gap-10 grid-cols-1 justify-evenly items-center w-full py-15">
+        <p className="text-center text-lg mt-5">
+          Calorix memiliki fitur yang sangat membantu dalam mengelola
+          aktivitas sehari-hari
+        </p>
+        <div className="flex w-full grid lg:grid-cols-4 md:grid-cols-2 gap-5 mt-10 justify-center items-center gap-10">
           {features.map((feature, index) => (
-            <div
+            <Link
               key={index}
-              className="bg-slate-300 h-72 lg:w-72 w-3/4 w-full rounded-lg p-3 shadow-lg"
+              href={feature.link}
+              className="h-full lg:w-72 w-3/4 w-full rounded-lg p-3 shadow-lg flex flex-col gap-5 dark:bg-white/20 bg-black/10"
             >
-              <a href={feature.link} className="text-center">
+              <div className="flex justify-center">
+                <Image
+                  src={`/assets/static/images/${feature.imgName}`}
+                  alt={feature.title}
+                  width={500}
+                  height={500}
+                  quality={100}
+                  className="rounded-lg"
+                />
+              </div>
+              <div className="text-center flex flex-col gap-2 dark:bg-black/20 bg-black/10 py-3 rounded-lg">
                 <p className="text-xl font-bold">{feature.title}</p>
-                <p>{feature.description}</p>
-              </a>
-            </div>
+                <p className="text-base">{feature.description}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

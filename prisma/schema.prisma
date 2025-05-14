@@ -30,8 +30,8 @@ model User {
   UserGoal            UserGoal?
   lastSeen            DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @db.Timestamptz() @default(now())
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 }
 
 model Account {
@@ -47,8 +47,8 @@ model Account {
   id_token          String?
   session_state     String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @db.Timestamptz() @default(now())
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -61,8 +61,8 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @db.Timestamptz() @default(now())
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 }
 
 model VerificationToken {
@@ -111,8 +111,8 @@ model UserCharacteristics {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @db.Timestamptz() @default(now())
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 }
 
 model UserGoal {
@@ -128,8 +128,8 @@ model UserGoal {
   maxDailyCalories    String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @db.Timestamptz() @default(now())
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 }
 
 model PhysicalActivityLog {
@@ -152,8 +152,8 @@ model ActivityType {
   physicalActivityId String
 
   physicalActivity PhysicalActivityLog @relation(fields: [physicalActivityId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @db.Timestamptz() @default(now())
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 }
 
 model FoodLog {
@@ -165,8 +165,8 @@ model FoodLog {
   mealType       String
   userActivityId UserActivites?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @db.Timestamptz() @default(now())
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 }
 
 model UserHydration {
@@ -174,7 +174,7 @@ model UserHydration {
   userId       String      
   waterIntake  String
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  updatedAt    DateTime       @updatedAt @db.Timestamptz()
   userActivity UserActivites?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -184,8 +184,8 @@ model SleepTracker {
   id        String   @id @default(cuid())
   userId    String
   duration  Float // dalam menit
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @db.Timestamptz() @default(now())
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 
   user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userActivity UserActivites?
@@ -203,7 +203,7 @@ model UserActivites {
   foodLogId             String?  @unique
   physicalActivityLogId String?  @unique
   createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  updatedAt             DateTime @updatedAt @db.Timestamptz()
 
   user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   sleepTracker        SleepTracker?        @relation(fields: [sleepTrackerId], references: [id], onDelete: Cascade)
@@ -218,8 +218,8 @@ model Chatbot {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   payload   String? // Menggunakan tipe TEXT
   sender    SENDER
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @db.Timestamptz() @default(now())
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 }
 
 enum SENDER {
