@@ -214,6 +214,7 @@ export default function ActivityForm({
                 id={`${inputDurationOpen.inputId}`}
                 placeholder="Masukkan Durasi (menit)"
                 type="number"
+                min={1}
               ></Input>
             </div>
           )}

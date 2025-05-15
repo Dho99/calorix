@@ -196,13 +196,32 @@ export async function GET() {
 
     ).map(([date, data]) => ({ date, data }));
 
+    const getUserCtdAt = await prisma?.user?.findFirst({
+      where: {
+        id: session?.user?.id,
+      },
+      select: {
+        createdAt: true,
+      },
+    });
+
+    const calculateDaysSinceCreated = (createdAt: Date): number => {
+      const now = new Date();
+      const diffTime = Math.abs(now.getTime() - createdAt.getTime());
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    };
+
+    const cntUsrCtdAt = calculateDaysSinceCreated(new Date(getUserCtdAt?.createdAt as Date));
+
+    const sumSleepDur = sleepTracker?._sum.duration && (parseFloat(String(sleepTracker._sum.duration)) / 60).toFixed(2) || 0;
+
     const responseData = {
       caloriesBurned: caloriesBurnedData._sum.caloriesBurned && caloriesBurnedData._sum.caloriesBurned || 0,
       stepsGoal: stepsGoal?.stepNeeds || 0,
       stepsCount: parseFloat(String(stepsData._sum.stepsCount)).toFixed(2) || 0,
       tdee: tdeeData?.tdee || 0,
       hydrationNeeds: sumHydration,
-      sleepTracker: sleepTracker?._sum.duration && (parseFloat(String(sleepTracker._sum.duration)) / 60).toFixed(2) || 0,
+      sleepTracker: sumSleepDur,
       caloriesConsumed: Number(foodLog._sum.calories) || 0,
       goal: stepsGoal,
       userCharacteristics: userCharacteristics,
@@ -212,6 +231,9 @@ export async function GET() {
       groupedActivities: groupedActivitiesByWeek,
       groupedSteps: groupedStepsByMonth,
       totalActivityTime: totalActivityTime / activitiesData.length || 0,
+      avgSleep: Number(sumSleepDur) / cntUsrCtdAt || 0,
+      avgHydration: (sumHydration / cntUsrCtdAt) / 1000 || 0,
+      avgCaloriesEaten: Number(foodLog._sum.calories) / cntUsrCtdAt || 0,
     };
 
     return NextResponse.json({

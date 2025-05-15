@@ -13,6 +13,7 @@ import type { ActivitiesProps } from "./components/activities";
 import type { StatsProps } from "./components/stats";
 import type { PhysicalActivityLog } from "@/app/utils/lib/types/user";
 import { FlameIcon, FootprintsIcon, BeerIcon, BedIcon, BeefIcon } from "lucide-react";
+import Tips from "./components/tips";
 
 export type DashboardComponentPageProps = {
   open: boolean;
@@ -54,6 +55,9 @@ export default function Page() {
     groupedSteps: StatsProps["groupedSteps"];
     totalActivityTime: number;
     totalActivityCount: number;
+    avgSleep: number;
+    avgHydration: number;
+    avgCaloriesEaten: number;
   } | null>(null);
 
   useEffect(() => {
@@ -108,40 +112,43 @@ export default function Page() {
 
   const activitiesData: ActivitiesProps[] = [
     {
-      title: "Calories Burned",
+      title: "Kalori Terbakar Harian",
       value: parseFloat(String(pageData?.caloriesBurned)).toFixed(2),
       target: parseFloat(String(pageData?.goal.deficitPerDay)).toFixed(2),
       parameter: "Kkal",
-      icon: FlameIcon
+      icon: FlameIcon,
     },
     {
-      title: "Steps",
-      value: Number(pageData?.stepsCount),
+      title: "Daily Steps",
+      value: Number(pageData?.stepsCount).toFixed(0),
       target: pageData?.goal.stepNeeds,
       parameter: "Langkah",
       icon: FootprintsIcon
     },
     {
-      title: "Hydration",
+      title: "Kebutuhan Cairan Harian",
       value: pageData?.hydrationNeeds,
       target: parseFloat(String(pageData?.goal.hydrationNeeds)).toFixed(2),
       parameter: "Liter",
       unit: "ml",
-      icon: BeerIcon
+      icon: BeerIcon,
+      avg: pageData?.avgHydration,
     },
     {
-      title: "Sleep",
+      title: "Waktu Tidur Harian",
       value: pageData?.sleepTracker,
       target: 8,
       parameter: "Jam",
-      icon: BedIcon
+      icon: BedIcon,
+      avg: pageData?.avgSleep,
     },
     {
-      title: "Kalori Masuk",
+      title: "Kalori Masuk Harian",
       value: pageData?.caloriesConsumed,
       target: Number(pageData?.goal?.maxDailyCalories).toFixed(2),
       parameter: "Kalori",
-      icon: BeefIcon
+      icon: BeefIcon,
+      avg: pageData?.avgCaloriesEaten,
     },
   ];
 
@@ -180,6 +187,7 @@ export default function Page() {
             <p className="dark:text-white">This Month</p>
           </div>
           <Stats pageData={statsData}/>
+          <Tips />
         </div>
       </div>
     </Dialog>

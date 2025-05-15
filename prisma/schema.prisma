@@ -222,6 +222,11 @@ model Chatbot {
   updatedAt DateTime @updatedAt @db.Timestamptz()
 }
 
+enum SENDER {
+  USER
+  BOT
+}
+
 enum ACTIVITY_TYPE {
   SLEEP_TRACKER
   USER_HYDRATION
@@ -229,9 +234,3 @@ enum ACTIVITY_TYPE {
   PHYSICAL_ACTIVITY
   STEP_TRACKER
 }
-
-enum SENDER {
-  USER
-  BOT
-}
-

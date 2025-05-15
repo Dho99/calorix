@@ -6,7 +6,7 @@ export default function Training({
   activityCount?: number;
 }) {
   return (
-    <div className="w-full h-full bg-green-200 dark:bg-[#1B4242] dark:text-white  border border-white/50 rounded-lg shadow-md p-4 flex flex-col gap-4">
+    <div className="w-full h-full bg-green-200 dark:bg-[#1B4242]/70 dark:text-white  border border-white/50 rounded-lg shadow-md p-4 flex flex-col gap-4">
       <div>
         <h2 className="text-lg font-bold">Activities</h2>
         <div className="flex lg:flex-row flex-col items-baseline w-full">
