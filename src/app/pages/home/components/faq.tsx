@@ -36,6 +36,10 @@ export default function FAQ() {
             title: "Apakah aplikasi ini bisa membantu saya menghitung dan memantau asupan kalori?",
             content: "Ya! Website ini menyediakan fitur pelacakan makanan, kalkulator kalori, serta visualisasi aktivitas dan kalori terbakar untuk membantu kamu mencapai tujuan diet dengan lebih mudah.",
         },
+        {
+            title: "Apa itu BMI, BMR dan TDEE?",
+            content: "BMI (Body Mass Index) adalah ukuran untuk menilai berat badan ideal berdasarkan tinggi badan. BMR (Basal Metabolic Rate) adalah jumlah kalori yang dibutuhkan tubuh saat istirahat. TDEE (Total Daily Energy Expenditure) adalah total kalori yang dibakar dalam sehari, termasuk aktivitas fisik.",
+        },
     ]
 
   return (

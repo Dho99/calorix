@@ -19,7 +19,7 @@ export default function Calories({
   } satisfies ChartConfig;
 
   return (
-    <div className="w-full h-full bg-green-200 dark:bg-[#1B4242] dark:text-white  border border-white/50 rounded-lg shadow-md p-4 flex flex-col gap-2">
+    <div className="w-full h-full bg-green-200 dark:bg-[#1B4242]/70 dark:text-white  border border-white/50 rounded-lg shadow-md p-4 flex flex-col gap-2">
       <div className="flex flex-row gap-5 items-center">
         <div className="bg-green-300 dark:bg-white/10 rounded p-2 w-fit ">
           <FlameIcon className="dark:text-white w-14 h-14" />

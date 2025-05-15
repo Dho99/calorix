@@ -26,7 +26,12 @@ export default function SigninForm({
       toast.error(validateInput.error.issues[0].message);
     } else {
       try {
-        signIn("credentials", data, { redirectTo: "/pages/user/dashboard" });
+        signIn("credentials", data, {
+          redirectTo: "/pages/user/dashboard",
+        }).then(() => {
+          window.location.href = "/pages/user/dashboard";
+        });
+        toast.success("Login Berhasil");
       } catch (err) {
         if (err instanceof Error) {
           toast.error(err.message);
