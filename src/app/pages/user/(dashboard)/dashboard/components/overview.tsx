@@ -55,17 +55,16 @@ export default function Overview({ pageData }: { pageData: OverviewProps }) {
         <div className="w-full grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 grid-cols-2 gap-2">
           <div className="w-full bg-green-300/60 dark:bg-[#1B4242] dark:text-white rounded-lg shadow-md p-4 border border-white/50">
             <h2 className="text-lg font-bold">Weight</h2>
-            <p>{parseFloat(String(pageData?.currentWeight)).toFixed(2)} Kg</p>
+            <p>{Number(Number(pageData?.currentWeight) || 0).toFixed(2)} Kg</p>
           </div>
           <div className="w-full  bg-green-300/60 dark:bg-[#1B4242] dark:text-white  rounded-lg shadow-md p-4 border border-white/50">
             <h2 className="text-lg font-bold">Goal</h2>
-            <p>{pageData?.targetWeight} Kg</p>
+            <p>{Number(pageData?.targetWeight) || 0} Kg</p>
           </div>
           <div className="w-full  bg-green-300/60 dark:bg-[#1B4242] dark:text-white rounded-lg shadow-md p-4 border border-white/50">
             <h2 className="text-lg font-bold">Body Fat</h2>
             <p>
-              {pageData?.bodyFatPercentage &&
-                parseFloat(String(pageData?.bodyFatPercentage)).toFixed(2)}{" "}
+              {pageData?.bodyFatPercentage && parseFloat(String(pageData?.bodyFatPercentage)).toFixed(2) || 0}{" "}
               %
             </p>
           </div>
@@ -75,7 +74,7 @@ export default function Overview({ pageData }: { pageData: OverviewProps }) {
               <div className="flex w-full h-full items-start justify-between flex lg:flex-row md:flex-row sm:flex-row flex-col gap-2">
                 <p>
                   {pageData?.bmi &&
-                    parseFloat(String(pageData?.bmi)).toFixed(2)}
+                    parseFloat(String(pageData?.bmi)).toFixed(2) || 0}
                 </p>
                 <div
                   className={`text-xs w-fit h-fit p-1 rounded-lg font-bold ${bmiStatus?.color}`}
@@ -100,7 +99,7 @@ export default function Overview({ pageData }: { pageData: OverviewProps }) {
             </div>
             <div className="flex flex-col">
               <h2 className="text-lg font-bold">Progress</h2>
-              <p>{pageData?.weightDiffPercent}% </p>
+              <p>{Number(pageData?.weightDiffPercent) || 0}% </p>
             </div>
           </div>
         </div>

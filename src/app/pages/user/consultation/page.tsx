@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import Markdown from "react-markdown";
 import { BotIcon } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type ChatProps = {
   id: number;
@@ -14,6 +15,8 @@ type ChatProps = {
 
 export default function Page() {
   const {data: session} = useSession();
+  const [loadingConv, setLoadingConv] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   const [chatState, setChatState] = useState<ChatProps[]>([
     {
@@ -23,8 +26,27 @@ export default function Page() {
     },
   ]);
 
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatState]);
+
   const sendQuestion = (userQuery: string) => {
+    if (!userQuery) return;
     const id = chatState.length + 1;
+    setLoadingConv(true);
+    setChatState((prev) => [
+      ...prev,
+      {
+        id: id,
+        userQuery: userQuery,
+        response: null
+        
+      },
+    ]);
     axios
       .post("/api/handler/consultation", {
         userQuery: userQuery,
@@ -34,8 +56,9 @@ export default function Page() {
           ...prev,
           {
             id: id,
+            userQuery: null,
             response: getRes.data?.message,
-            userQuery: userQuery,
+            setLoadingConv: false,
           },
         ]);
       })
@@ -76,13 +99,13 @@ export default function Page() {
   return (
     <div className="h-dvh overflow-auto w-full relative ">
       {session?.user ? (
-        <div className="absolute bottom-0 left-0 w-full text-white h-full">
+        <div className="absolute bottom-0 left-0 w-full dark:text-white h-full">
           <div className="w-full flex flex-col gap-y-2 mb-7 h-full overflow-auto pt-15 pb-5 lg:px-30 md:px-15 px-5 relative">
 
-            <div className="flex w-full py-2 my-5 bg-white/10 gap-x-4 items-center justify-center shaodow-lg">
+            <div className="flex w-full py-2 my-5 bg-black/20 dark:bg-white/10 gap-x-4 items-center justify-center shadow-lg">
               <div className=" w-full flex lg:flex-row md:flex-row flex-col justify-center items-center gap-x-4">
-                <BotIcon className="text-white w-8 h-8" />
-                <h1 className="text-xl font-semibold text-white text-center">
+                <BotIcon className="dark:text-white w-8 h-8" />
+                <h1 className="text-xl font-semibold dark:text-white text-center">
                   Anda sedang Berkonsultasi dengan AI
                 </h1>
               </div>
@@ -96,14 +119,20 @@ export default function Page() {
                       {chat.userQuery}
                     </div>
                   )}
-                  {chat.response && (
-                    <div className="text-gray-700 bg-blue-100 p-3 max-w-[60%] w-fit shadow-lg rounded-md">
+                  {loadingConv && chat.id === chatState.length && (
+                    <div className="text-gray-700 bg-gray-100 p-3 max-w-[60%] w-fit shadow-lg rounded-md">
+                      <Skeleton className="h-4 w-40 bg-gray-300 rounded-md" />
+                    </div>
+                  )}
+                  {chat.response && chat.id !== chatState.length && (
+                    <div className="text-gray-700 bg-green-200/70 p-3 max-w-[60%] w-fit shadow-lg rounded-md">
                       <Markdown>{chat.response}</Markdown>
                     </div>
                   )}
                 </div>
               );
             })}
+            <div ref={chatEndRef} />
 
             <div className="flex lg:flex-row md:flex-row flex-col gap-1 mt-4 sticky bottom-0 bg-black/50 backdrop-blur-md p-3 rounded-lg shadow-lg">
               <input

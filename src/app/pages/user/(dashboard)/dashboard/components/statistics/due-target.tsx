@@ -14,7 +14,7 @@ export default function DueTarget({
         <div className="flex flex-col items-baseline w-full gap-y-2">
         <h2 className="text-lg font-bold">Hari Menuju Target</h2>
           <p className="font-bold text-2xl">
-            {Number(targetTime ?? 0) * 30} Hari
+            {Number(targetTime ?? 0)} Hari
           </p>
         </div>
       </div>

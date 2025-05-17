@@ -11,32 +11,31 @@ export default function SigninForm({
 }: {
   setMode: (is: boolean) => void;
 }): React.ReactNode {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
+  
     const data = {
       email: formData.get("email"),
       password: formData.get("password"),
     };
-
+  
     const validateInput = loginSchema.safeParse(data);
-
+  
     if (!validateInput.success) {
       toast.error(validateInput.error.issues[0].message);
-    } else {
-      try {
-        signIn("credentials", data, {
-          redirectTo: "/pages/user/dashboard",
-        }).then(() => {
-          window.location.href = "/pages/user/dashboard";
-        });
-        toast.success("Login Berhasil");
-      } catch (err) {
-        if (err instanceof Error) {
-          toast.error(err.message);
-        }
-      }
+      return;
+    }
+  
+    const res = await signIn("credentials", {
+      redirect: false,
+      ...data,
+      redirectTo: "/pages/user/dashboard",
+    });
+
+  
+    if (res?.error) {
+      toast.error("Email atau password salah.");
     }
   };
 

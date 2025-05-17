@@ -55,6 +55,7 @@ export default function FoodForm({data, isEdit}: {data?: UserActivites, isEdit: 
               <SelectItem value="breakfast">Sarapan</SelectItem>
               <SelectItem value="dinner">Makan Malam</SelectItem>
               <SelectItem value="snacks">Cemilan / Snacks</SelectItem>
+              <SelectItem value="meal">Makan Berat</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

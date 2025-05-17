@@ -29,6 +29,12 @@ export default function FeatureOne() {
       description: "Fitur untuk mengelola akun dan karakteristik tubuh anda",
       imgName: "account-management.png",
     },
+    {
+      link: "/pages/scan",
+      title: "Food Nutrition Scanner",
+      description: "Fitur untuk memindai makanan dan mendapatkan informasi nutrisinya",
+      imgName: "nutriscan.png",
+    },
   ];
 
   return (
@@ -44,12 +50,12 @@ export default function FeatureOne() {
           Calorix memiliki fitur yang sangat membantu dalam mengelola
           aktivitas sehari-hari
         </p>
-        <div className="flex w-full grid lg:grid-cols-4 md:grid-cols-2 gap-5 mt-10 justify-center items-center gap-10">
-          {features.map((feature, index) => (
+        <div className="flex w-full grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5 mt-10 justify-center items-center gap-10">
+          {features.slice(0,3).map((feature, index) => (
             <Link
               key={index}
               href={feature.link}
-              className="h-full lg:w-72 w-3/4 w-full rounded-lg p-3 shadow-lg flex flex-col gap-5 dark:bg-white/20 bg-black/10"
+              className={`h-full lg:w-72 w-3/4 w-full rounded-lg p-3 shadow-lg flex flex-col gap-5 dark:bg-white/20 bg-black/10 ${index === 2 ? 'lg:col-span-1 md:col-span-2 col-span-1' : ''}`}
             >
               <div className="flex justify-center">
                 <Image
@@ -67,6 +73,30 @@ export default function FeatureOne() {
               </div>
             </Link>
           ))}
+          <div className="lg:col-span-3 md:col-span-2 w-full lg:flex lg:flex-row grid md:grid-cols-2 grid-cols-1 flex gap-10 justify-center items-center">
+          {features.slice(3).map((feature, index) => (
+            <Link
+              key={index}
+              href={feature.link}
+              className="h-full lg:w-72 w-full rounded-lg p-3 shadow-lg flex flex-col gap-5 dark:bg-white/20 bg-black/10"
+            >
+              <div className="flex justify-center">
+                <Image
+                  src={`/assets/static/images/${feature.imgName}`}
+                  alt={feature.title}
+                  width={500}
+                  height={500}
+                  quality={100}
+                  className="rounded-lg"
+                />
+              </div>
+              <div className="text-center flex flex-col gap-2 dark:bg-black/20 bg-black/10 py-3 rounded-lg">
+                <p className="text-xl font-bold">{feature.title}</p>
+                <p className="text-base">{feature.description}</p>
+              </div>
+            </Link>
+          ))}
+          </div>
         </div>
       </div>
     </div>

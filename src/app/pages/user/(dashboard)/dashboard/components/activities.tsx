@@ -42,7 +42,7 @@ export default function Activities({
               <h2 className="text-lg font-bold">{item.title}</h2>
               <div className="flex flex-wrap items-baseline gap-2">
                 <p className="text-3xl font-bold">
-                  {item.value || 0} {item?.unit}{" "}
+                  {Number(item.value) || 0} {item?.unit}{" "}
 
                 </p>
                 <p className="text-xl flex flex-wrap items-baseline">/ <span className="text-2xl me-1">{Number(item?.target) || 0}</span>{item.parameter}</p>

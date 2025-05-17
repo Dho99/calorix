@@ -29,20 +29,28 @@ export async function POST() {
                 },
                 select: {
                     targetTime: true,
+                    updatedAt: true,
                 }
             });
 
-            await prisma.userGoal.update({
-                where: {
-                    userId: session?.user?.id,
-                },
-                data: {
-                    targetTime: (getUserGoal?.targetTime ? getUserGoal?.targetTime + calculateDifferentDays : calculateDifferentDays).toString(),
-                },
-            });
+            if (new Date(getUserGoal?.updatedAt as Date).setHours(0, 0, 0, 0) !== new Date().setHours(0, 0, 0, 0)) {
 
-            showInfo.show = true;
-            showInfo.msgInfo = `You have been away for ${calculateDifferentDays} days. Your target time has been updated.`;
+                const calNewTargetTime = (getUserGoal?.targetTime ? Number(getUserGoal?.targetTime) + Number(calculateDifferentDays) : Number(calculateDifferentDays)).toString();
+
+                await prisma.userGoal.update({
+                    where: {
+                        userId: session?.user?.id,
+                    },
+                    data: {
+                        targetTime: calNewTargetTime
+                    },
+                });
+
+                showInfo.show = true;
+                showInfo.msgInfo = `You have been away for ${calculateDifferentDays} days. Your target time has been updated.`;
+            } else {
+                console.log("different date");
+            }
 
         }
 
@@ -81,7 +89,7 @@ export async function POST() {
             const targetTime = Number(getUserGoal?.targetTime);
             
             const selisih = caloriesBurnedYesterday - targetPerDay;
-            const adjustmentPerDay = selisih / (targetTime * 30);
+            const adjustmentPerDay = selisih / targetTime;
             const newTargetPerDay = targetPerDay - adjustmentPerDay;
 
             await prisma.userGoal.update({
