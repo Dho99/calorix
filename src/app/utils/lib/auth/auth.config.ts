@@ -34,25 +34,32 @@ export default {
     }),
     Credentials({
       credentials: {
-        email: { label: "Email" },
-        password: { label: "Password", type: "password" },
+        email: { label: "Email", name: "email", type: "email" },
+        password: { label: "Password", type: "password", name: "password" },
       },
       authorize: async (credentials) => {
         const user = await findUser(credentials?.email as string);
-
-        const verifyPassword = await validatePassword(user?.data?.password as string, credentials?.password as string);
-
-        if (!user || !(verifyPassword)) {
+      
+        if (!user || !user.data?.password) {
+          throw new Error("User not Found.");
+        }
+      
+        const verifyPassword = await validatePassword(
+          user.data.password,
+          credentials?.password as string
+        );
+      
+        if (!verifyPassword) {
           throw new Error("Invalid credentials.");
         }
-
+      
         return {
-          id: user?.data?.id,
-          name: user?.data?.name,
-          email: user?.data?.email,
-          username: user?.data?.username,
+          id: user.data.id,
+          name: user.data.name,
+          email: user.data.email,
+          username: user.data.username,
         };
-      },
+      }
     }),
   ],
   pages: {

@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
           userId: userId,
           goal: goal,
           deficitPerDay: deficitPerDay,
-          targetTime: targetTime,
+          targetTime: (targetTime * 30).toString(),
           targetWeight: targetWeight,
           hydrationNeeds: hydrationNeeds,
           totalDeficit: totalDeficit,
@@ -85,7 +85,6 @@ export async function POST(request: NextRequest) {
       
     ]);
 
-    console.log("created");
 
     return NextResponse.json({
       status: 200,

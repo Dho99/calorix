@@ -11,7 +11,7 @@ export async function POST() {
     }
 
     try {
-        const findLastSeen = await prisma.physicalActivityLog.findFirst({
+        const findLastSeen = await prisma.userActivites.findFirst({
             where: {
                 userId: session?.user?.id,
             },
@@ -20,7 +20,14 @@ export async function POST() {
             },
         });
         
-        const calculateDifferentDays = Math.floor((new Date().getTime() - new Date(findLastSeen?.createdAt as Date).getTime()) / (1000 * 60 * 60 * 24));
+        const startOfToday = new Date();
+        startOfToday.setHours(0, 0, 0, 0);
+
+        const startOfLastSeen = new Date(findLastSeen?.createdAt as Date);
+        startOfLastSeen.setHours(0, 0, 0, 0);
+
+        const calculateDifferentDays = Math.floor((startOfToday.getTime() - startOfLastSeen.getTime()) / (1000 * 60 * 60 * 24));
+
 
         if (calculateDifferentDays > 0 && findLastSeen?.createdAt) {
             const getUserGoal = await prisma.userGoal.findUnique({
@@ -29,20 +36,28 @@ export async function POST() {
                 },
                 select: {
                     targetTime: true,
+                    updatedAt: true,
                 }
             });
 
-            await prisma.userGoal.update({
-                where: {
-                    userId: session?.user?.id,
-                },
-                data: {
-                    targetTime: (getUserGoal?.targetTime ? getUserGoal?.targetTime + calculateDifferentDays : calculateDifferentDays).toString(),
-                },
-            });
+            if (new Date(getUserGoal?.updatedAt as Date).setHours(0, 0, 0, 0) !== new Date().setHours(0, 0, 0, 0)) {
 
-            showInfo.show = true;
-            showInfo.msgInfo = `You have been away for ${calculateDifferentDays} days. Your target time has been updated.`;
+                const calNewTargetTime = (getUserGoal?.targetTime ? Number(getUserGoal?.targetTime) + Number(calculateDifferentDays) : Number(calculateDifferentDays)).toString();
+
+                await prisma.userGoal.update({
+                    where: {
+                        userId: session?.user?.id,
+                    },
+                    data: {
+                        targetTime: calNewTargetTime
+                    },
+                });
+
+                showInfo.show = true;
+                showInfo.msgInfo = `You have been away for ${calculateDifferentDays} days. Your target time has been updated.`;
+            } else {
+                console.log("different date");
+            }
 
         }
 
@@ -81,7 +96,7 @@ export async function POST() {
             const targetTime = Number(getUserGoal?.targetTime);
             
             const selisih = caloriesBurnedYesterday - targetPerDay;
-            const adjustmentPerDay = selisih / (targetTime * 30);
+            const adjustmentPerDay = selisih / targetTime;
             const newTargetPerDay = targetPerDay - adjustmentPerDay;
 
             await prisma.userGoal.update({
