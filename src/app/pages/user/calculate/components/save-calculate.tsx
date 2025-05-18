@@ -11,10 +11,10 @@ export default function SaveCalculate({props}: { props: StepValues }) {
         <div className="bg-green-300/60 dark:bg-white/30 rounded-lg p-4 dark:text-white shadow-lg w-full h-full flex justify-center">
             <div className="flex flex-col mb-2 text-start">
                 <h1 className="text-2xl font-bold mb-3 text-center">Your Results</h1>
-                <p className="dark:text-white text-xl">BMI Anda: {parseFloat(bmi as string).toFixed(2)}</p>
-                <p className="dark:text-white text-xl">BMR Anda: {parseFloat(bmr as string).toFixed(2)}</p>
-                <p className="dark:text-white text-xl">TDEE Anda: {parseFloat(tdee as string).toFixed(2)}</p>
-                <p className="dark:text-white text-xl">Perhitungan MET Awal Anda: {parseFloat(userMETValue as string).toFixed(2)} Kalori</p>
+                <p className="dark:text-white text-xl">BMI Anda: {Number(bmi).toFixed(2) ?? 0}</p>
+                <p className="dark:text-white text-xl">BMR Anda: {Number(bmr).toFixed(2) ?? 0}</p>
+                <p className="dark:text-white text-xl">TDEE Anda: {Number(tdee).toFixed(2) ?? 0}</p>
+                <p className="dark:text-white text-xl">Perhitungan MET Awal Anda: {Number(userMETValue).toFixed(2) ?? 0} Kalori</p>
             </div>
         </div>
 
