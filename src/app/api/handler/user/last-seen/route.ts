@@ -11,7 +11,7 @@ export async function POST() {
     }
 
     try {
-        const findLastSeen = await prisma.physicalActivityLog.findFirst({
+        const findLastSeen = await prisma.userActivites.findFirst({
             where: {
                 userId: session?.user?.id,
             },
@@ -20,7 +20,14 @@ export async function POST() {
             },
         });
         
-        const calculateDifferentDays = Math.floor((new Date().getTime() - new Date(findLastSeen?.createdAt as Date).getTime()) / (1000 * 60 * 60 * 24));
+        const startOfToday = new Date();
+        startOfToday.setHours(0, 0, 0, 0);
+
+        const startOfLastSeen = new Date(findLastSeen?.createdAt as Date);
+        startOfLastSeen.setHours(0, 0, 0, 0);
+
+        const calculateDifferentDays = Math.floor((startOfToday.getTime() - startOfLastSeen.getTime()) / (1000 * 60 * 60 * 24));
+
 
         if (calculateDifferentDays > 0 && findLastSeen?.createdAt) {
             const getUserGoal = await prisma.userGoal.findUnique({

@@ -100,7 +100,7 @@ export default function Page() {
 
     console.log(data);
 
-    axios.post(`/api/handler/activities/user?${searchParams.toString()}`, {data: JSON.stringify(data)}).then((response) => {
+    axios.post(`/api/handler/activities/user?${searchParams.toString()}`, {data: JSON.stringify(data)}).then(() => {
       if(confirm("Berhasil menambahkan food log, apakah anda ingin melihat food log?")) {
         router.push("/pages/user/activity");
       }

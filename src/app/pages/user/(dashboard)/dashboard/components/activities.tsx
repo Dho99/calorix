@@ -57,11 +57,11 @@ export default function Activities({
                       Rata-rata : {item?.avg} {item?.parameter}
                     </p>
 
-                    {Number(item.avg) < Number(item.target) ? (
+                    {Number(item.value) < Number(item.target) ? (
                       <p className="text-sm text-red-500 font-bold p-1 bg-red-200 rounded">
                         Kurang dari target
                       </p>
-                    ) : Number(item.avg) > Number(item.target) ? (
+                    ) : Number(item.value) > Number(item.target) ? (
                       <p className="text-sm text-green-500">
                         Melebihi target
                       </p>
