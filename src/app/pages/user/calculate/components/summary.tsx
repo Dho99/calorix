@@ -31,7 +31,7 @@ export default function SummaryCalculate({
               <h3 className="text-xl font-bold">{step.question}</h3>
 
               {step.type === "number" ? (
-                <div className="w-full h-full flex flex-row items-center gap-x-3 px-5 bg-slate-200/70 dark:bg-white/70 rounded-lg">
+                <div className={`w-full h-full flex flex-row items-center gap-x-3 px-5 bg-slate-200/70 dark:bg-white/70 rounded-lg`}>
                   <input
                     id={step.stateKey}
                     type="number"

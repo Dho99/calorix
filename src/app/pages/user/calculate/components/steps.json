@@ -77,11 +77,11 @@
       "type": "radio",
       "required": true,
       "opts": [
-        { "value": "1.2", "label": "Sangat Sedikit (Sedentari)" },
-        { "value": "1.375", "label": "Ringan (1–3x/minggu)" },
-        { "value": "1.55", "label": "Sedang (3–5x/minggu)" },
-        { "value": "1.725", "label": "Berat (6–7x/minggu)" },
-        { "value": "1.9", "label": "Sangat Berat (2x/hari)" }
+        { "value": "1.2", "label": "Sangat Sedikit" },
+        { "value": "1.375", "label": "Ringan " },
+        { "value": "1.55", "label": "Sedang" },
+        { "value": "1.725", "label": "Berat" },
+        { "value": "1.9", "label": "Sangat Berat" }
       ]
     },
     {

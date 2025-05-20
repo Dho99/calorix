@@ -38,11 +38,6 @@ export const navigContent = [
     icon: WrenchIcon,
   },
   {
-    title: "User Guide",
-    link: "#",
-    icon: NotebookTabsIcon,
-  },
-  {
     title: "FAQ",
     link: "/home#faq",
     icon: CircleHelpIcon,
