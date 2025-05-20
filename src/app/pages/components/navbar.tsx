@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import {
   WrenchIcon,
   CircleHelpIcon,
-  NotebookTabsIcon,
   InfoIcon,
   HomeIcon,
   MoonIcon,
