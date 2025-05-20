@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import {
   WrenchIcon,
   CircleHelpIcon,
-  NotebookTabsIcon,
   InfoIcon,
   HomeIcon,
   MoonIcon,
@@ -36,11 +35,6 @@ export const navigContent = [
     title: "Fitur",
     link: "/home#features",
     icon: WrenchIcon,
-  },
-  {
-    title: "User Guide",
-    link: "#",
-    icon: NotebookTabsIcon,
   },
   {
     title: "FAQ",
