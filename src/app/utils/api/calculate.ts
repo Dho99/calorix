@@ -37,7 +37,7 @@ export const calculateUserData = async (data: StepValues) => {
     bmr: BMR.toString(),
     tdee: TDEE.toString(),
     bodyFatPercentage: bodyFat.toString(),
-    hydrationNeeds: waterNeeds.toString(),
+    hydrationNeeds: waterNeeds,
     ...deficitPerDay,
     stepNeeds: stepNeeds.toString(), //estimated daily steps needed to reach the goal
     userMETValue: calculateUserMET,

@@ -14,7 +14,7 @@ export default function SaveCalculate({props}: { props: StepValues }) {
                 <p className="dark:text-white text-xl">BMI Anda: {Number(bmi).toFixed(2) ?? 0}</p>
                 <p className="dark:text-white text-xl">BMR Anda: {Number(bmr).toFixed(2) ?? 0}</p>
                 <p className="dark:text-white text-xl">TDEE Anda: {Number(tdee).toFixed(2) ?? 0}</p>
-                <p className="dark:text-white text-xl">Perhitungan MET Awal Anda: {Number(userMETValue).toFixed(2) ?? 0} Kalori</p>
+                <p className="dark:text-white text-xl"> Perhitungan Kalori dari Aktivitas Fisik (MET) Awal Anda: {Number(userMETValue).toFixed(2) ?? 0} Kalori</p>
             </div>
         </div>
 
