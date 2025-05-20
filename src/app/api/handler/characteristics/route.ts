@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
           deficitPerDay: deficitPerDay,
           targetTime: (targetTime * 30).toString(),
           targetWeight: targetWeight,
-          hydrationNeeds: hydrationNeeds,
+          hydrationNeeds: hydrationNeeds.toString(),
           totalDeficit: totalDeficit,
           stepNeeds: stepNeeds,
           maxDailyCalories: maxDailyCalories,
