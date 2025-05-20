@@ -374,6 +374,28 @@ export async function DELETE(request: NextRequest) {
       ]);
     }
 
+    if(res?.category === "SLEEP_TRACKER" && res.sleepTrackerId) {
+      await prisma.sleepTracker.delete({
+        where: {
+          id: res.sleepTrackerId
+        }
+      })
+    }
+    if(res?.category === "FOOD_LOG" && res.foodLogId) {
+      await prisma.foodLog.delete({
+        where: {
+          id: res.foodLogId
+        }
+      })
+    }
+    if(res?.category === "USER_HYDRATION" && res.userHydrationId) {
+      await prisma.userHydration.delete({
+        where: {
+          id: res.userHydrationId
+        }
+      })
+    }
+
     return NextResponse.json({ success: true, data: res }, { status: 200 });
   }
 

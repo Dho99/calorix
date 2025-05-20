@@ -121,7 +121,7 @@ model UserGoal {
   goal           String
   deficitPerDay  String
   targetTime     String?
-  hydrationNeeds String
+  hydrationNeeds Float?
   targetWeight   String
   totalDeficit   String
   stepNeeds      String
