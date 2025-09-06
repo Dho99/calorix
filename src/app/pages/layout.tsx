@@ -2,7 +2,7 @@
 import AppNavbar from "./components/navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "./components/sidebar";
-import ScanButton from "./user/components/scan-button";
+// import ScanButton from "./user/components/scan-button";
 
 export default async function Layout({
   children,
@@ -16,7 +16,7 @@ export default async function Layout({
         <AppSidebar />
         <AppNavbar />
         <div className="w-full h-full relative overflow-auto">
-          <ScanButton />
+          {/* <ScanButton /> */}
 
           {children}
         </div>

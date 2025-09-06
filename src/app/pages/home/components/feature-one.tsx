@@ -7,6 +7,7 @@ import {
   SquareChartGantt,
   ScanQrCode,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   link: string;
@@ -17,6 +18,7 @@ interface IProps {
 }
 
 export default function FeatureOne() {
+  const router = useRouter();
   const features: IProps[] = [
     {
       link: "/pages/user/dashboard",
@@ -49,8 +51,8 @@ export default function FeatureOne() {
       icon: SquareChartGantt,
     },
     {
-      link: "/pages/scan",
-      title: "Food Nutrition Scanner",
+      link: "#",
+      title: "Food Nutrition Scanner (Maintenance)",
       description:
         "Fitur untuk memindai makanan dan mendapatkan informasi nutrisinya",
       imgName: "nutriscan.png",
@@ -81,8 +83,9 @@ export default function FeatureOne() {
           {/* Featured Card - Orange Border */}
           {features.slice(0, 2).map((feature, index) => (
             <div
-              className="bg-white rounded-2xl p-8 shadow-lg border-2 hover:border-orange-500 hover:shadow-xl transition-shadow duration-300 hover:rotate-[-3deg] hover:scale-105 transition-all"
+              className="bg-white rounded-2xl p-8 shadow-lg border-2 hover:border-orange-500 hover:shadow-xl transition-shadow duration-300 hover:rotate-[-3deg] hover:scale-105 hover:cursor-pointer transition-all"
               key={index}
+              onClick={() => {router.push(feature.link)}}
             >
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4">
@@ -108,8 +111,9 @@ export default function FeatureOne() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.slice(2, 4).map((feature, index) => (
             <div
-              className={`bg-white rounded-2xl p-8 shadow-lg border-2 hover:border-orange-500 hover:shadow-xl transition-shadow duration-300 hover:rotate-[-3deg] hover:scale-105 transition-all`}
+              className={`bg-white rounded-2xl p-8 shadow-lg border-2 hover:border-orange-500 hover:shadow-xl transition-shadow duration-300 hover:rotate-[-3deg] hover:scale-105 hover:cursor-pointer transition-all`}
               key={index}
+              onClick={() => {router.push(feature.link)}}
             >
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4">
