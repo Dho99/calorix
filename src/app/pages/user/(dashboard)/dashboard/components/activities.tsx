@@ -28,11 +28,11 @@ export default function Activities({
 
         <div
           key={index}
-          className={`w-full h-full bg-green-200 dark:bg-[#1B4242]/70 dark:text-white rounded-lg shadow-md p-4 flex flex-col ${index === pageData.length - 1 ? 'col-span-2' : ''} border border-white/50`}
+          className={`w-full h-full bg-orange-500/40 dark:text-white rounded-lg shadow-md p-4 flex flex-col ${index === pageData.length - 1 ? 'col-span-2' : ''} border border-white/50`}
         >
           {
             item?.icon && (
-              <div className="p-2 bg-green-300/60 dark:bg-white/10 rounded mb-2 w-fit">
+              <div className="p-2 bg-orange-500/40 dark:bg-white/10 rounded mb-2 w-fit">
                 <item.icon className="w-12 h-12 dark:text-white mb-2" />
               </div>
             )

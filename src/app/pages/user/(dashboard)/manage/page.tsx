@@ -133,7 +133,7 @@ export default function Page() {
             </button>
           </DialogClose>
           <DialogClose asChild>
-            <button className="py-2 px-3 bg-[#9EC8B9] rounded-lg hover:cursor-pointer text-black ms-auto">
+            <button className="py-2 px-3 bg-orange-500 text-white rounded-lg hover:cursor-pointer text-black ms-auto">
               Tetap Edit
             </button>
           </DialogClose>
@@ -141,11 +141,11 @@ export default function Page() {
       </DialogContent>
       <div className="w-full flex flex-col gap-3">
         <div
-          className="w-full h-auto px-15 pb-15 pt-10 flex flex-col gap-8 border dark:bg-white/2 bg-green-200/40 rounded-lg"
+          className="w-full h-auto px-15 pb-15 pt-10 flex flex-col gap-8 border bg-orange-500/40 rounded-lg"
           ref={pageRef}
         >
           <div className="flex lg:flex-row md:flex-row flex-col gap-5 w-full h-auto items-center">
-            <div className="w-24 h-24 bg-green-300/50 dark:bg-[#9EC8B9]/20 p-2 rounded-full flex justify-center items-center">
+            <div className="w-24 h-24 bg-orange-500/60 p-2 rounded-full flex justify-center items-center">
               <UserRound className="w-full h-full dark:text-white" />
             </div>
             <div className="flex flex-col gap-3">
@@ -163,7 +163,7 @@ export default function Page() {
                 </DialogTrigger>
               ) : (
                 <button
-                 className="py-1 w-full px-4 dark:border bg-green-300/50 dark:bg-transparent dark:border-[#9EC8B9] rounded-lg dark:text-[#9EC8B9] hover:cursor-pointer hover:bg-green-300/70 hover:text-white hover:font-bold hover:shadow-lg transition-all transition-duration-400" 
+                 className="py-1 w-full px-4 dark:border bg-orange-500/60 dark:bg-transparent rounded-lg hover:cursor-pointer bg-orange-500/70 hover:text-white hover:shadow-lg transition-all transition-duration-400" 
                   type="button"
                   onClick={() => {
                     setEdit(true);
@@ -238,7 +238,7 @@ export default function Page() {
             </div>
             {isEdit && (
               <>
-                <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
+                <div className="grid w-full w-full items-center gap-3">
                   <Label htmlFor="password">Password</Label>
                   <Input
                     type="password"
@@ -249,7 +249,7 @@ export default function Page() {
                     required
                   />
                 </div>
-                <div className="grid w-full lg:max-w-3/4 w-full items-center gap-3">
+                <div className="grid w-full w-full items-center gap-3">
                   <Label htmlFor="validatePass">Validate Password</Label>
                   <Input
                     type="password"
@@ -263,7 +263,7 @@ export default function Page() {
               </>
             )}
             {isEdit && (
-              <div className="mt-4 mb-10 lg:max-w-3/4 w-full flex">
+              <div className="mt-4 mb-10 w-full flex">
                 <button
                   type="submit"
                   className="w-full py-2 rounded-lg bg-[#1B4242] text-white drop-shadow-xl transition-all transition-duration-400 hover:bg-[#9EC8B9] hover:text-black hover:font-bold"

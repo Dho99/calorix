@@ -15,7 +15,7 @@ export default function ScanButton(){
 
     return (
         <div className="fixed bottom-5 right-5 z-20">
-            <button className="p-4 bg-green-500 dark:bg-green-500 text-white rounded-full shadow-lg flex flex-row gap-x-2 items-center justify-center hover:cursor-pointer hover:bg-green-400/80 active:bg-green-400/70 transition-all duration-200 ease-in-out" onClick={() => {router.push('/pages/scan')}}>
+            <button className="p-4 bg-orange-500 text-white rounded-full shadow-lg flex flex-row gap-x-2 items-center justify-center hover:cursor-pointer hover:bg-orange-500/80 active:bg-green-400/70 transition-all duration-200 ease-in-out" onClick={() => {router.push('/pages/scan')}}>
             <ScanSearchIcon className="w-6 h-6" />
             <p className="text-center" >Food Scan</p>
             </button>

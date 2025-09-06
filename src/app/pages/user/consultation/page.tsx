@@ -115,7 +115,7 @@ export default function Page() {
               return (
                 <div key={index} className="flex flex-col gap-y-2">
                   {chat.userQuery && (
-                    <div className="text-gray-700 bg-gray-100 p-3 max-w-[60%] w-fit shadow-lg rounded-md ms-auto">
+                    <div className="text-gray-700 bg-orange-500/50 p-3 max-w-[60%] w-fit shadow-lg rounded-md ms-auto">
                       {chat.userQuery}
                     </div>
                   )}
@@ -125,7 +125,7 @@ export default function Page() {
                     </div>
                   )}
                   {chat.response && chat.id !== chatState.length && (
-                    <div className="text-gray-700 bg-green-200/70 p-3 max-w-[60%] w-fit shadow-lg rounded-md">
+                    <div className="text-gray-700 bg-gray-200/50 p-3 max-w-[60%] w-fit shadow-lg rounded-md">
                       <Markdown>{chat.response}</Markdown>
                     </div>
                   )}
@@ -148,7 +148,7 @@ export default function Page() {
                 }}
               />
               <button
-                className="bg-blue-400 text-white p-2 px-6 rounded-lg"
+                className="bg-orange-500 text-white p-2 px-6 rounded-lg"
                 onClick={() => {
                   const input = document.querySelector(
                     "input[type='text']"

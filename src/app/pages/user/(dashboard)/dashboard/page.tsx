@@ -74,7 +74,7 @@ export default function Page() {
               <>
                 <Button
                   variant="ghost"
-                  className="bg-green-200/70 text-white border-none"
+                  className="bg-orange-500/70 text-white border-none"
                   onClick={() => {
                     router.push("/pages/user/calculate");
                   }}

@@ -3,7 +3,7 @@ import { Geist } from 'next/font/google'
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "next-auth/react";
-import { ThemeProvider } from "next-themes";
+// import { ThemeProvider } from "next-themes";
 
 const geist = Geist({ subsets: ['latin'] })
 
@@ -22,12 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-      className={`${geist.className} anti-antialiased overflow-auto dark:bg-[#092635] bg-gradient-to-r to-green-300/70 transition-all transition-duration-500`}
+      className={`${geist.className} anti-antialiased overflow-auto transition-all transition-duration-500 bg-white text-black`}
       >
       <SessionProvider>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        {/* <ThemeProvider attribute="class"> */}
         {children}
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
       </SessionProvider>
       <Toaster />
       </body>

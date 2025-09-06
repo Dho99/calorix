@@ -102,8 +102,8 @@ export default function SideMenu() {
                 href={`${item.link}`}
                 className={`${
                   pathname !== item.link
-                    ? "hover:bg-green-200 dark:hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold "
-                    : "bg-green-200 dark:bg-slate-200/30 shadow-lg font-semibold "
+                    ? "hover:bg-orange-500/60 dark:hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold "
+                    : "bg-orange-500/60 dark:bg-slate-200/30 shadow-lg font-semibold "
                 } dark:text-white text-base transition-all transition-duration-400 py-2 px-4 rounded-lg flex flex-row gap-2 items-center`}
               >
                 <item.icon className="dark:text-white" />
@@ -112,7 +112,7 @@ export default function SideMenu() {
             );
           })}
           <button
-            className="dark:text-white text-base text-start transition-all transition-duration-400  py-2 px-4 rounded-lg hover:bg-green-200 dark:hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold flex flex-row gap-2 items-center"
+            className="dark:text-white text-base text-start transition-all transition-duration-400  py-2 px-4 rounded-lg hover:bg-orange-500/60 dark:hover:bg-slate-200/30 hover:shadow-lg hover:font-semibold flex flex-row gap-2 items-center"
             onClick={() => {
               signOut({ redirectTo: "/auth/signin" });
             }}

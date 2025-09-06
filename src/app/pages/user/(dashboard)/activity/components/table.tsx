@@ -89,7 +89,7 @@ export default function ActivityTable({
         activitiesProps.map((activity, key) => (
           <DialogTrigger asChild key={key}>
             <div
-              className="w-full flex flex-row gap-2 border border-black dark:border-white bg-white/2 rounded-lg py-2 px-4 dark:text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center"
+              className="w-full flex flex-row gap-2 border border-black dark:border-white bg-white/2 rounded-lg py-2 px-4 dark:text-white py-4 hover:bg-orange-500/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center"
               onClick={() =>
                 setDialogProps({
                   content: (
@@ -133,7 +133,7 @@ export default function ActivityTable({
             </div>
           </DialogTrigger>
         )) : (
-          <div className="w-full flex flex-row gap-2 border border-white bg-white/2 rounded-lg py-2 px-4 dark:text-white py-4 hover:bg-[#9EC8B9]/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center">
+          <div className="w-full flex flex-row gap-2 border border-white bg-white/2 rounded-lg py-2 px-4 dark:text-white py-4 hover:bg-orange-500/50 hover:cursor-pointer transition-all duration-200 ease-in-out justify-between items-center">
             <p className="dark:text-white text-2xl font-semibold">Tidak ada data</p>
             <p className="dark:text-white/50 text-sm">Silahkan tambahkan data</p>  
           </div>

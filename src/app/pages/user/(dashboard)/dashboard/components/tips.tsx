@@ -23,7 +23,7 @@ export default function Tips(){
     ]
 
     return (
-        <div className="flex-col flex gap-6 w-full  bg-green-200 dark:bg-[#1B4242]/70 dark:text-white rounded-lg shadow-md py-5 px-3 border border-white/50">
+        <div className="flex-col flex gap-6 w-full bg-orange-500/40 dark:text-white rounded-lg shadow-md py-5 px-3 border border-white/50">
             <div className="flex flex-row gap-x-3 items-center">
             <BookType className="w-8 h-8 dark:text-white" />
             <h2 className="text-2xl font-bold">Tips</h2>

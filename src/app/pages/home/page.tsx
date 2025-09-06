@@ -6,7 +6,7 @@ import About from "./components/about"
 
 export default function Page(){
     return (   
-        <div className="lg:px-15 px-10">
+        <div className="">
             <Hero />
             <About />
             <FeatureOne />
