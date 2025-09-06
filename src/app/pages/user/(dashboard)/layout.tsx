@@ -32,7 +32,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     updateLastSeen();
   }, []);
   return (
-    <div className="w-full h-full lg:flex lg:flex-row pt-8 dark:text-white">
+    <div className="w-full h-full lg:flex lg:flex-row pt-12 dark:text-white">
       <div className="max-w-1/6 w-full overflow-hidden h-full flex justify-center py-15 relative lg:block hidden">
         <SideMenu />
       </div>

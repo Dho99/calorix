@@ -141,7 +141,7 @@ export default function Page() {
           <DialogTrigger asChild>
             <button
               type="button"
-              className="dark:bg-[#9EC8B9]/10 bg-green-300/70 hover:bg-[#9EC8B9]/50 transition-all transition-duration-400 py-2 px-4 border rounded-lg dark:text-white shadow-lg lg:ms-auto md:ms-auto me-auto flex flex-row gap-4 lg:w-58 md:w-64 w-full justify-center"
+              className="bg-orange-500/40 hover:bg-orange-500/70 transition-all transition-duration-400 py-2 px-4 border rounded-lg dark:text-white shadow-lg lg:ms-auto md:ms-auto me-auto flex flex-row gap-4 lg:w-58 md:w-64 w-full justify-center"
               onClick={() => {
                 setDialogProps({
                   content: (
@@ -158,19 +158,19 @@ export default function Page() {
             </button>
           </DialogTrigger>
         </div>
-        <div className="bg-green-200 dark:bg-white/2 border border-black dark:border-white rounded-lg shadow-lg p-5 w-full h-auto flex flex-col gap-5">
+        <div className="bg-orange-500/40 dark:bg-white/2 border border-black dark:border-white rounded-lg shadow-lg p-5 w-full h-auto flex flex-col gap-5">
           <div className="flex lg:flex-row md:flex-row flex-col gap-y-5 w-full justify-between items-center">
 
             <form className="flex flex-row w-full" onSubmit={handleFilterByName} id="search-form">
               <Input type="text" className="lg:w-sm md:w-sm w-full border border-black dark:border-white rounded-e-none" name="title" placeholder="Find Activity by Name"></Input>
-              <Button type="submit" variant={"default"} className="rounded-s-none px-5 border border-black dark:border-white text-black bg-green-300/70 dark:bg-white/10 dark:text-white hover:bg-white/40">Cari</Button>
+              <Button type="submit" variant={"default"} className="rounded-s-none px-5 border border-black dark:border-white text-black bg-orange-500/40 dark:bg-white/10 dark:text-white hover:bg-white/40">Cari</Button>
             </form>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="bg-green-300/70 hover:bg-green-300 dark:bg-white/3 dark:text-white space-x-2 me-auto lg:w-fit md:w-fit w-full"
+                  className="bg-orange-500/40 hover:bg-orange-500/70 dark:bg-white/3 dark:text-white space-x-2 me-auto lg:w-fit md:w-fit w-full"
                 >
                   <FunnelIcon />
                   {pageData?.category
@@ -230,7 +230,7 @@ export default function Page() {
             <div className="flex flex-row border border-black dark:border-white/20 rounded-lg bg-white/5 p-2 gap-2">
               <Button
                 variant="secondary"
-                className="bg-green-500/50 hover:bg-green-200"
+                className="bg-orange-500/40 hover:bg-orange-500/70"
                 disabled={pageData?.page < 2}
                 onClick={prevSlide}
               >
@@ -246,7 +246,7 @@ export default function Page() {
                 </div>
               </div>
               <Button
-              className="bg-green-500/50 hover:bg-green-200"
+                className="bg-orange-500/40 hover:bg-orange-500/70"
                 variant="secondary"
                 onClick={nextSlide}
                 disabled={

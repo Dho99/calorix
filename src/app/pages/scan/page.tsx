@@ -113,7 +113,7 @@ export default function Page() {
 
 
   return (
-    <div className="w-full dark:text-white relative py-20 lg:px-15 px-5 gap-y-10 flex-col flex justify-center items-center">
+    <div className="w-full dark:text-white relative py-20 lg:px-15 px-5 gap-y-10 flex-col flex justify-center items-center h-dvh ">
       <div className="flex flex-col lg:w-3/4 md:w-3/4 w-full h-full gap-y-5 justify-center items-center bg:black/20 dark:bg-white/10 rounded-lg p-5 border border-black/20 dark:border-white/10 bg-black/10 shadow-lg">
         <div className="flex flex-col gap-y-2 text-center">
           <h1 className="text-2xl font-bold">Food Nutrition Scanner</h1>
@@ -140,7 +140,7 @@ export default function Page() {
               />
               {isInputFilled && (
                 <Button
-                  className="bg-red-500/80 text-white hover:bg-red-500/70"
+                  className="bg-orange-500/80 text-white hover:bg-orange-500/70"
                   variant={"default"}
                   onClick={() => {
                     setIsInputFilled(false);
@@ -169,7 +169,7 @@ export default function Page() {
           )}
           <Button
             variant={"default"}
-            className=" text-white flex flex-row gap-x-2 items-center w-full justify-center bg-green-400/70 hover:bg-green-500/60"
+            className=" text-white flex flex-row gap-x-2 items-center w-full justify-center bg-orange-500/70 hover:bg-orange-500/60"
             type="submit"
             disabled={disabled}
           >

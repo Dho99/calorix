@@ -18,7 +18,7 @@ export default function ChatBox() {
         <ChatBoxDialog toggleChat={toggleChat} />
       ) : (
         <button
-          className="bg-blue-400 rounded-lg shadow-lg p-3 text-white font-bold flex flex-row items-center gap-x-2"
+          className="bg-orange-500 rounded-lg shadow-lg p-3 text-white font-bold flex flex-row items-center gap-x-2"
           onClick={toggleChat}
         >
           <div>Calorix Assist</div>
@@ -133,7 +133,7 @@ export function ChatBoxDialog({ toggleChat }: { toggleChat: () => void }) {
                   }}
                 />
                 <button
-                  className="bg-blue-400 text-white p-2 rounded-lg"
+                  className="bg-orange-500 text-white p-2 rounded-lg"
                   onClick={() => {
                     const input = document.querySelector(
                       "input[type='text']"

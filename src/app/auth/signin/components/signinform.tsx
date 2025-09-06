@@ -5,12 +5,16 @@ import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { loginSchema } from "@/app/utils/lib/validation/user";
 import { FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SigninForm({
   setMode,
 }: {
   setMode: (is: boolean) => void;
 }): React.ReactNode {
+  const router = useRouter();
+
+  
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -30,13 +34,14 @@ export default function SigninForm({
     const res = await signIn("credentials", {
       redirect: false,
       ...data,
-      redirectTo: "/pages/user/dashboard",
     });
 
   
     if (res?.error) {
       toast.error("Email atau password salah.");
+      return;
     }
+    router.push("/pages/user/dashboard");
   };
 
   return (
@@ -75,7 +80,7 @@ export default function SigninForm({
         </p>
         <button
           type="submit"
-          className="w-full py-2 rounded-lg bg-[#1B4242] text-white hover:cursor-pointer"
+          className="w-full py-2 rounded-lg bg-orange-500/60 hover:bg-orange-500/80 transition-all transition-duration-200 text-white hover:cursor-pointer"
           value="Sign In"
         >
           Sign In

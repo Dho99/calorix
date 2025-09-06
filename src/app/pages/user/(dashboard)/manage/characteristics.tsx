@@ -63,7 +63,7 @@ export default function Characteristics({
   }
 
   return (
-    <div className="w-full h-auto lg:px-15 md:px-10 px-5 pt-10 pb-15 flex flex-col gap-8 border dark:bg-white/2 bg-green-200/50 rounded-lg">
+    <div className="w-full h-auto lg:px-15 md:px-10 px-5 pt-10 pb-15 flex flex-col gap-8 border bg-orange-500/40 rounded-lg">
       <div className="w-full flex flex-col gap-3">
         <div className="w-full h-auto flex flex-col gap-3">
           <div className="flex lg:flex-row md:flex-row flex-col gap-y-4 w-full justify-between">
@@ -86,7 +86,7 @@ export default function Characteristics({
           <Accordion type="single" collapsible className="mt-3">
             {data?.map((item, index) => (
               <AccordionItem value={`item-${index}`} key={index}>
-                <AccordionTrigger className="text-lg flex flex-row justify-between hover:no-underline hover:cursor-pointer hover:bg-[#9EC8B9]/20 hover:rounded-lg items-center px-5 focus:bg-[#9EC8B9]/20 border">
+                <AccordionTrigger className="text-lg flex flex-row justify-between hover:no-underline hover:cursor-pointer hover:bg-orange-500/20 hover:rounded-lg items-center px-5 focus:bg-orange-500/20 border border-orange-500/70">
                   <div className="hover:no-underline">
                     {getStringDateName(item?.createdAt)}
                   </div>
@@ -136,7 +136,7 @@ export default function Characteristics({
                           <TableCell>
                             <Button
                               variant="secondary"
-                              className="bg-red-600/60 hover:bg-red-600/80"
+                              className="bg-red-600/60 hover:bg-red-600/80 transition-all transition-duration-400 w-full text-white flex flex-row items-center"
                               type="button"
                               onClick={() => {
                                 deleteCharacteristic(item?.id);

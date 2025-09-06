@@ -223,7 +223,7 @@ export default function Page() {
       <div className="w-full flex flex-row justify-between gap-5">
         <button
           type="button"
-          className="bg-[#5C8374] text-white rounded-lg py-2 px-4 ms-auto"
+          className="bg-orange-500 text-white rounded-lg py-2 px-4 ms-auto"
           onClick={() => {
             router.push("/pages/user/dashboard");
           }}
@@ -320,7 +320,7 @@ export default function Page() {
                   <>
                     <button
                       type="button"
-                      className="border border-[#5C8374] rounded-lg py-2 px-4 text-white"
+                      className="border border-orange-500 rounded-lg py-2 px-4 text-white"
                       onClick={() => {
                         setIsUpdatePage(true);
                         setAlert(null);
@@ -330,7 +330,7 @@ export default function Page() {
                     </button>
                     <button
                       type="submit"
-                      className="bg-[#5C8374] text-white rounded-lg py-2 px-4"
+                      className="bg-orange-500 text-white rounded-lg py-2 px-4"
                       onClick={() => {
                         router.push("/pages/user/dashboard");
                       }}
@@ -345,7 +345,7 @@ export default function Page() {
           {currentStep < steps.length - 1 ? (
             <>
               <div className="h-full w-full flex flex-wrap py-5 ">
-                <div className="w-full h-full flex justify-center items-center flex-col bg-green-700/20 dark:bg-white/20 rounded-lg">
+                <div className="w-full h-full flex justify-center items-center flex-col bg-orange-500/40 dark:bg-white/20 rounded-lg">
                   <div className="w-full h-max flex flex-col gap-10 p-10 ring ring-black/30 shadow-xl/20 rounded-xl justify-center items-center">
                     <div className="w-full flex justify-center items-center ">
                       <h1 className="lg:text-4xl md:text-xl text-lg font-bold text-center">
@@ -358,10 +358,10 @@ export default function Page() {
                           <button
                             key={index}
                             type="button"
-                            className={`transition-all transition-duration-30 hover:cursor-pointer h-full p-5 shadow-lg text-black rounded-lg lg:text-2xl text-base font-bold flex flex-col items-center justify-center gap-5 focus:bg-green-300/80 focus:dark:bg-[#5C8374] focus:text-white ${
+                            className={`transition-all transition-duration-30 hover:cursor-pointer h-full p-5 shadow-lg text-black rounded-lg lg:text-2xl text-base font-bold flex flex-col items-center justify-center gap-5 focus:bg-orange-500/50 focus:dark:bg-[#5C8374] focus:text-white ${
                               opt.value ===
                               stepState?.[steps[currentStep - 1].stateKey!]
-                                ? "bg-[#5C8374] text-white"
+                                ? "bg-orange-500 text-white"
                                 : "bg-white"
                             }`}
                             onClick={() => {
@@ -487,13 +487,13 @@ export default function Page() {
             {currentStep > 1 && (
               <button
                 onClick={handlePrev}
-                className="text-xl lg:w-56 md:w-56 w-full bg-green-400/80 dark:bg-[#5C8374] py-3 px-5 rounded-lg text-white font-bold lg:order-1 md:order-1 order-2"
+                className="text-xl lg:w-56 md:w-56 w-full bg-orange-500/80 dark:bg-[#5C8374] py-3 px-5 rounded-lg text-white font-bold lg:order-1 md:order-1 order-2"
               >
                 Kembali
               </button>
             )}
             <button
-              className="text-xl lg:w-56 md:w-56 w-full bg-green-400/80 dark:bg-[#5C8374] py-3 px-5 rounded-lg ms-auto text-white font-bold lg:order-2 md:order-2 order-1"
+              className="text-xl lg:w-56 md:w-56 w-full bg-orange-500/80 dark:bg-[#5C8374] py-3 px-5 rounded-lg ms-auto text-white font-bold lg:order-2 md:order-2 order-1"
               onClick={handleNext}
             >
               Lanjutkan

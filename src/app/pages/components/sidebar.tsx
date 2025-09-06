@@ -15,7 +15,7 @@ export default function AppSidebar() {
 
 
   return (
-    <Sidebar className={`${open ? 'block' : 'hidden'} z-10`}>
+    <Sidebar className={`${open ? 'block' : 'hidden'} z-500`}>
       <SidenavContent />
       <SidebarFooter />
     </Sidebar>
